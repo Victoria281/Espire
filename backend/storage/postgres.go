@@ -35,9 +35,13 @@ func NewConnection(config *Config) *gorm.DB {
 	if models.MigrateBooks(database) != nil {
 		fmt.Println("could not migrate book db")
 	}
+	if models.MigrateUser(database) != nil {
+		fmt.Println("could not migrate user db")
+	}
 	if models.MigrateArticle(database) != nil {
 		fmt.Println("could not migrate articles db")
 	}
+
 	fmt.Println("Connected to postgreSQL!")
 
 	return database

@@ -2,12 +2,48 @@ package routes
 
 import (
 	"github.com/Victoria281/Espire/backend/controller"
+	"github.com/Victoria281/Espire/backend/middleware"
 	"github.com/Victoria281/Espire/backend/repo"
 	"github.com/Victoria281/Espire/backend/services"
 	"github.com/Victoria281/Espire/backend/storage"
 
 	"github.com/gofiber/fiber/v2"
 )
+
+func SetUpRoutes(router fiber.Router) {
+	router.Use(middleware.PrintingDebugInfo)
+}
+
+func SecureRoutes(router fiber.Router) {
+	router.Use(middleware.JWTMiddleware())
+}
+
+func AuthRouter(router fiber.Router) {
+	router.Use(middleware.PrintingDebugInfo)
+	db := storage.GetDB()
+
+	userRepo := repo.NewUserRepository(db)
+	authService := services.NewAuthService(userRepo)
+	authController := &controller.AuthController{
+		Service: authService,
+	}
+
+	router.Post("/login", authController.Login)
+	router.Post("/register", authController.Register)
+}
+
+func UserRouter(router fiber.Router) {
+	db := storage.GetDB()
+
+	userRepo := repo.NewUserRepository(db)
+	userService := services.NewUserService(userRepo)
+	userController := &controller.UserController{
+		Service: userService,
+	}
+
+	router.Put("/update", userController.UpdatePassword)
+	router.Put("/delete", userController.Delete)
+}
 
 func ArticleRouter(router fiber.Router) {
 	db := storage.GetDB()

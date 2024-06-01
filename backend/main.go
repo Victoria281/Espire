@@ -29,8 +29,14 @@ func main() {
 
 	app := fiber.New()
 	espireApi := app.Group("/espire")
-	routes.BookRouter(espireApi.Group("/books"))
+	routes.SetUpRoutes(espireApi)
+
+	//public routes
 	routes.AuthRouter(espireApi.Group("/auth"))
+
+	// Protected routes
+	routes.SecureRoutes(espireApi)
+	routes.BookRouter(espireApi.Group("/books"))
 	routes.UserRouter(espireApi.Group("/users"))
 	routes.ArticleRouter(espireApi.Group("/articles"))
 
