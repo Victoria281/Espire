@@ -32,6 +32,7 @@ func main() {
 	routes.BookRouter(espireApi.Group("/books"))
 	routes.AuthRouter(espireApi.Group("/auth"))
 	routes.UserRouter(espireApi.Group("/users"))
+	routes.ArticleRouter(espireApi.Group("/articles"))
 
 	app.Listen(":8080")
 }
