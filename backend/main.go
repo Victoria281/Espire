@@ -30,6 +30,7 @@ func main() {
 	app := fiber.New()
 	espireApi := app.Group("/espire")
 	routes.BookRouter(espireApi.Group("/books"))
+	routes.ArticleRouter(espireApi.Group("/articles"))
 
 	app.Listen(":8080")
 }
