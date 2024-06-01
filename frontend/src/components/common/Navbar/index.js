@@ -1,0 +1,58 @@
+import React, { useState, useRef, useEffect } from "react";
+import NavItem from './NavItem';
+import Logo from './Logo';
+import styles from './styles.module.css'
+// import AuthService from "../../../config/AuthService";
+import useLocalStorageService from '../../../functions/useLocalStorageService';
+import { NAVBAR_ITEMS, NAVBAR_BTNS } from '../../../constants/names'
+import { useNavigate, useLocation } from "react-router-dom";
+import Button from "../Button";
+
+const Navbar = () => {
+    const [loggedIn, setLoggedIn] = useState(null);
+    const navigate = useNavigate();
+    const location = useLocation();
+    // const redirectToLogout = () => {
+    //     AuthService.redirectToLogout()
+    // }
+
+    const handleClick = (pathname) => {
+        navigate(pathname)
+    }
+
+    const handleDisabled = (name) => {
+        return location.pathname == name
+    }
+
+    useEffect(() => {
+        if (window.localStorage.getItem('token') != null) {
+            setLoggedIn(true);
+        }
+    })
+
+
+
+    return (
+        <div className={styles.navbarContainer}>
+            <div className={styles.navbarContainerLeft}>
+                <Logo />
+                {
+                    NAVBAR_ITEMS.map((item, index) =>
+                        <NavItem key={index} index={index} name={item.name} linkTo={item.link} disabled={handleDisabled(item.link)} />
+                    )
+                }
+            </div>
+            <div className={styles.navbarContainerRight}>
+                {
+                    NAVBAR_BTNS(loggedIn == null).map((item, index) =>
+                        <Button key={index} type="main" onClick={() => handleClick(item.link)}>
+                            {item.name}
+                        </Button>
+                    )
+                }
+            </div>
+        </div>
+    );
+}
+
+export default Navbar;

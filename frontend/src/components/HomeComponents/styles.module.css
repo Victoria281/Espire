@@ -1,0 +1,239 @@
+/* Advertisement */
+
+.advertisementContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0px;
+    background-color: white;
+    margin: 5vh 10vw;
+}
+
+.advertisementContainerLeft {
+    width: 60%;
+    position: relative;
+}
+
+.advertisementContainerLeft p {
+    text-align: left;
+    font-size: 110%;
+    margin: 0;
+}
+
+.advertisementContainerLeft p:first-of-type {
+    font-weight: bold;
+    font-size: 150%;
+}
+
+.advertisementContainerRight {
+    width: 40%;
+}
+
+.advertisementContainerLeftImg {
+    position: absolute;
+    top: -25px;
+    left: -30px;
+    width: 4vw;
+}
+
+.advertisementContainerRightImg {
+    width: 60%;
+    object-fit: contain;
+}
+
+/* Services */
+
+.servicesContainer {
+    background-color: #437FC7;
+    padding: 8vh 10vw;
+}
+
+.servicesContainer>p {
+    color: white;
+    font-weight: 500;
+    font-size: 110%;
+    padding: 0;
+    margin: 0;
+}
+
+.servicesItemsMainContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5vh;
+}
+
+.servicesItemsContainer {
+    background-color: white;
+    width: 24%;
+    height: 30vh;
+    border-radius: 5px;
+    box-shadow: 4px 6px 5px rgba(0, 0, 0, 0.446);
+    text-align: left;
+    padding-left: 3%;
+    padding-right: 3%;
+}
+
+.servicesItemsContainer>p {
+    font-size: 110%;
+    font-weight: 600;
+}
+
+.servicesItemsContainer>ul {
+    font-size: 100%;
+}
+
+.servicesItemsContainer li {
+    padding-bottom: 8px;
+}
+
+
+/* Flow */
+
+.flowContainer {
+    margin: 0 0;
+}
+
+.flowItemsContainer:nth-child(odd) {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+    margin: 10vh 0;
+}
+
+.flowItemsContainer:nth-child(even) {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: right;
+    align-items: center;
+    margin: 10vh 0;
+}
+
+.flowItemsContainerLeft {
+    width: 60%;
+}
+
+.flowItemsContainer:nth-child(odd) p {
+    margin: 6vh 0;
+    text-align: left;
+    width: 70%;
+    margin-left: 10%;
+}
+
+.flowItemsContainer:nth-child(even) p {
+    margin: 6vh 0;
+    text-align: right;
+    width: 70%;
+    margin-right: 10%;
+}
+
+.flowItemsContainerLeft p:first-of-type {
+    font-size: 140%;
+    font-weight: bold;
+}
+
+.flowItemsContainerRight {
+    width: 8%;
+    object-fit: contain;
+    padding-left: 10%;
+    margin: 2vh;
+}
+
+.flowItemsContainerRight:nth-child(even) {
+    width: 8%;
+    object-fit: contain;
+    padding-right: 10%;
+}
+
+.slanted {
+    background-color: #437FC7;
+    width: 100%;
+    height: 2vh;
+    transform: skewX(-20deg);
+}
+
+/* Action */
+.actionContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.actionContainerBtn {
+    display: inline-block;
+    padding: 2vh 5vw;
+    background-color: #6DAFFE;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 25px;
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+}
+
+.actionContainerBtn:hover {
+    background-color: #437FC7;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.actionContainerBtn:active {
+    background-color: #003d80;
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* End */
+
+.endContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    width: 100vw;
+    height: 50vh;
+    background-image: url('../../../public//images/home-endbg.png');
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.endContainerLeft {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    margin-top: 20vh;
+}
+
+.endContainerRight {
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    margin-top: 15vh;
+}
+
+.endContainer p {
+    color: white;
+    width: 100%;
+}
+
+.endContainerLeft p {
+    text-align: left;
+    padding: 0 5vh;
+    margin: 10px;
+    font-size: 120%;
+}
+
+.endContainerLeft p:first-of-type {
+    font-weight: bold;
+    font-size: 150%;
+}
+
+.endContainerRight p {
+    padding: 0 5vh;
+    margin: 0;
+    font-size: 100%;
+}
+
+.endContainerRight div {
+    margin-bottom: 5vh;
+}
