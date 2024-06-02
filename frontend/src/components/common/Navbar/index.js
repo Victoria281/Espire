@@ -2,18 +2,15 @@ import React, { useState, useRef, useEffect } from "react";
 import NavItem from './NavItem';
 import Logo from './Logo';
 import styles from './styles.module.css'
-import { useSelector } from "react-redux";
 import { NAVBAR_ITEMS, NAVBAR_BTNS } from '../../../constants/names'
 import { useNavigate, useLocation } from "react-router-dom";
 import Button from "../Button";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
     const token = useSelector(state => state.user.token)
     const navigate = useNavigate();
     const location = useLocation();
-    // const redirectToLogout = () => {
-    //     AuthService.redirectToLogout()
-    // }
 
     const handleClick = (pathname) => {
         navigate(pathname)
@@ -22,6 +19,7 @@ const Navbar = () => {
     const handleDisabled = (name) => {
         return location.pathname == name
     }
+
 
     return (
         <div className={styles.navbarContainer}>

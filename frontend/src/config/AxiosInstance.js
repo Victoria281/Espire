@@ -19,8 +19,8 @@ function redirectToLogout() {
 
 axiosInstance.interceptors.request.use(
     async config => {
-        // const token = useSelector(state => state.user.token)
-        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTc0MTQzMTEsInVzZXJuYW1lIjoidGVzdCJ9.kQ_O_VKL8h1a5mFr-1AgsgQNPEdrjGvZFhVCV8zYB_8"
+        const state = JSON.parse(localStorage.getItem("state"))
+        const token = state.user.token;
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }

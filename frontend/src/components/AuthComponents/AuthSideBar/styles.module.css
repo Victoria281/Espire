@@ -1,0 +1,38 @@
+.authSideBarContainer {
+    width: 30%;
+    height: 100%;
+    background-color: #437FC7;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.authSideBarContainer p {
+    color: white;
+    font-size: 150%;
+    font-weight: bold;
+}
+
+.authSideBarContainer .authSideBarContainerBtn {
+    width: 50%;
+    padding: 5px 20px;
+    background-color: transparent;
+    color: white;
+    border: 2px solid white; 
+    border-radius: 20px; 
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  }
+  
+  .authSideBarContainer .authSideBarContainerBtn:hover {
+    background-color: white; 
+    color: #6DAFFE; 
+    border-color: #6DAFFE;
+  }
+  
+  .authSideBarContainer .authSideBarContainerBtn:active {
+    background-color: #437FC7;
+    color: #fff;
+    border-color: #437FC7;
+  }

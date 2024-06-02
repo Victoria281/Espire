@@ -7,16 +7,16 @@ const LibraryScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (AuthService.isLoggedIn()) {
-      retrieveProjectList(dispatch);
-      const intervalId = setInterval(() => {
-        retrieveProjectList(dispatch)
-      }, 300000)
+  // useEffect(() => {
+  //   if (AuthService.isLoggedIn()) {
+  //     retrieveProjectList(dispatch);
+  //     const intervalId = setInterval(() => {
+  //       retrieveProjectList(dispatch)
+  //     }, 300000)
 
-      return () => clearInterval(intervalId);
-    }
-  }, [])
+  //     return () => clearInterval(intervalId);
+  //   }
+  // }, [])
 
   return (
     <div className="mainContainer restrictScroll">
