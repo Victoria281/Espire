@@ -20,7 +20,10 @@ function redirectToLogout() {
 axiosInstance.interceptors.request.use(
     async config => {
         const state = JSON.parse(localStorage.getItem("state"))
-        const token = state.user.token;
+        let token = "";
+        if (state != undefined) {
+            token = state.user.token;
+        }
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }

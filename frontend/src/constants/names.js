@@ -122,16 +122,5 @@ export const SIGNUP="SIGN UP"
 export const SIGNIN="SIGN IN"
 
 
-// export const AUTH1="LOGIN"
-// export const AUTH1_SIDEBAR_TITLE="Don’t have an account?"
-// export const AUTH1_SIDEBAR_BTN="SIGN UP"
-// export const AUTH1_MAINBAR_TITLE="Don’t have an account?"
-// export const AUTH1_MAINBAR_LST="SIGN UP"
-// export const AUTH1_MAINBAR_BTN="SIGN UP"
-
-
-// export const AUTH2="REGISTER"
-// export const AUTH2_SIDEBAR_TITLE="Welcome Back!"
-// export const AUTH2_SIDEBAR_BTN="SIGN IN"
-
-
+export const TAB1="Articles"
+export const TAB2="Folders"

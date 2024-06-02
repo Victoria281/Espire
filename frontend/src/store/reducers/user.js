@@ -1,9 +1,9 @@
 import {
-    SET_USER_INFO
-} from '../actions/articles';
+  SET_USER_INFO
+} from '../actions/user';
 
 const initialState = {
-    username: "",
+  username: "",
   token: undefined,
 };
 
@@ -12,7 +12,7 @@ const reducer = (state = initialState, action) => {
     case SET_USER_INFO:
       return {
         ...state,
-        username: action.articles,
+        username: action.username,
         token: action.token,
       };
     default:

@@ -1,26 +1,24 @@
-// import {
-//   getMyArticlesAPI,
-//   getArticlesByUserAPI,
-//   getArticlesByNameAPI,
-//   getArticlesByIdAPI,
-//   createNewArticleAPI,
-//   updateArticleInfoAPI,
-//   deleteArticleAPI
-// } from '../../controller/articleController';
+import {
+  getMyArticlesAPI,
+  getArticlesByUserAPI,
+  getArticlesByNameAPI,
+  getArticlesByIdAPI,
+  createNewArticleAPI,
+  updateArticleInfoAPI,
+  deleteArticleAPI
+} from '../../controller/articleController';
 
-// export const SET_ARTICLES = 'SET_ARTICLES';
+export const SET_ARTICLES = 'SET_ARTICLES';
 
-// export const getMyArticles = () => async (dispatch) => {
-//   const result = await getMyArticlesAPI();
-//   if (!result.success) return null;
-
-//   console.log(result)
-//   dispatch({
-//     type: SET_ARTICLES,
-//     result: result.data
-//   });
-//   return result;
-// };
+export const getMyArticles = () => async (dispatch) => {
+  const result = await getMyArticlesAPI();
+  if (!result.success) return null;
+  dispatch({
+    type: SET_ARTICLES,
+    articles: result.data
+  });
+  return result;
+};
 
 // export const getArticlesByUser = (user) => async (dispatch) => {
 //   const result = await getArticlesByUserAPI(user);

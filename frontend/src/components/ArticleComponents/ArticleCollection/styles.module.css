@@ -1,0 +1,53 @@
+
+.articleListTitle{
+    margin: 2vh 4vw 1vh 4vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: white;
+}
+
+.articleListTitle p {
+    font-weight: 800;
+    font-size: 80%;
+    padding: 0;
+    margin: 1vh 0;
+    text-align: left;
+}
+
+.articleListItemTitle{
+    background-color: #EDF6FF;
+    margin: 1vh 4vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.articleListItemTitle p {
+    margin: 1vh 0;
+    text-align: left;
+    padding: 0 10px;
+    font-size: 100%;
+    font-weight: 500;
+}
+
+.articleListItemTitle p:nth-of-type(1), .articleListTitle p:nth-of-type(1) {
+    width: 15%;
+}
+
+.articleListItemTitle p:nth-of-type(2), .articleListTitle p:nth-of-type(2) {
+    width: 50%;
+}
+
+.articleListItemTitle p:nth-of-type(3), .articleListTitle p:nth-of-type(3) {
+    width: 25%;
+}
+
+.articleListItemTitle p:nth-of-type(4), .articleListTitle p:nth-of-type(4) {
+    width: 10%;
+}
+
+.articleListItemDescription {
+    background-color: #DBEDFF;
+    text-align: left;
+}

@@ -1,39 +1,40 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from "react-router-dom";
+import { retrieveownArticles } from "../functions/articles";
+import TabSelection from "../components/ArticleComponents/TabSelection";
+import ArticleCollection from "../components/ArticleComponents/ArticleCollection";
 
 const LibraryScreen = () => {
-
+  const [articleView, setArticleView] = useState(true);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (AuthService.isLoggedIn()) {
-  //     retrieveProjectList(dispatch);
-  //     const intervalId = setInterval(() => {
-  //       retrieveProjectList(dispatch)
-  //     }, 300000)
+  const token = useSelector(state => state.user.token);
+  const articles = useSelector(state => state.articles.articles);
 
-  //     return () => clearInterval(intervalId);
-  //   }
-  // }, [])
+  const switchTabs = () => {
+    setArticleView(!articleView);
+  }
+
+  useEffect(() => {
+    if (token != undefined) {
+      retrieveownArticles(dispatch);
+    }
+  }, [])
 
   return (
     <div className="mainContainer restrictScroll">
-      <div className="authContainer">
-        <div className="sideContainer">
-          <p>LibraryScreen</p>
+      <TabSelection articleView={articleView} setArticleView={setArticleView} />
+      {
+        articleView ?
+          <ArticleCollection articles={articles} />
+          :
           <div>
-            <a>Sign In</a>
+            Coming Soon
           </div>
-        </div>
-        <div className="mainContainer">
-          <p>Register</p>
-          <input name="myUsername" placeholder="Username" />
-          <input name="myEmail" placeholder="Email" />
-          <input name="myPassword" type="password" placeholder="Password" />
-        </div>
-      </div>
+      }
+
     </div>
   );
 };
