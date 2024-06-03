@@ -34,22 +34,25 @@ const ArticleCollection = ({ articles }) => {
                 <p>Author</p>
                 <p>Saves</p>
             </div>
-            {articles.map((item, index) =>
+            {articles!=undefined && articles.map((item, index) =>
                 <div key={index}>
-                    <div key={index} className={styles.articleListItemTitle} onClick={()=> handleShowDescription(index)}>
+                    <div key={index} className={styles.articleListItemTitle} onClick={() => handleShowDescription(index)}>
                         <p>{formatDate(item.createdat)}</p>
                         <p>{item.name}</p>
-                        <p>{item.username}</p>
+                        <p>{item.authors}</p>
                         <p>X saves</p>
                     </div>
                     {selectedArticle == index ?
-                        <div key={index} className={styles.articleListItemDescription} onClick={()=> handleSelectArticle(index)}>
-                            <p>{formatDate(item.createdat)}</p>
+                        <div key={index} className={styles.articleListItemDescription} onClick={() => handleSelectArticle(index)}>
                             <p>{item.name}</p>
-                            <p>{item.username}</p>
-                            <p>X saves</p>
+                            <p>by {item.authors}</p>
+                            <p>Published on {formatDate(item.createdat)}</p>
+                            <p>{item.Links.map((linkItem, ind) => {
+                                if (linkItem.is_main) return <div>{linkItem.Link}</div>
+                            })}</p>
+                            <p>{item.description}</p>
                         </div>
-                        : 
+                        :
                         <span></span>
                     }
                 </div>

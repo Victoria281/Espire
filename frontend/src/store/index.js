@@ -7,7 +7,7 @@ const persistedStore = loadState();
 export const store = configureStore({
     reducer: rootReducers,
     preloadedState: persistedStore,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk)
 });
 
 store.subscribe(() => {

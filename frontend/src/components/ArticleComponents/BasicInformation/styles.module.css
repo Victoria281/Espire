@@ -1,0 +1,130 @@
+.basicInformationContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.basicInformationTop{
+    width: 86vw;
+    margin: auto;
+}
+
+.basicInformationTop > div{
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+}
+
+.basicInformationTop > div > p:nth-of-type(1), .basicInformationBottom p:nth-of-type(1) {
+    margin: 10px 0;
+    font-weight: bold;
+    width: 15vw;
+    text-align: left;
+}
+
+.basicInformationTop > div > p:nth-of-type(2) {
+    background-color: #F0F0F0;
+    width: 71vw;
+    margin: 0;
+    padding: 2px 10px;
+    text-align: left;
+    height: 3vh;
+    font-size: 90%;
+}
+
+.basicInformationTop > div > div {
+    width: 71vw;
+    margin: 0;
+    text-align: left;
+    height: 3vh;
+    font-size: 90%;
+}
+
+.linkContainer {
+    display: block;
+    background-color: #F0F0F0;
+    margin-bottom: 10px;
+    padding: 2px 10px;
+    height: 3vh;
+}
+
+
+.basicInformationBottom {
+    width: 86vw;
+    margin: auto;
+    margin-top: 7vh;
+}
+
+.basicInformationBottom p:nth-of-type(2) {
+    width: 86vw;
+    margin: 5px 0;
+    background-color: #F0F0F0;
+    text-align: left;
+    padding: 2px 10px;
+}
+
+.basicInformationBottom div:nth-of-type(1) p:nth-of-type(2) {
+    min-height: 10vh;
+    max-height: 40vh;
+    overflow-y: auto;
+}
+
+.basicInformationBottom div:nth-of-type(2) p:nth-of-type(2) {
+    height: 3vh;
+}
+
+
+
+/* Edit Mode */
+
+.basicInformationTop > div > input, .basicInformationBottom input {
+    margin: 10px 0;
+    width: 15vw;
+    text-align: left;
+    border: 1px solid grey
+}
+
+.basicInformationTop > div > input {
+    background-color: #F0F0F0;
+    width: 71vw;
+    margin: 0;
+    padding: 2px 10px;
+    text-align: left;
+    height: 3vh;
+    font-size: 90%;
+}
+
+
+.linkBoxContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.linkBoxContainer button{
+    height: 4vh;
+}
+
+.linkBoxContainer input {
+    margin-right: 20px;
+    border: 1px solid grey
+}
+
+.basicInformationBottom textarea  {
+    width: 86vw;
+    margin: 5px 0;
+    background-color: #F0F0F0;
+    text-align: left;
+    padding: 2px 10px;
+    resize: none; 
+    overflow-y: auto;
+}
+
+.basicInformationBottom div:nth-of-type(1) textarea  {
+    min-height: 10vh;
+    max-height: 40vh;
+}
+
+.basicInformationBottom div:nth-of-type(2) textarea  {
+    height: 3vh;
+}

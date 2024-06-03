@@ -17,7 +17,7 @@
 
 .articleListItemTitle{
     background-color: #EDF6FF;
-    margin: 1vh 4vw;
+    margin: 1vh 4vw 0 4vw;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -50,4 +50,17 @@
 .articleListItemDescription {
     background-color: #DBEDFF;
     text-align: left;
+    margin: 0 4vw 1vh 4vw;
+    box-shadow: inset 0 10px 10px -10px rgba(0, 0, 0, 0.5);
+    padding: 3vh 2vw;
+}
+
+.articleListItemDescription p{
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+.articleListItemDescription p:nth-of-type(1) {
+    font-weight: bold;
+    font-size: 110%;
 }

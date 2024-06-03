@@ -5,7 +5,7 @@ const Template = () => {
 
   return (
     <div className="mainContainer restrictScroll">
-      <p>Template</p>
+      <p>Coming Soon</p>
     </div>
   );
 };

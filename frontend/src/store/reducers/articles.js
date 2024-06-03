@@ -1,6 +1,10 @@
 import {
-  SET_ARTICLES
+  SET_ARTICLES,
+  SET_ARTICLE_WORKSPACE
 } from '../actions/articles';
+import {
+  CLEAR_STATE
+} from '../actions/user';
 
 const initialState = {
   collections: [],
@@ -18,6 +22,13 @@ const reducer = (state = initialState, action) => {
         ...state,
         articles: action.articles
       };
+      case SET_ARTICLE_WORKSPACE:
+        return {
+          ...state,
+          workspace: action.workspace
+        };
+        case CLEAR_STATE:
+          return initialState;
     default:
       return state;
   }

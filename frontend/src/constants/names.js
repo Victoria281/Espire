@@ -124,3 +124,104 @@ export const SIGNIN="SIGN IN"
 
 export const TAB1="Articles"
 export const TAB2="Folders"
+
+export const BASIC_INFO="Basic Information"
+export const TAG_MANAGEMENT="Tag Management"
+export const QUOTE_MANAGEMENT="Quotes / Statistics"
+export const FLASHCARD_MANAGEMENT="Flashcard Management"
+
+export const BASIC_INFO_CONTENT_P1 = [
+    {
+        name: "Name",
+        tag: "name"
+    },
+    {
+        name: "Authors",
+        tag: "authors"
+    },
+    {
+        name: "Date Published",
+        tag: "createdat"
+    }
+]
+
+
+
+export const LINK_NAME = "Link to Article"
+export const LINKS_NAME = "Links to related content"
+
+export const BASIC_INFO_CONTENT_P2 = [
+    {
+        name: "Description",
+        tag: "description"
+    },
+    {
+        name: "Use",
+        tag: "use"
+    }
+]
+
+export const QUOTES_GROUP = {
+    1: "Important",
+    2: "Fun Fact",
+    3: "Extra",
+}
+
+export const QUOTES_PRIORITY = {
+    1: "Low",
+    2: "Medium",
+    3: "High",
+}
+
+export const ARTICLE_BASE_TEMPLATE = {
+    "name": "",
+    "authors": "",
+    "use": "",
+    "description": "",
+    "Links": [
+        {
+            "is_main": false,
+            "link": "",
+        },
+        {
+            "is_main": true,
+            "link": "",
+        }
+    ],
+    "Quotes": [
+        {
+            "grp_num": 1,
+            "priority": 1,
+            "fact": "",
+        }
+    ]
+}
+
+export const ARTICLE_BASE_TEMPLATE_FILLED = {
+    "name": "fdsfsd",
+    "authors": "fsdfs",
+    "use": "fdsfs",
+    "description": "fsdfs",
+    "Links": [
+        {
+            "is_main": false,
+            "link": "fsdfs"
+        },
+        {
+            "is_main": true,
+            "link": "fsdfs"
+        }
+    ],
+    "Quotes": [
+        {
+            "grp_num": 2,
+            "priority": 1,
+            "fact": "fdsf"
+        },
+        {
+            "grp_num": 1,
+            "priority": 3,
+            "fact": "fsdfdsf"
+        }
+    ]
+}

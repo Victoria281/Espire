@@ -1,5 +1,6 @@
 import {
-  SET_USER_INFO
+  SET_USER_INFO,
+  CLEAR_STATE
 } from '../actions/user';
 
 const initialState = {
@@ -15,6 +16,8 @@ const reducer = (state = initialState, action) => {
         username: action.username,
         token: action.token,
       };
+    case CLEAR_STATE:
+      return initialState;
     default:
       return state;
   }

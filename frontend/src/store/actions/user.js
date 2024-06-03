@@ -3,6 +3,7 @@ import {
 } from "../../controller/userController"
 
 export const SET_USER_INFO = 'SET_USER_INFO';
+export const CLEAR_STATE = 'CLEAR_STATE';
 
 
 export const handleLoginUser = (username, password) => async (dispatch) => {
@@ -23,3 +24,10 @@ export const handleRegisterUser = (username, email, password) => async (dispatch
   //set onboarding to false
   //update user token
 };
+
+export const clear_store = () => async (dispatch) => {
+  dispatch({
+    type: CLEAR_STATE
+  });
+};
+
