@@ -14,8 +14,8 @@ const defaultCheck = "deleted_at IS NULL"
 
 type ArticleRepository interface {
 	SelectByField(field string, value interface{}) ([]models.Articles, error)
-	CreateArticle(article models.Articles) error
-	Update(articleID uint, article *models.Articles) error
+	CreateArticle(article models.Articles) (uint, error)
+	Update(articleID uint, updatedArticle interface{}) error
 	Delete(articleID uint) error
 }
 
@@ -35,15 +35,15 @@ func (m *articleSqlRepository) SelectByField(field string, value interface{}) ([
 	return articles, nil
 }
 
-func (m *articleSqlRepository) CreateArticle(article models.Articles) error {
+func (m *articleSqlRepository) CreateArticle(article models.Articles) (uint, error) {
 	if err := m.DB.Create(&article).Error; err != nil {
-		return err
+		return 0, err
 	}
-	return nil
+	return article.ID, nil
 }
 
-func (m *articleSqlRepository) Update(articleID uint, article *models.Articles) error {
-	if err := m.DB.Where("id =?", articleID).Where("deleted_at IS NULL").Save(article).Error; err != nil {
+func (m *articleSqlRepository) Update(articleID uint, updatedArticle interface{}) error {
+	if err := m.DB.Model(&models.Articles{}).Omit("parent_username").Where("deleted_at IS NULL").Where("id = ?", articleID).Save(updatedArticle).Error; err != nil {
 		return err
 	}
 	return nil

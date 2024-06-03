@@ -4,8 +4,6 @@ import {
   Routes,
   Route
 } from "react-router-dom";
-import { useSelector } from "react-redux";
-import useLocalStorage from 'use-local-storage'
 //styles
 import "./App.css"
 //screens
@@ -13,7 +11,9 @@ import HomeScreen from "./screens/HomeScreen";
 import PostScreen from "./screens/PostScreen";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
+import ArticleScreen from "./screens/ArticleScreen";
 import Template from "./screens/Template";
+import LibraryScreen from "./screens/LibraryScreen";
 import Navbar from './components/common/Navbar'
 
 const App = () => {
@@ -26,9 +26,12 @@ const App = () => {
           <Route path="/databank" element={<HomeScreen />} />
           <Route path="/login" element={<LoginScreen />} />
           <Route path="/register" element={<RegisterScreen />} />
+          <Route path="/library" element={<LibraryScreen />} />
+          <Route path="/articles/:articleid" element={<ArticleScreen />} />
           <Route path="/post" element={<PostScreen />} />
-          <Route path="/articles" element={<Template />} />
-          <Route path="/articles/:??" element={<Template />} />
+          <Route path="/post/:articleid" element={<PostScreen />} />
+          <Route path="/databank" element={<Template />} />
+          <Route path="/dashboard" element={<Template />} />
         </Routes>
       </Router>
     </div>

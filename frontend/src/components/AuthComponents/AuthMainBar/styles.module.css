@@ -7,7 +7,7 @@
     align-items: center;
 }
 
-.authMainBarContainer p {
+.authTitle {
     color: #437FC7;
     font-size: 200%;
     font-weight: bold;

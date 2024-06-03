@@ -1,0 +1,98 @@
+.quoteManagementContainer {
+    width: 86vw;
+    margin: auto;
+    margin-bottom: 10vh;
+}
+
+.quoteManagementContainer>div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 4vh 0;
+}
+
+.quoteInformationDescription {
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+}
+
+.quoteInformationDescription p {
+    background-color: #920000ab;
+    height: 100%;
+    margin: 0 5%;
+    text-align: center;
+    justify-content: center;
+    padding-top: 2px;
+}
+
+.quoteInformationDescription p:first-of-type {
+    margin-bottom: 10px;
+}
+
+.quoteInformation {
+    background-color: #F0F0F0;
+    min-height: 10vh;
+    max-height: 40vh;
+    overflow-y: auto;
+    width: 80%;
+    text-align: left;
+    padding: 2px 10px;
+    margin: 0;
+}
+
+/* Edit area */
+.quoteManagementContainerEdit {
+    width: 86vw;
+    margin: auto;
+    margin-bottom: 5vh;
+}
+
+.quoteManagementContainerEdit>div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.quotePrioritySet, .quoteGrpSet {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.quotePrioritySet p, .quoteGrpSet p {
+    cursor: pointer;
+    background-color: #92000057;
+    margin: 5px 20px 5px 0;
+    width: 10vw;
+    border-radius: 5px;
+}
+
+.quoteSelected {
+    background-color: #920000a6;
+    border: 3px solid red
+}
+
+.quoteInformationEdit {
+    background-color: #F0F0F0;
+    min-height: 10vh;
+    max-height: 40vh;
+    overflow-y: auto;
+    width: 96%;
+    text-align: left;
+    padding: 2px 2%;
+    margin: 0;
+    margin-top: 5px;
+}
+
+.quoteManagementContainerEdit > div::after {
+    content: ''; 
+    display: block;
+    width: 85vw;
+    margin: 15px auto;
+    height: 1vh;
+    background-color: aliceblue;
+    border-radius: 5px;
+}

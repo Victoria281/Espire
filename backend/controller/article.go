@@ -83,21 +83,27 @@ func (c *ArticleController) CreateNewArticle(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request body"})
 	}
 
-	if err := c.Service.CreateNewArticle(username, article); err != nil {
+	index, err := c.Service.CreateNewArticle(username, article)
+	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Error creating article"})
 	}
 
-	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{"message": "Article created successfully"})
+	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{"id": index})
 }
-
 func (c *ArticleController) UpdateArticle(ctx *fiber.Ctx) error {
 
+	username := auth.ParseUsername(ctx)
+	id := ctx.Params("id")
+	articleID, err := strconv.ParseUint(id, 10, 64)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid article ID"})
+	}
 	var article models.Articles
 	if err := ctx.BodyParser(&article); err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request body"})
 	}
 
-	if err := c.Service.UpdateArticle(article); err != nil {
+	if err := c.Service.UpdateArticle(username, uint(articleID), &article); err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Error updating article"})
 	}
 

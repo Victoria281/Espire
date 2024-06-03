@@ -13,7 +13,7 @@ import (
 func main() {
 	// err := godotenv.Load(".env")
 	// if err != nil {
-	// 	log.Fatal(err)
+	// 	log.Panic(err)
 	// }
 	config := &storage.Config{
 		Host:     os.Getenv("DB_HOST"),
@@ -33,6 +33,7 @@ func main() {
 	espireApi := app.Group("/espire")
 	routes.SetUpRoutes(espireApi)
 
+	app.Use(cors.New())
 	//public routes
 	routes.AuthRouter(espireApi.Group("/auth"))
 

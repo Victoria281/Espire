@@ -11,6 +11,7 @@ type Articles struct {
 	Username       string              `json:"username"`
 	ParentUsername *string             `json:"parentusername"`
 	Name           string              `json:"name"`
+	Authors        string              `json:"authors"`
 	Use            string              `json:"use"`
 	Description    string              `json:"description"`
 	CreatedAt      time.Time           `gorm:"default:CURRENT_TIMESTAMP" json:"createdat"`

@@ -6,7 +6,7 @@ const AuthMainBar = ({ title, btn, onClick, children }) => {
     return (
         <div className={styles.authMainBarContainer} >
             <div className={styles.authMainBarItem}>
-                <p>{title}</p>
+                <p className={styles.authTitle}>{title}</p>
                 {children}
                 <Button
                     type="submit"

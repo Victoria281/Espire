@@ -7,7 +7,7 @@ import (
 
 type ArticleQuoteService interface {
 	CreateQuote(articleID uint, groupNum int, priority int, fact string) error
-	UpdateQuote(quoteID uint, updatedQuote models.ArticleQuotes) error
+	UpdateQuote(articleID uint, quoteID uint, groupNum int, priority int, fact string) error
 	DeleteQuote(quoteID uint) error
 }
 
@@ -29,7 +29,14 @@ func (s *articleQuoteService) CreateQuote(articleID uint, groupNum int, priority
 	return s.repo.CreateQuote(newQuote)
 }
 
-func (s *articleQuoteService) UpdateQuote(quoteID uint, updatedQuote models.ArticleQuotes) error {
+func (s *articleQuoteService) UpdateQuote(articleID uint, quoteID uint, groupNum int, priority int, fact string) error {
+	updatedQuote := models.ArticleQuotes{
+		ID:        quoteID,
+		ArticleID: articleID,
+		GroupNum:  groupNum,
+		Priority:  priority,
+		Fact:      fact,
+	}
 	return s.repo.UpdateQuote(quoteID, updatedQuote)
 }
 

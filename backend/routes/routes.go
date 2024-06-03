@@ -54,6 +54,12 @@ func ArticleRouter(router fiber.Router) {
 		Service: articleService,
 	}
 
+	articleLinkRepo := repo.NewArticleLinkRepository(db)
+	articleLinkService := services.NewArticleLinkService(articleLinkRepo)
+	articleLinkController := &controller.ArticleLinkController{
+		Service: articleLinkService,
+	}
+
 	articleQuoteRepo := repo.NewArticleQuoteRepository(db) // Assuming you have this repository
 	articleQuoteService := services.NewArticleQuoteService(articleQuoteRepo)
 	articleQuoteController := &controller.ArticleQuoteController{
@@ -73,6 +79,10 @@ func ArticleRouter(router fiber.Router) {
 	router.Post("/create", articleController.CreateNewArticle)
 	router.Put("/:id", articleController.UpdateArticle)
 	router.Delete("/:id", articleController.DeleteArticle)
+
+	router.Post("/links", articleLinkController.CreateLink)
+	router.Put("/links/:id", articleLinkController.UpdateLink)
+	router.Delete("/links/:id", articleLinkController.DeleteLink)
 
 	router.Post("/quotes", articleQuoteController.CreateQuote)
 	router.Put("/quotes/:id", articleQuoteController.UpdateQuote)

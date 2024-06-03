@@ -11,41 +11,36 @@ const checkError = (err, url) => {
     console.log('\n');
     console.log('!!! Failed to send request to API Endpoint: ' + url);
 
-    if (err.toJSON().message.toLowerCase().includes('network error')) {
-        console.log('Error: Timeout exceeded.');
-        return TIMEOUT;
-    } else {
-        try {
-            if (err.response) {
-                if (err.response.status == 401) {
-                    console.log('Error: Unauthorised.');
-                    return UNAUTHORISED;
-                }
-                if (err.response.status == 403) {
-                    console.log('Error: Forbidden.');
-                    return FORBIDDEN;
-                }
-
-                console.log('Error: Here is the response');
-                console.log('Data: ' + err.response.data);
-                console.log('Message: ' + err.response.data.message);
-                console.log('Status: ' + err.response.status);
-                console.log('Headers: ' + err.response.headers);
-                return GENERAL;
-            } else if (err.request) {
-                console.log('Error: No response received from the API Endpoint');
-                console.log('Request: ' + JSON.stringify(err.request));
-                return TIMEOUT;
-            } else {
-                console.log('Error: Request Failed / ' + JSON.stringify(err.message));
-                return TIMEOUT;
+    try {
+        if (err.response) {
+            if (err.response.status == 401) {
+                console.log('Error: Unauthorised.');
+                return UNAUTHORISED;
             }
-        } catch (e) {
-            return BUG;
-        } finally {
-            console.log('Error: ' + JSON.stringify(err.config));
-            console.log('Summary: ' + err);
+            if (err.response.status == 403) {
+                console.log('Error: Forbidden.');
+                return FORBIDDEN;
+            }
+
+            console.log('Error: Here is the response');
+            console.log('Data: ' + err.response.data);
+            console.log('Message: ' + err.response.data.message);
+            console.log('Status: ' + err.response.status);
+            console.log('Headers: ' + err.response.headers);
+            return GENERAL;
+        } else if (err.request) {
+            console.log('Error: No response received from the API Endpoint');
+            console.log('Request: ' + JSON.stringify(err.request));
+            return TIMEOUT;
+        } else {
+            console.log('Error: Request Failed / ' + JSON.stringify(err.message));
+            return TIMEOUT;
         }
+    } catch (e) {
+        return BUG;
+    } finally {
+        // console.log('Error: ' + JSON.stringify(err.config));
+        console.log('Summary: ' + err);
     }
 };
 
@@ -80,6 +75,4 @@ export const displayErrorHandler = (err, api_url) => {
             break;
         }
     }
-    document.getElementById('launch_error').innerText = err_message;
-    document.getElementById('launch_error').click();
 }

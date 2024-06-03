@@ -1,15 +1,14 @@
 import rootReducers from "./reducers";
-import { createStore } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit'
 import { saveState, loadState } from "./persistStore";
-import thunk from "redux-thunk"
+import { thunk } from "redux-thunk"
 
-import { applyMiddleware } from "redux"
 const persistedStore = loadState();
-export const store = createStore(
-    rootReducers,
-    persistedStore,
-    applyMiddleware(thunk),
-);
+export const store = configureStore({
+    reducer: rootReducers,
+    preloadedState: persistedStore,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk)
+});
 
 store.subscribe(() => {
     saveState(store.getState());

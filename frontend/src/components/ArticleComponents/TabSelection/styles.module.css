@@ -1,0 +1,48 @@
+.tabContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 15vw;
+    margin: 2vh 0 2vh 2vw;
+}
+
+.tabContainer>span {
+    display: inline-block;
+    margin-top: 5px;
+    padding: 1px 2px;
+    background-color: #437FC7;
+    color: #fff;
+    transform: skewX(-20deg); 
+    border-radius: 2px;
+    height: 2.5vh;
+    width: 1%;
+}
+
+.tabContainer>div {
+    width: 40%;
+    
+}
+
+.tabContainer>div>p {
+    margin: 0;
+    color: #437FC7;
+    font-size: 110%;
+}
+
+.tabItem {
+    cursor: pointer;
+    font-weight: normal;
+}
+
+.tabItem:hover p {
+    color: #437FC7;   
+    font-weight: 300; 
+}
+
+.tabItem:active {
+    font-weight: bold; 
+}
+
+.tabItem-selected {
+    font-weight: bold; 
+}
