@@ -28,7 +28,7 @@ func (r *articleQuoteRepository) CreateQuote(quote models.ArticleQuotes) error {
 }
 
 func (r *articleQuoteRepository) UpdateQuote(quoteID uint, updatedQuote models.ArticleQuotes) error {
-	if err := r.DB.Where("id = ?", quoteID).Save(&updatedQuote).Error; err != nil {
+	if err := r.DB.Model(&models.ArticleQuotes{}).Where("deleted_at IS NULL").Where("id = ?", quoteID).Updates(updatedQuote).Error; err != nil {
 		return err
 	}
 	return nil

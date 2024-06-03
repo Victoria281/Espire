@@ -13,8 +13,8 @@ type ArticleService interface {
 	FindById(id uint) (models.Articles, error)
 	FindByUsername(username string) ([]models.Articles, error)
 	FindByName(name string) ([]models.Articles, error)
-	CreateNewArticle(username string, article models.Articles) error
-	UpdateArticle(article models.Articles) error
+	CreateNewArticle(username string, article models.Articles) (uint, error)
+	UpdateArticle(username string, id uint, article *models.Articles) error
 	DeleteArticle(id uint) error
 }
 
@@ -61,23 +61,30 @@ func (s *articleService) FindByName(name string) ([]models.Articles, error) {
 	return articles, nil
 }
 
-func (s *articleService) CreateNewArticle(username string, article models.Articles) error {
+func (s *articleService) CreateNewArticle(username string, article models.Articles) (uint, error) {
 
 	newArticle := models.Articles{
 		Username:       username,
 		ParentUsername: nil,
 		Name:           article.Name,
+		Authors:        article.Authors,
 		Use:            article.Use,
 		Description:    article.Description,
 	}
-	err := s.repo.CreateArticle(newArticle)
-	return err
+	return s.repo.CreateArticle(newArticle)
 }
 
-func (s *articleService) UpdateArticle(article models.Articles) error {
-	article.UpdatedAt = time.Now()
-
-	err := s.repo.Update(article.ID, &article)
+func (s *articleService) UpdateArticle(username string, id uint, article *models.Articles) error {
+	updatedArticle := &models.Articles{
+		Username:    username,
+		ID:          id,
+		Name:        article.Name,
+		Authors:     article.Authors,
+		Use:         article.Use,
+		Description: article.Description,
+		UpdatedAt:   time.Now(),
+	}
+	err := s.repo.Update(article.ID, updatedArticle)
 	return err
 }
 

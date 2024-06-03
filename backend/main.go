@@ -1,21 +1,20 @@
 package main
 
 import (
-	"log"
 	"os"
 
 	"github.com/Victoria281/Espire/backend/routes"
 	"github.com/Victoria281/Espire/backend/storage"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/joho/godotenv"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func main() {
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatal(err)
-	}
+	// err := godotenv.Load(".env")
+	// if err != nil {
+	// 	log.Panic(err)
+	// }
 	config := &storage.Config{
 		Host:     os.Getenv("DB_HOST"),
 		Port:     os.Getenv("DB_PORT"),
@@ -31,6 +30,7 @@ func main() {
 	espireApi := app.Group("/espire")
 	routes.SetUpRoutes(espireApi)
 
+	app.Use(cors.New())
 	//public routes
 	routes.AuthRouter(espireApi.Group("/auth"))
 
