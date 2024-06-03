@@ -27,6 +27,9 @@ func main() {
 	storage.NewConnection(config)
 
 	app := fiber.New()
+
+	app.Use(cors.New())
+
 	espireApi := app.Group("/espire")
 	routes.SetUpRoutes(espireApi)
 

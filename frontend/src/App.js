@@ -8,10 +8,10 @@ import {
 import "./App.css"
 //screens
 import HomeScreen from "./screens/HomeScreen";
+import PostScreen from "./screens/PostScreen";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import ArticleScreen from "./screens/ArticleScreen";
-import PostScreen from "./screens/PostScreen";
 import Template from "./screens/Template";
 import LibraryScreen from "./screens/LibraryScreen";
 import Navbar from './components/common/Navbar'
@@ -23,6 +23,7 @@ const App = () => {
         <Navbar />
         <Routes>
           <Route path="" element={<HomeScreen />} />
+          <Route path="/databank" element={<HomeScreen />} />
           <Route path="/login" element={<LoginScreen />} />
           <Route path="/register" element={<RegisterScreen />} />
           <Route path="/library" element={<LibraryScreen />} />
