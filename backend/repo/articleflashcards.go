@@ -1,6 +1,8 @@
 package repo
 
 import (
+	"time"
+
 	"github.com/Victoria281/Espire/backend/models"
 
 	"gorm.io/gorm"
@@ -8,7 +10,7 @@ import (
 
 type ArticleFlashcardRepository interface {
 	CreateFlashcard(flashcard models.ArticleFlashcards) error
-	UpdateFlashcard(flashcardID uint, updatedFlashcard models.ArticleFlashcards) error
+	UpdateFlashcard(flashcardID uint, updatedFlashcard interface{}) error
 	DeleteFlashcard(flashcardID uint) error
 }
 
@@ -27,15 +29,17 @@ func (r *articleFlashcardRepository) CreateFlashcard(flashcard models.ArticleFla
 	return nil
 }
 
-func (r *articleFlashcardRepository) UpdateFlashcard(flashcardID uint, updatedFlashcard models.ArticleFlashcards) error {
-	if err := r.DB.Where("id = ?", flashcardID).Save(&updatedFlashcard).Error; err != nil {
+func (r *articleFlashcardRepository) UpdateFlashcard(flashcardID uint, updatedFlashcard interface{}) error {
+	if err := r.DB.Debug().Model(&models.ArticleFlashcards{}).Where("deleted_at IS NULL").Where("id = ?", flashcardID).UpdateColumns(updatedFlashcard).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
 func (r *articleFlashcardRepository) DeleteFlashcard(flashcardID uint) error {
-	if err := r.DB.Delete(&models.ArticleFlashcards{}, flashcardID).Error; err != nil {
+	if err := r.DB.Model(&models.ArticleFlashcards{}).Where("id = ?", flashcardID).Updates(map[string]interface{}{
+		"deleted_at": time.Now(),
+	}).Error; err != nil {
 		return err
 	}
 	return nil
