@@ -73,6 +73,7 @@ func (r *collectionSqlRepository) RemoveArticle(collectionID uint, articleID uin
 	}
 	return nil
 }
+
 func (r *collectionSqlRepository) Delete(collectionID uint) error {
 	if err := r.DB.Model(&models.Collection{}).Where("id = ?", collectionID).Updates(map[string]interface{}{
 		"deleted_at": time.Now(),

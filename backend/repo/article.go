@@ -18,6 +18,7 @@ type ArticleRepository interface {
 	Update(articleID uint, updatedArticle interface{}) error
 	Delete(articleID uint) error
 	FindArticlesWithSimilarTitles(string) ([]models.Articles, error)
+	FindArticlesByTagIDs(tagIDs []uint) ([]models.Articles, error)
 }
 
 type articleSqlRepository struct {
@@ -30,7 +31,7 @@ func NewArticleRepository(db *gorm.DB) ArticleRepository {
 
 func (m *articleSqlRepository) SelectByField(field string, value interface{}) ([]models.Articles, error) {
 	var articles []models.Articles
-	if err := m.DB.Preload("Links").Preload("Quotes").Preload("Flashcards").Preload("Collections").Where(field+" = ?", value).Where(defaultCheck).Find(&articles).Error; err != nil {
+	if err := m.DB.Preload("Links").Preload("Quotes").Preload("Flashcards").Preload("Collections").Preload("Tags").Where(field+" = ?", value).Where(defaultCheck).Find(&articles).Error; err != nil {
 		return nil, err
 	}
 	return articles, nil
@@ -72,4 +73,11 @@ func (m *articleSqlRepository) FindArticlesWithSimilarTitles(name string) ([]mod
 		return articles, err
 	}
 	return articles, nil
+}
+
+func (r *articleSqlRepository) FindArticlesByTagIDs(tagIDs []uint) ([]models.Articles, error) {
+	var articles []models.Articles
+	err := r.DB.Joins("JOIN article_tags ON articles.id = article_tags.article_id").
+		Where("article_tags.tag_id IN (?)", tagIDs).Find(&articles).Error
+	return articles, err
 }

@@ -112,6 +112,21 @@ func CollectionRouter(router fiber.Router) {
 	router.Delete("/:id", collectionController.DeleteCollection)
 }
 
+func TagRouter(router fiber.Router) {
+	db := storage.GetDB()
+
+	tagRepo := repo.NewTagRepository(db)
+	tagService := services.NewTagService(tagRepo)
+	tagController := &controller.TagController{
+		Service: tagService,
+	}
+
+	router.Get("/", tagController.GetAllTags)
+	router.Post("/", tagController.CreateTag)
+	router.Put("/articles/:article_id", tagController.UpdateArticleTags)
+	router.Delete("/:id", tagController.DeleteTag)
+}
+
 func BookRouter(router fiber.Router) {
 	db := storage.GetDB()
 

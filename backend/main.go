@@ -46,6 +46,7 @@ func main() {
 	routes.UserRouter(espireApi.Group("/users"))
 	routes.ArticleRouter(espireApi.Group("/articles"))
 	routes.CollectionRouter(espireApi.Group("/collections"))
+	routes.TagRouter(espireApi.Group("/tags"))
 
 	app.Listen(":8080")
 }
