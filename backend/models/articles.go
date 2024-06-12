@@ -20,6 +20,7 @@ type Articles struct {
 	Links          []ArticleLinks      `gorm:"foreignKey:ArticleID"`
 	Quotes         []ArticleQuotes     `gorm:"foreignKey:ArticleID"`
 	Flashcards     []ArticleFlashcards `gorm:"foreignKey:ArticleID"`
+	Collections    []Collection        `gorm:"many2many:collection_articles;"`
 }
 
 type ArticleLinks struct {

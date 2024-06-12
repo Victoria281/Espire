@@ -95,6 +95,23 @@ func ArticleRouter(router fiber.Router) {
 	router.Get("/search", articleController.GetSimilarArticles)
 }
 
+func CollectionRouter(router fiber.Router) {
+	db := storage.GetDB()
+
+	collectionRepo := repo.NewCollectionRepository(db)
+	collectionService := services.NewCollectionService(collectionRepo)
+	collectionController := &controller.CollectionController{
+		Service: collectionService,
+	}
+
+	router.Get("/", collectionController.GetCollection)
+	router.Post("/", collectionController.CreateCollection)
+	router.Put("/:id", collectionController.UpdateCollection)
+	router.Post("/:id/articles/:article_id", collectionController.AddArticleToCollection)
+	router.Delete("/:id/articles/:article_id", collectionController.RemoveArticleFromCollection)
+	router.Delete("/:id", collectionController.DeleteCollection)
+}
+
 func BookRouter(router fiber.Router) {
 	db := storage.GetDB()
 

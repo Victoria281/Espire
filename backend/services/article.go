@@ -83,7 +83,7 @@ func (s *articleService) CreateNewArticle(username string, article models.Articl
 		Use:            article.Use,
 		Description:    article.Description,
 	}
-	return s.repo.CreateArticle(newArticle)
+	return s.repo.Create(newArticle)
 }
 
 func (s *articleService) UpdateArticle(username string, id uint, article *models.Articles) error {
@@ -96,7 +96,7 @@ func (s *articleService) UpdateArticle(username string, id uint, article *models
 		Description: article.Description,
 		UpdatedAt:   time.Now(),
 	}
-	err := s.repo.Update(article.ID, updatedArticle)
+	err := s.repo.Update(id, updatedArticle)
 	return err
 }
 
