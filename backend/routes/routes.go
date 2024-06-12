@@ -72,7 +72,7 @@ func ArticleRouter(router fiber.Router) {
 		Service: articleFlashcardService,
 	}
 
-	router.Get("/:id", articleController.GetArticleByID)
+	router.Get("/id/:id", articleController.GetArticleByID)
 	router.Get("/", articleController.GetArticle)
 	router.Get("/username/:username", articleController.GetArticleByUsername)
 	router.Get("/name/:name", articleController.GetArticlesByName)
@@ -91,6 +91,8 @@ func ArticleRouter(router fiber.Router) {
 	router.Post("/flashcards", articleFlashcardController.CreateFlashcard)
 	router.Put("/flashcards/:id", articleFlashcardController.UpdateFlashcard)
 	router.Delete("/flashcards/:id", articleFlashcardController.DeleteFlashcard)
+
+	router.Get("/search", articleController.GetSimilarArticles)
 }
 
 func BookRouter(router fiber.Router) {

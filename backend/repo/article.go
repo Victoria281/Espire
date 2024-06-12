@@ -17,6 +17,7 @@ type ArticleRepository interface {
 	CreateArticle(article models.Articles) (uint, error)
 	Update(articleID uint, updatedArticle interface{}) error
 	Delete(articleID uint) error
+	FindArticlesWithSimilarTitles(string) ([]models.Articles, error)
 }
 
 type articleSqlRepository struct {
@@ -59,4 +60,12 @@ func (m *articleSqlRepository) Delete(articleID uint) error {
 		return err
 	}
 	return nil
+}
+
+func (m *articleSqlRepository) FindArticlesWithSimilarTitles(name string) ([]models.Articles, error) {
+	var articles []models.Articles
+	if err := m.DB.Where("name LIKE ?", "%"+name+"%").Find(&articles).Error; err != nil {
+		return articles, err
+	}
+	return articles, nil
 }

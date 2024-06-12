@@ -2,8 +2,11 @@ package services
 
 import (
 	"fmt"
+	"net/http"
+	"net/url"
 	"time"
 
+	"github.com/PuerkitoBio/goquery"
 	"github.com/Victoria281/Espire/backend/models"
 	"github.com/Victoria281/Espire/backend/repo"
 	"gorm.io/gorm"
@@ -16,6 +19,15 @@ type ArticleService interface {
 	CreateNewArticle(username string, article models.Articles) (uint, error)
 	UpdateArticle(username string, id uint, article *models.Articles) error
 	DeleteArticle(id uint) error
+	FetchArticlesFromGoogleScholar(query string) ([]ArticleSearch, error)
+	FindArticlesWithSimilarTitles(query string) ([]models.Articles, error)
+}
+
+type ArticleSearch struct {
+	Title    string `json:"title"`
+	Authors  string `json:"authors"`
+	Abstract string `json:"abstract"`
+	Link     string `json:"link"`
 }
 
 type articleService struct {
@@ -92,4 +104,40 @@ func (s *articleService) DeleteArticle(id uint) error {
 	fmt.Println("deleting")
 	err := s.repo.Delete(id)
 	return err
+}
+
+func (s *articleService) FindArticlesWithSimilarTitles(query string) ([]models.Articles, error) {
+	return s.repo.FindArticlesWithSimilarTitles(query)
+}
+
+func (s *articleService) FetchArticlesFromGoogleScholar(query string) ([]ArticleSearch, error) {
+	var articleSearch []ArticleSearch
+
+	resp, err := http.Get("https://scholar.google.com/scholar?q=" + url.QueryEscape(query))
+	if err != nil {
+		return articleSearch, err
+	}
+	defer resp.Body.Close()
+
+	doc, err := goquery.NewDocumentFromReader(resp.Body)
+	if err != nil {
+		return articleSearch, err
+	}
+
+	doc.Find(".gs_ri").Each(func(i int, s *goquery.Selection) {
+		title := s.Find(".gs_rt").Text()
+		authors := s.Find(".gs_a").Text()
+		abstract := s.Find(".gs_rs").Text()
+		link, _ := s.Find(".gs_rt a").Attr("href")
+
+		article := ArticleSearch{
+			Title:    title,
+			Authors:  authors,
+			Abstract: abstract,
+			Link:     link,
+		}
+		articleSearch = append(articleSearch, article)
+	})
+
+	return articleSearch, nil
 }
