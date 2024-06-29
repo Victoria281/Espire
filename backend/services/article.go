@@ -2,6 +2,7 @@ package services
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"net/url"
 	"time"
@@ -9,10 +10,12 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"github.com/Victoria281/Espire/backend/models"
 	"github.com/Victoria281/Espire/backend/repo"
+	"github.com/gocolly/colly/v2"
 	"gorm.io/gorm"
 )
 
 type ArticleService interface {
+	GetAllArticles() ([]models.Articles, error)
 	FindById(id uint) (models.Articles, error)
 	FindByUsername(username string) ([]models.Articles, error)
 	FindByName(name string) ([]models.Articles, error)
@@ -24,10 +27,11 @@ type ArticleService interface {
 }
 
 type ArticleSearch struct {
-	Title    string `json:"title"`
-	Authors  string `json:"authors"`
-	Abstract string `json:"abstract"`
-	Link     string `json:"link"`
+	Title       string `json:"title"`
+	Authors     string `json:"authors"`
+	Description string `json:"description"`
+	Link        string `json:"link"`
+	Date        string `json:"date"`
 }
 
 type articleService struct {
@@ -38,6 +42,10 @@ func NewArticleService(repo repo.ArticleRepository) ArticleService {
 	return &articleService{
 		repo: repo,
 	}
+}
+
+func (s *articleService) GetAllArticles() ([]models.Articles, error) {
+	return s.repo.GetAllArticles()
 }
 
 func (s *articleService) FindById(id uint) (models.Articles, error) {
@@ -127,17 +135,67 @@ func (s *articleService) FetchArticlesFromGoogleScholar(query string) ([]Article
 	doc.Find(".gs_ri").Each(func(i int, s *goquery.Selection) {
 		title := s.Find(".gs_rt").Text()
 		authors := s.Find(".gs_a").Text()
-		abstract := s.Find(".gs_rs").Text()
+		short_description := s.Find(".gs_rs").Text()
 		link, _ := s.Find(".gs_rt a").Attr("href")
 
+		var description string
+		var date string
+
+		if link != "" {
+			description, date, err = fetchAdditionalInfo(link)
+			if err != nil {
+				description = short_description
+				date = "No date available"
+			}
+		}
+
 		article := ArticleSearch{
-			Title:    title,
-			Authors:  authors,
-			Abstract: abstract,
-			Link:     link,
+			Title:       title,
+			Authors:     authors,
+			Description: description,
+			Link:        link,
+			Date:        date,
 		}
 		articleSearch = append(articleSearch, article)
 	})
 
 	return articleSearch, nil
+}
+
+func fetchAdditionalInfo(link string) (string, string, error) {
+	var description, date string
+
+	c := colly.NewCollector(
+		colly.UserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"),
+	)
+
+	c.OnHTML("meta[name='description']", func(e *colly.HTMLElement) {
+		description = e.Attr("content")
+	})
+
+	c.OnHTML("time", func(e *colly.HTMLElement) {
+		date = e.Text
+	})
+
+	c.OnRequest(func(r *colly.Request) {
+		fmt.Println("Visiting", r.URL.String())
+	})
+
+	c.OnError(func(r *colly.Response, err error) {
+		log.Println("Request error:", err)
+	})
+
+	err := c.Visit(link)
+	if err != nil {
+		return "", "", err
+	}
+
+	if description == "" {
+		description = "No description available"
+	}
+	if date == "" {
+		date = "No date available"
+	}
+
+	return description, date, nil
 }

@@ -13,6 +13,8 @@ import {
     UPDATE_ARTICLE,
     UPDATE_ARTICLE_LINK,
     UPDATE_ARTICLE_QUOTE,
+    SEARCH_ARTICLES,
+    GET_ALL_TAGS
 
 } from '../constants/apiUrls'
 
@@ -95,3 +97,25 @@ export const updateArticleQuotesAPI = async (new_info) => {
         return { success: false, error: e.response.data }
     }
 }
+
+export const searchArticleAPI = async (query) => {
+    try {
+        const { data, status } = await axiosInstance.get(SEARCH_ARTICLES, { params: { query } });
+        if (status == 200) return { data: data, success: true }
+    } catch (e) {
+        displayErrorHandler(e, SEARCH_ARTICLES);
+        return { success: false, error: e.response.data }
+    }
+}
+
+
+export const getAllTagsAPI = async () => {
+    try {
+        const { data, status } = await axiosInstance.get(GET_ALL_TAGS);
+        if (status == 200) return { data: data, success: true }
+    } catch (e) {
+        displayErrorHandler(e, GET_ALL_TAGS);
+        return { success: false, error: e.response.data }
+    }
+}
+

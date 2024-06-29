@@ -13,6 +13,7 @@ import (
 const defaultCheck = "deleted_at IS NULL"
 
 type ArticleRepository interface {
+	GetAllArticles() ([]models.Articles, error)
 	SelectByField(field string, value interface{}) ([]models.Articles, error)
 	Create(article models.Articles) (uint, error)
 	Update(articleID uint, updatedArticle interface{}) error
@@ -27,6 +28,12 @@ type articleSqlRepository struct {
 
 func NewArticleRepository(db *gorm.DB) ArticleRepository {
 	return &articleSqlRepository{DB: storage.GetDB()}
+}
+
+func (m *articleSqlRepository) GetAllArticles() ([]models.Articles, error) {
+	var articles []models.Articles
+	err := m.DB.Find(&articles).Error
+	return articles, err
 }
 
 func (m *articleSqlRepository) SelectByField(field string, value interface{}) ([]models.Articles, error) {

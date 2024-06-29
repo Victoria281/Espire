@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from './styles.module.css'
 
-const ArticleCollection = ({ articles }) => {
+const ArticleCollection = ({ search, articles }) => {
 
     const [selectedArticle, setSelectedArticle] = useState(-1);
     const navigate = useNavigate();
@@ -32,23 +32,31 @@ const ArticleCollection = ({ articles }) => {
                 <p>Date</p>
                 <p>Name</p>
                 <p>Author</p>
-                <p>Saves</p>
+                {search ?
+                    <p>User</p>
+                    :
+                    <p>Saves</p>
+                }
             </div>
-            {articles!=undefined && articles.map((item, index) =>
+            {articles != undefined && articles.map((item, index) =>
                 <div key={index}>
                     <div key={index} className={styles.articleListItemTitle} onClick={() => handleShowDescription(index)}>
                         <p>{formatDate(item.createdat)}</p>
                         <p>{item.name}</p>
                         <p>{item.authors}</p>
-                        <p>X saves</p>
+                        {search ?
+                            <p>{item.username}</p>
+                            :
+                            <p>X saves</p>
+                        }
                     </div>
                     {selectedArticle == index ?
                         <div key={index} className={styles.articleListItemDescription} onClick={() => handleSelectArticle(index)}>
                             <p>{item.name}</p>
                             <p>by {item.authors}</p>
                             <p>Published on {formatDate(item.createdat)}</p>
-                            <p>{item.Links.map((linkItem, ind) => {
-                                if (linkItem.is_main) return <div>{linkItem.Link}</div>
+                            <p>{item.Links != null && item.Links.map((linkItem, ind) => {
+                                if (linkItem.is_main) return <p>{linkItem.Link}</p>
                             })}</p>
                             <p>{item.description}</p>
                         </div>

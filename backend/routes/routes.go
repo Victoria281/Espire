@@ -43,6 +43,12 @@ func UserRouter(router fiber.Router) {
 
 	router.Put("/update", userController.UpdatePassword)
 	router.Put("/delete", userController.Delete)
+
+	router.Post("/add-tag", userController.AddUserTag)
+	router.Delete("/remove-tag", userController.RemoveUserTag)
+	router.Post("/add-visit", userController.AddUserArticleVisit)
+	router.Get("/get-visits", userController.GetUserArticleVisits)
+	router.Get("/get-tags", userController.GetUserTags)
 }
 
 func ArticleRouter(router fiber.Router) {
