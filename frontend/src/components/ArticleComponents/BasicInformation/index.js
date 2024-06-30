@@ -23,11 +23,29 @@ const BasicInformation = ({ editedInfo, setEditedInfo, edit }) => {
         }));
     }
 
+    const formatTimestamp = (timestamp) => {
+        const date = new Date(timestamp);
+        return date.toLocaleString('en-US', {
+            timeZone: 'Asia/Singapore',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+        });
+    };
+    
+    const formatString = (title, data) => {
+        if (title == "date") {
+            return formatTimestamp(data);
+        } else {
+            return data
+        }
+    }
+
     return (
         <div className={styles.basicInformationContainer} >
             <div className={styles.basicInformationTop} >
                 {
-                    BASIC_INFO_CONTENT_P1.slice(0,2).map((item, index) =>
+                    BASIC_INFO_CONTENT_P1.slice(0,3).map((item, index) =>
                         <div key={index}>
                             <p>{item.name}</p>
                             {edit ? (
@@ -38,7 +56,7 @@ const BasicInformation = ({ editedInfo, setEditedInfo, edit }) => {
                                     onChange={(e) => handleInputChange(e, item.tag)}
                                 />
                             ) : (
-                                <p>{editedInfo[item.tag]}</p>
+                                <p>{formatString(item.tag, editedInfo[item.tag])}</p>
                             )}
                         </div>
                     )

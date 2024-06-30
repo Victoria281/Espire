@@ -33,7 +33,7 @@ const Navbar = () => {
 
     const handleEditClick = () => {
         const aid = location.pathname.split('/').slice(2, 4).join('/');
-        navigate(`/post/${aid}`)
+        navigate(`/manpost/${aid}`)
     }
 
     const handleLogout = () => {

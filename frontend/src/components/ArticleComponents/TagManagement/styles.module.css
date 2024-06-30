@@ -67,3 +67,37 @@
 .autocompleteInput {
     margin-bottom: 10px;
 }
+
+
+
+.tagsDisplayContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px; /* Space between tags */
+    padding: 10px; /* Padding around tags */
+    background-color: #f1f8ff; /* Light background color */
+    border: 1px solid #d1e3ff; /* Border to make the container stand out */
+    border-radius: 4px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for a card-like effect */
+}
+
+.tagManagementContainer {
+    border-radius: 8px;
+}
+
+.tagManagementContainerEdit {
+    padding: 16px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tagsTopContainer {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.tagsInput {
+    flex: 1;
+}

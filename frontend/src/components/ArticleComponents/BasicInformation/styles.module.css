@@ -5,7 +5,7 @@
 
 .basicInformationTop{
     width: 86vw;
-    margin: auto;
+    margin: 10px auto;
 }
 
 .basicInformationTop > div{
@@ -28,7 +28,7 @@
     margin: 0;
     padding: 2px 10px;
     text-align: left;
-    height: 3vh;
+    height: 100%;
     font-size: 90%;
 }
 
@@ -36,7 +36,7 @@
     width: 71vw;
     margin: 0;
     text-align: left;
-    height: 3vh;
+    height: 100%;
     font-size: 90%;
 }
 
@@ -45,7 +45,7 @@
     background-color: #F0F0F0;
     margin-bottom: 10px;
     padding: 2px 10px;
-    height: 3vh;
+    height: 100%;
 }
 
 

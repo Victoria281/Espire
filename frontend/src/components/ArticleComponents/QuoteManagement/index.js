@@ -34,6 +34,19 @@ const QuoteManagement = ({ edit, quoteInfo, setQuoteInfo }) => {
         setQuoteInfo(updatedQuoteInfo);
     };
 
+    const getColor = (id, bg, index) => {
+        const grpBGColor = ['#ffebee', '#e0f7fa', '#f3e5f5']
+        const grpColor = ['#d32f2f', '#00796b', '#6a1b9a']
+        const priorityColor = ['#c8e6c9', '#ffeb3b', '#ef5350']
+        if (bg==1) {
+            return { backgroundColor: grpBGColor[index-1]}
+        } else if (id == 1) {
+            return { color: grpColor[index-1]}
+        } else {
+            return { backgroundColor: priorityColor[index-1]}
+        }
+    }
+
     return (
         <Box className={edit ? styles.quoteManagementContainerEdit : styles.quoteManagementContainer}>
             {quoteInfo && quoteInfo.map((item, index) =>
@@ -102,12 +115,14 @@ const QuoteManagement = ({ edit, quoteInfo, setQuoteInfo }) => {
                     </Box>
                 ) : (
                     <Box key={index} className={styles.quoteDisplay}>
-                        <Typography variant="body1" className={styles.quoteGroup}>
-                            {QUOTES_GROUP[item.grp_num]}
-                        </Typography>
-                        <Typography variant="body2" className={styles.quotePriority}>
-                            {QUOTES_PRIORITY[item.priority]}
-                        </Typography>
+                        <div className={styles.groupFlag} style={getColor(0, 1, item.grp_num)}>
+                            <Typography variant="body1" className={styles.quoteGroup} style={getColor(1, 0, item.grp_num)}>
+                                {QUOTES_GROUP[item.grp_num]}
+                            </Typography>
+                            <Typography variant="body2" className={styles.quotePriority} style={getColor(0, 0, item.priority)}>
+                                {QUOTES_PRIORITY[item.priority]}
+                            </Typography>
+                        </div>
                         <Typography variant="body2" className={styles.quoteFact}>
                             {item.fact}
                         </Typography>

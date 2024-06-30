@@ -1,0 +1,84 @@
+.flashcardManagementContainer {
+    margin-bottom: 10vh;
+}
+
+/* flashcardStyles.module.css */
+
+/* Container for the flashcard management section */
+.flashcardManagementContainer {
+    padding: 16px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 800px;
+    margin: auto;
+}
+
+/* Container for flashcards in edit mode */
+.editModeContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Card style for flashcards in edit mode */
+.flashcardEditContainer {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* Style for each flashcard */
+.flashcardCard {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    width: 100%;
+}
+
+/* Input style for question and answer */
+.flashcardInput {
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    padding: 8px;
+}
+
+/* Button to delete a flashcard */
+.deleteButton {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    background-color: #ef5350;
+    color: #fff;
+    border-radius: 4px;
+}
+
+/* Container for flashcards in view mode */
+.viewModeContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Style for chips in view mode */
+.viewModeChip {
+    background-color: #ffffff;
+    border: 2px solid #437FC7;
+    color: #437FC7;
+    font-weight: 700;
+    border-radius: 4px;
+}
+
+/* Content of the dialog */
+.flashcardDialogContent {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}

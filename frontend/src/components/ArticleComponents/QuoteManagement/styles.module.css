@@ -44,17 +44,31 @@
     margin: 20px auto 0;
     border-radius: 8px;
     padding: 10px 20px;
-    font-size: 10px!important;
+    font-size: 10px !important;
+}
+
+.groupFlag {
+    border-radius: 4px;
+    padding: 8px;
+    margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .quoteGroup {
     font-weight: bold;
-    color: #1a73e8;
+    margin-bottom: 4px;
 }
 
 .quotePriority {
-    color: #00796b;
+    border-radius: 4px;
+    padding: 2px 6px;
+    color: #000;
+    font-size: 0.75rem;
+    text-transform: uppercase;
 }
+
 
 .quoteFact {
     margin-top: 8px;

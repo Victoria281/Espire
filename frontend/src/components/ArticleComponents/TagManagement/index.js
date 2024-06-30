@@ -42,7 +42,7 @@ const TagManagement = ({ edit, tags, tagInfo, setTagsInfo }) => {
                                             padding: 0,
                                             '& .MuiOutlinedInput-input': {
                                                 padding: '4px',
-                                                fontSize: '13px', 
+                                                fontSize: '13px',
                                             },
                                         },
                                     }}
@@ -83,7 +83,7 @@ const TagManagement = ({ edit, tags, tagInfo, setTagsInfo }) => {
                                 className={styles.tagChip}
                                 sx={{
                                     '& .MuiChip-deleteIcon': {
-                                        color: '#437FC7', 
+                                        color: '#437FC7',
                                     },
                                 }}
                             />
@@ -92,8 +92,26 @@ const TagManagement = ({ edit, tags, tagInfo, setTagsInfo }) => {
 
                 </>
                 :
-                <div>
-                    hi
+
+                <div className={styles.tagsDisplayContainer}>
+                    {tagInfo.length > 0 ? (
+                        tagInfo.map((tag, index) => (
+                            <Chip
+                                key={index}
+                                label={tag.name}
+                                className={styles.tagChip}
+                                sx={{
+                                    '& .MuiChip-deleteIcon': {
+                                        display: 'none', // Hide delete icon
+                                    },
+                                }}
+                            />
+                        ))
+                    ) : (
+                        <Typography variant="body2" color="textSecondary">
+                            No tags available
+                        </Typography>
+                    )}
                 </div>
 
             }

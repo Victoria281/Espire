@@ -2,22 +2,26 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate, useParams } from "react-router-dom";
 import { retrieveArticleById } from "../functions/articles";
-import { newArticleWorkspace, handleCreateNewArticlePost, handleUpdateNewArticlePost } from "../store/actions/articles";
+import { getAllTags, newArticleWorkspace, handleCreateNewArticlePost, handleUpdateNewArticlePost } from "../store/actions/articles";
 import { BASIC_INFO, TAG_MANAGEMENT, QUOTE_MANAGEMENT, FLASHCARD_MANAGEMENT } from "../constants/names";
 import InformationHeading from "../components/ArticleComponents/InformationHeading";
 import BasicInformation from "../components/ArticleComponents/BasicInformation";
 import QuoteManagement from "../components/ArticleComponents/QuoteManagement";
+import TagManagement from "../components/ArticleComponents/TagManagement";
 import PostButton from "../components/ArticleComponents/PostButton";
 
 const PostScreen = () => {
   const { articleid } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const tags = useSelector(state => state.articles.tags);
+  const token = useSelector(state => state.user.token);
 
 
   const workspace_article = useSelector(state => state.articles.workspace.article);
   const [editedInfo, setEditedInfo] = useState(workspace_article);
   const [quoteInfo, setQuoteInfo] = useState(workspace_article.Quotes);
+  const [tagInfo, setTagInfo] = useState(workspace_article.Tags);
   const [errMsg, setErrMsg] = useState("");
 
   useEffect(() => {
@@ -50,8 +54,10 @@ const PostScreen = () => {
       }
     }
   }
-  const checkWorkspaceInfo = (info) => {
+
+  const checkWorkspaceInfo = () => {
     let err_msg = "";
+    let info = { ...editedInfo, Quotes: quoteInfo, Tags: tagInfo }
     let hasError = false;
 
     if (!info.name) {
@@ -88,12 +94,16 @@ const PostScreen = () => {
       hasError = true;
     }
 
-    if (!info.startDate) {
+    if (!info.date) {
       err_msg += "Start date cannot be empty. ";
       hasError = true;
-    } else if (!isValidDate(info.startDate)) {
+    } else if (!isValidDate(info.date)) {
       err_msg += "Start date is not in the correct format (YYYY-MM-DD). ";
       hasError = true;
+    }
+
+    if (err_msg == "") {
+      err_msg = "Ready to create!";
     }
 
     setErrMsg(err_msg);
@@ -102,19 +112,26 @@ const PostScreen = () => {
 
   const isValidDate = (dateString) => {
     const regex = /^\d{4}-\d{2}-\d{2}$/;
-    if (!dateString.match(regex)) return false;
+    if (!regex.test(dateString)) {
+      return false;
+    }
 
-    const [year, month, day] = dateString.split('/').map(Number);
-    const date = new Date(year, month - 1, day);
+    const date = new Date(dateString);
+    const [year, month, day] = dateString.split('-').map(Number);
 
     return (
       date.getFullYear() === year &&
-      date.getMonth() === month - 1 &&
+      date.getMonth() + 1 === month &&
       date.getDate() === day
     );
-  }
+  };
 
 
+  useEffect(() => {
+    if (token != undefined) {
+      dispatch(getAllTags())
+    }
+  }, [])
 
   return (
     <div className="mainContainer restrictScroll">
@@ -127,6 +144,9 @@ const PostScreen = () => {
 
             <InformationHeading title={QUOTE_MANAGEMENT} />
             <QuoteManagement edit={true} quoteInfo={quoteInfo} setQuoteInfo={setQuoteInfo} />
+
+            <InformationHeading title={TAG_MANAGEMENT} />
+            <TagManagement edit={true} tags={tags} tagInfo={tagInfo} setTagInfo={setTagInfo} />
 
             {/* <InformationHeading title={FLASHCARD_MANAGEMENT}/>
     <FlashcardManagement edit={false} info={workspace.article.Flashcards} /> */}
