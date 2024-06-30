@@ -6,7 +6,7 @@ import (
 )
 
 type TagService interface {
-	CreateTag(tag models.Tag) error
+	CreateTag(tag models.Tag) (uint, error)
 	UpdateArticleTags(articleID uint, tagIDs []uint) error
 	GetAllTags() ([]models.Tag, error)
 	DeleteTag(tagID uint) error
@@ -20,7 +20,7 @@ func NewTagService(repo repo.TagRepository) TagService {
 	return &tagService{repo: repo}
 }
 
-func (s *tagService) CreateTag(tag models.Tag) error {
+func (s *tagService) CreateTag(tag models.Tag) (uint, error) {
 	newTag := models.Tag{
 		Name: tag.Name,
 	}

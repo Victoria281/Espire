@@ -22,11 +22,12 @@ func (c *TagController) CreateTag(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request body"})
 	}
 
-	if err := c.Service.CreateTag(tag); err != nil {
+	index, err := c.Service.CreateTag(tag)
+	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Error creating tag"})
 	}
 
-	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{"message": "Tag created successfully"})
+	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{"id": index})
 }
 
 func (c *TagController) UpdateArticleTags(ctx *fiber.Ctx) error {

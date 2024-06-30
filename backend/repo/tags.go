@@ -9,7 +9,7 @@ import (
 )
 
 type TagRepository interface {
-	Create(tag models.Tag) error
+	Create(tag models.Tag) (uint, error)
 	GetByID(tagID uint) (models.Tag, error)
 	GetAll() ([]models.Tag, error)
 	DeleteArticleTags(articleID uint) error
@@ -25,8 +25,11 @@ func NewTagRepository(db *gorm.DB) TagRepository {
 	return &tagSqlRepository{DB: db}
 }
 
-func (r *tagSqlRepository) Create(tag models.Tag) error {
-	return r.DB.Create(&tag).Error
+func (r *tagSqlRepository) Create(tag models.Tag) (uint, error) {
+	if err := r.DB.Create(&tag).Error; err != nil {
+		return 0, err
+	}
+	return tag.ID, nil
 }
 
 func (r *tagSqlRepository) GetByID(tagID uint) (models.Tag, error) {

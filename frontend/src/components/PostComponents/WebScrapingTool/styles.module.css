@@ -1,0 +1,81 @@
+.loaderContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.loaderContainer  > p {
+    width: 40vw;
+    color: #437FC7;
+    font-size: 15px;
+
+}
+
+.loader {
+    color: #437FC7;
+    margin-bottom: 2vh;
+}
+
+.backBtn {
+    color: #437FC7;
+    margin: 3vh auto 3vh 0;
+    cursor: pointer;
+}
+
+.linkTitle {
+    font-size: 100%;
+    font-weight: bold;
+    color: #437FC7;
+    text-align: left;
+    margin: 0 10vw;
+}
+
+.failTitle {
+    font-size: 150%;
+    font-weight: bold;
+    color: #437FC7;
+    text-align: left;
+    margin: 0 auto;
+}
+
+.linkContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 5vh 10vw;
+    margin: 12vh 10vw;
+    width: 60vw;
+    height: 50vh;
+}
+
+.linkTitle {
+    font-size: 20px;
+    font-weight: bold;
+    color: #437FC7;
+    margin-bottom: 20px;
+    margin-left: 2vw;
+    margin-right: auto;
+}
+
+.searchInput {
+    width: 90%;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #437FC7;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    margin-left: 2vw;
+    box-sizing: border-box;
+}
+
+.searchBtn {
+    width: 20%;
+    margin-right: 10%;
+    margin-left: auto;
+}

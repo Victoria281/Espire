@@ -14,6 +14,7 @@ type Articles struct {
 	Authors        string              `json:"authors"`
 	Use            string              `json:"use"`
 	Description    string              `json:"description"`
+	Date           time.Time           `gorm:"default:CURRENT_TIMESTAMP" json:"date"`
 	CreatedAt      time.Time           `gorm:"default:CURRENT_TIMESTAMP" json:"createdat"`
 	UpdatedAt      time.Time           `gorm:"default:CURRENT_TIMESTAMP" json:"updatedat"`
 	DeletedAt      *time.Time          `json:"deletedat"`

@@ -50,27 +50,68 @@ const PostScreen = () => {
       }
     }
   }
-
   const checkWorkspaceInfo = (info) => {
     let err_msg = "";
     let hasError = false;
-    if (!info.name || !info.authors || !info.use || !info.description) {
-      err_msg += "Fields cannot be empty. ";
+
+    if (!info.name) {
+      err_msg += "Name cannot be empty. ";
       hasError = true;
     }
+    if (!info.authors) {
+      err_msg += "Authors cannot be empty. ";
+      hasError = true;
+    }
+    if (!info.use) {
+      err_msg += "Use cannot be empty. ";
+      hasError = true;
+    }
+    if (!info.description) {
+      err_msg += "Description cannot be empty. ";
+      hasError = true;
+    }
+
     const mainLink = info.Links.find(link => link.is_main);
-    if (!mainLink || !mainLink.link) {
+    if (!mainLink) {
+      err_msg += "Main link is missing. ";
+      hasError = true;
+    } else if (!mainLink.link) {
       err_msg += "Main link cannot be empty. ";
       hasError = true;
     }
-    if (info.Quotes.length === 0 || info.Quotes.some(quote => !quote.fact)) {
-      err_msg += "Quotes cannot be empty. ";
+
+    if (info.Quotes.length === 0) {
+      err_msg += "At least one quote is required. ";
+      hasError = true;
+    } else if (info.Quotes.some(quote => !quote.fact)) {
+      err_msg += "Quotes cannot have empty facts. ";
       hasError = true;
     }
-    console.log(err_msg);
+
+    if (!info.startDate) {
+      err_msg += "Start date cannot be empty. ";
+      hasError = true;
+    } else if (!isValidDate(info.startDate)) {
+      err_msg += "Start date is not in the correct format (YYYY-MM-DD). ";
+      hasError = true;
+    }
+
     setErrMsg(err_msg);
-    if (hasError) return false;
-    return true;
+    return !hasError;
+  }
+
+  const isValidDate = (dateString) => {
+    const regex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!dateString.match(regex)) return false;
+
+    const [year, month, day] = dateString.split('/').map(Number);
+    const date = new Date(year, month - 1, day);
+
+    return (
+      date.getFullYear() === year &&
+      date.getMonth() === month - 1 &&
+      date.getDate() === day
+    );
   }
 
 

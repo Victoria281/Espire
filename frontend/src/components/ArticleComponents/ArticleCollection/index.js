@@ -41,7 +41,7 @@ const ArticleCollection = ({ search, articles }) => {
             {articles != undefined && articles.map((item, index) =>
                 <div key={index}>
                     <div key={index} className={styles.articleListItemTitle} onClick={() => handleShowDescription(index)}>
-                        <p>{formatDate(item.createdat)}</p>
+                        <p>{formatDate(item.date)}</p>
                         <p>{item.name}</p>
                         <p>{item.authors}</p>
                         {search ?
@@ -54,7 +54,7 @@ const ArticleCollection = ({ search, articles }) => {
                         <div key={index} className={styles.articleListItemDescription} onClick={() => handleSelectArticle(index)}>
                             <p>{item.name}</p>
                             <p>by {item.authors}</p>
-                            <p>Published on {formatDate(item.createdat)}</p>
+                            <p>Published on {formatDate(item.date)}</p>
                             <p>{item.Links != null && item.Links.map((linkItem, ind) => {
                                 if (linkItem.is_main) return <p>{linkItem.Link}</p>
                             })}</p>

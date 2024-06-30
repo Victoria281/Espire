@@ -1,16 +1,20 @@
 package services
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
 	"net/url"
+	"sort"
+	"strings"
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/Victoria281/Espire/backend/models"
 	"github.com/Victoria281/Espire/backend/repo"
 	"github.com/gocolly/colly/v2"
+	"github.com/jdkato/prose/v2"
 	"gorm.io/gorm"
 )
 
@@ -24,6 +28,7 @@ type ArticleService interface {
 	DeleteArticle(id uint) error
 	FetchArticlesFromGoogleScholar(query string) ([]ArticleSearch, error)
 	FindArticlesWithSimilarTitles(query string) ([]models.Articles, error)
+	GetArticleInfoAndSuggestTags(url string) (*models.Articles, error)
 }
 
 type ArticleSearch struct {
@@ -88,6 +93,7 @@ func (s *articleService) CreateNewArticle(username string, article models.Articl
 		ParentUsername: nil,
 		Name:           article.Name,
 		Authors:        article.Authors,
+		Date:           article.Date,
 		Use:            article.Use,
 		Description:    article.Description,
 	}
@@ -102,6 +108,7 @@ func (s *articleService) UpdateArticle(username string, id uint, article *models
 		Authors:     article.Authors,
 		Use:         article.Use,
 		Description: article.Description,
+		Date:        article.Date,
 		UpdatedAt:   time.Now(),
 	}
 	err := s.repo.Update(id, updatedArticle)
@@ -198,4 +205,130 @@ func fetchAdditionalInfo(link string) (string, string, error) {
 	}
 
 	return description, date, nil
+}
+
+func (s *articleService) GetArticleInfoAndSuggestTags(url string) (*models.Articles, error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, errors.New("failed to fetch the article")
+	}
+
+	doc, err := goquery.NewDocumentFromReader(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	title := doc.Find("title").Text()
+	if title == "" {
+		return nil, errors.New("failed to find the article title")
+	}
+
+	author := doc.Find("meta[name='author']").AttrOr("content", "No author available")
+	description := doc.Find("meta[name='description']").AttrOr("content", "No description available")
+	publishedDateStr := doc.Find("meta[name='date']").AttrOr("content", "No date available")
+
+	contentBuilder := strings.Builder{}
+	doc.Find("p").Each(func(i int, s *goquery.Selection) {
+		contentBuilder.WriteString(s.Text() + "\n")
+	})
+	content := contentBuilder.String()
+
+	tags, err := extractTagsUsingProse(content)
+	if err != nil {
+		return nil, err
+	}
+
+	var publishedDate time.Time
+	var parseErr error
+	if publishedDateStr != "No date available" {
+		publishedDate, parseErr = time.Parse(time.RFC3339, publishedDateStr)
+		if parseErr != nil {
+			return nil, fmt.Errorf("failed to parse published date: %v", parseErr)
+		}
+	} else {
+		// Fallback to the current time if the date is not available
+		publishedDate = time.Now()
+	}
+
+	article := &models.Articles{
+		Name:        title,
+		Authors:     author,
+		Description: description,
+		Use:         content,
+		Date:        publishedDate,
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
+		Tags:        tags,
+		Links: []models.ArticleLinks{
+			{IsMain: true, Link: url},
+		},
+	}
+
+	return article, nil
+}
+func extractTagsUsingProse(content string) ([]models.Tag, error) {
+	doc, err := prose.NewDocument(content)
+	if err != nil {
+		return nil, err
+	}
+
+	keywords := make(map[string]int)
+	for _, token := range doc.Tokens() {
+		if token.Tag == "NN" || token.Tag == "NNS" || token.Tag == "JJ" {
+			if len(token.Text) >= 2 {
+				keywords[token.Text]++
+			}
+		}
+	}
+
+	type kv struct {
+		Key   string
+		Value int
+	}
+	var sortedKeywords []kv
+	for k, v := range keywords {
+		sortedKeywords = append(sortedKeywords, kv{k, v})
+	}
+	sort.Slice(sortedKeywords, func(i, j int) bool {
+		return sortedKeywords[i].Value > sortedKeywords[j].Value
+	})
+
+	tags := make([]models.Tag, 0, 5)
+	for i, kv := range sortedKeywords {
+		if i >= 5 {
+			break
+		}
+		tags = append(tags, models.Tag{Name: kv.Key})
+	}
+
+	return tags, nil
+}
+
+func extractTagsFromContent(content string) []models.Tag {
+	stopWords := map[string]bool{
+		"the": true, "and": true, "is": true, "in": true, "to": true, "of": true, "a": true, "with": true, "that": true, "for": true,
+	}
+
+	words := strings.Fields(content)
+	wordFrequency := make(map[string]int)
+
+	for _, word := range words {
+		word = strings.ToLower(strings.Trim(word, ".,!?\"'"))
+		if !stopWords[word] {
+			wordFrequency[word]++
+		}
+	}
+
+	var tags []models.Tag
+	for word, freq := range wordFrequency {
+		if freq > 1 {
+			tags = append(tags, models.Tag{Name: word, ID: 0})
+		}
+	}
+	return tags
 }

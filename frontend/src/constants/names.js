@@ -141,7 +141,7 @@ export const BASIC_INFO_CONTENT_P1 = [
     },
     {
         name: "Date Published",
-        tag: "createdat"
+        tag: "date"
     }
 ]
 

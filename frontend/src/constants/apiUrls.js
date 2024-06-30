@@ -20,3 +20,6 @@ export const DELETE_ARTICLE = (aid) => `/articles/${aid}`;
 
 export const SEARCH_ARTICLES = `/articles/search`;
 export const GET_ALL_TAGS = `/tags`;
+export const GET_WEB_SCRAPE = `/articles/webscrap`;
+export const CREATE_NEW_TAG = `/tags`;
+export const ATTACH_TAGS = (aid) => `/tags/articles/${aid}`;

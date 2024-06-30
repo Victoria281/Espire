@@ -1,0 +1,69 @@
+.tagManagementContainer {
+    width: 90%;
+    margin: auto;
+    padding: 16px;
+}
+
+.tagManagementContainerEdit {
+    width: 90%;
+    margin: auto;
+    padding: 16px;
+}
+
+.tagManager {
+    width: 100%;
+    max-width: 600px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.tagsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    max-height: 9vh;
+    overflow-y: auto;
+}
+
+.tagsTopContainer {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    height: 20%;
+}
+
+.tagsContainer::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+.tagsContainer::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.tagsContainer::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+.tagsContainer::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.tagChip {
+    color: #437FC7!important;
+    background-color: #ffffff!important;
+    border: 2px solid #437FC7!important;
+    border-radius: 2px!important;
+    font-size: 13px!important;
+    font-weight: 700!important;
+}
+
+.autocompleteInput {
+    margin-bottom: 10px;
+}

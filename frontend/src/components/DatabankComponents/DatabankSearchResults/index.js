@@ -7,7 +7,6 @@ import SearchWebResults from "../../ArticleComponents/SearchWebResults";
 const DatabankSearchResults = ({ results }) => {
 
 
-    console.log(results)
     return (
         <div>
             {results.database.map((item, index) =>

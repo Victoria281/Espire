@@ -19,7 +19,7 @@ const SearchWebResults = ({ web_results }) => {
     }
 
     const handleSelectWebResult = (item) => {
-
+        navigate(`/articles/${item.link}`)
     }
 
 

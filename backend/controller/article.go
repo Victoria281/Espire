@@ -147,3 +147,17 @@ func (c *ArticleController) GetSimilarArticles(ctx *fiber.Ctx) error {
 
 	return ctx.Status(fiber.StatusOK).JSON(response)
 }
+
+func (c *ArticleController) GetArticleInfoAndSuggestTags(ctx *fiber.Ctx) error {
+	url := ctx.Query("url")
+	if url == "" {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "URL parameter is required"})
+	}
+
+	article, err := c.Service.GetArticleInfoAndSuggestTags(url)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"article": article})
+}

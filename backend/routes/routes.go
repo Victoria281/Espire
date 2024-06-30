@@ -99,6 +99,7 @@ func ArticleRouter(router fiber.Router) {
 	router.Delete("/flashcards/:id", articleFlashcardController.DeleteFlashcard)
 
 	router.Get("/search", articleController.GetSimilarArticles)
+	router.Get("/webscrap", articleController.GetArticleInfoAndSuggestTags)
 }
 
 func CollectionRouter(router fiber.Router) {

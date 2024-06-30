@@ -6,12 +6,14 @@ import { navigateToLogin } from "../functions/authFunctions";
 import SearchBar from "../components/DatabankComponents/SearchBar";
 import TagBar from "../components/DatabankComponents/TagBar";
 import DatabankSearchResults from "../components/DatabankComponents/DatabankSearchResults";
+import DatabankLoad from "../components/DatabankComponents/DatabankLoad";
 import queryString from 'query-string';
 
 const DatabankScreen = () => {
   const [searchedList, setSearchedList] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [tagSearchQuery, setTagSearchQuery] = useState('');
+  const [loading, setLoading] = useState(false);
   const [searching, setSearching] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -46,17 +48,33 @@ const DatabankScreen = () => {
   };
 
   useEffect(() => {
-    const query = queryString.parse(location.search).query;
-    if (token != undefined) {
-      dispatch(getAllTags())
-      if (query != undefined) {
-        setSearching(true);
-        setSearchQuery(query)
-        dispatch(searchArticles(query))
+
+    const fetchData = async () => {
+      const query = queryString.parse(location.search).query;
+      if (token !== undefined) {
+        dispatch(getAllTags());
+
+        if (query !== undefined) {
+          setSearching(true);
+          setLoading(true);
+          setSearchQuery(query);
+          await dispatch(searchArticles(query)).then((result) => {
+            if (result.success) {
+              console.log("result")
+              console.log(result)
+              setLoading(false);
+            }
+          });
+        } else {
+          setSearching(false);
+          setLoading(false);
+        }
+      } else {
+        navigateToLogin(navigate);
       }
-    } else {
-      navigateToLogin(navigate);
-    }
+    };
+
+    fetchData();
   }, [location.search, token, dispatch, navigate]);
 
   return (
@@ -66,11 +84,17 @@ const DatabankScreen = () => {
 
       <TagBar tags={tags} tagSearchQuery={tagSearchQuery} setTagSearchQuery={setTagSearchQuery} handleTagKeyPress={handleTagKeyPress} handleTagSearch={handleTagSearch} />
 
-      {searching ?
-        searchResults.web.length != 0 &&
+      {searching && (!loading ?
+        searchResults.web?.length != 0 &&
         <DatabankSearchResults results={searchResults} />
         :
-        <div>dfdf</div>
+        <DatabankLoad query={searchQuery} />
+      )}
+
+      {!searching &&
+        <div>
+          show reccomendation
+        </div>
       }
 
 

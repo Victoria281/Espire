@@ -1,0 +1,20 @@
+.loaderContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 20vh;
+}
+
+.loaderContainer>p {
+    color: #437FC7;
+    font-size: 15px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.loader {
+    color: #437FC7;
+    margin-bottom: 2vh;
+}

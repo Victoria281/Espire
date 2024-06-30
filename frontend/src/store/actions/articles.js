@@ -8,7 +8,10 @@ import {
     updateArticleLinkAPI,
     updateArticleQuotesAPI,
     searchArticleAPI,
-    getAllTagsAPI
+    getAllTagsAPI,
+    scrapeArticleAPI,
+    createNewTagAPI,
+    createNewArticleTagsAPI
 } from '../../controller/articleController';
 import {
     ARTICLE_BASE_TEMPLATE,
@@ -55,6 +58,23 @@ export const newArticleWorkspace = () => async (dispatch) => {
 
 export const handleCreateNewArticlePost = (new_info) => async (dispatch, getState) => {
     let articleid = -1;
+
+    const tags = getState().articles.tags;
+    const existingTagNames = tags.map(tag => tag.name);
+    const oldTagIds = tags
+        .filter(tag => new_info.Tags.some(newTag => newTag.name === tag.name))
+        .map(tag => tag.ID);
+
+    const newTags = new_info.Tags.filter(tag => !existingTagNames.includes(tag.name));
+    const newTagIds = [];
+    for (const tag of newTags) {
+        const result = await createNewTagAPI({ name: tag.name });
+        if (result.success) {
+            newTagIds.push(result.data.id);
+        }
+    }
+    const allTagIds = [...oldTagIds, ...newTagIds];
+
     const result = await createNewArticleAPI({
         name: new_info.name,
         authors: new_info.authors,
@@ -65,8 +85,10 @@ export const handleCreateNewArticlePost = (new_info) => async (dispatch, getStat
         articleid = result.data.id;
         await createNewArticleLinkAPI({ article_id: articleid.toString(), Links: new_info.Links });
         await createNewArticleQuotesAPI({ article_id: articleid.toString(), Quotes: new_info.Quotes });
+        await createNewArticleTagsAPI({ article_id: articleid.toString(), Tags: allTagIds });
     }
     return articleid;
+    return null
 }
 
 export const handleUpdateNewArticlePost = (new_info) => async (dispatch, getState) => {
@@ -89,7 +111,7 @@ export const searchArticles = (query) => async (dispatch, getState) => {
         type: SET_SEARCH_RESULTS,
         search: result.data
     });
-    return result;
+    return result.success;
 }
 
 export const getAllTags = () => async (dispatch, getState) => {
@@ -98,6 +120,12 @@ export const getAllTags = () => async (dispatch, getState) => {
         type: SET_TAGS,
         tags: result.data
     });
+    return result;
+}
+
+
+export const scrapeArticle = (link) => async (dispatch, getState) => {
+    const result = await scrapeArticleAPI(link);
     return result;
 }
 

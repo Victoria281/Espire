@@ -14,7 +14,10 @@ import {
     UPDATE_ARTICLE_LINK,
     UPDATE_ARTICLE_QUOTE,
     SEARCH_ARTICLES,
-    GET_ALL_TAGS
+    GET_ALL_TAGS,
+    GET_WEB_SCRAPE,
+    CREATE_NEW_TAG,
+    ATTACH_TAGS
 
 } from '../constants/apiUrls'
 
@@ -119,3 +122,35 @@ export const getAllTagsAPI = async () => {
     }
 }
 
+export const scrapeArticleAPI = async (url) => {
+    try {
+        const { data, status } = await axiosInstance.get(GET_WEB_SCRAPE, { params: { url } });
+        if (status == 200) return { data: data, success: true }
+    } catch (e) {
+        console.log(e.response.data)
+        displayErrorHandler(e, GET_WEB_SCRAPE);
+        return { success: false, error: e.response.data }
+    }
+}
+
+
+
+export const createNewTagAPI = async (name) => {
+    try {
+        const { data, status } = await axiosInstance.post(CREATE_NEW_TAG, name);
+        if (status == 201) return { data: data, success: true }
+    } catch (e) {
+        displayErrorHandler(e, CREATE_NEW_TAG);
+        return { success: false, error: e.response.data }
+    }
+}
+
+export const createNewArticleTagsAPI = async (new_info) => {
+    try {
+        const { data, status } = await axiosInstance.put(ATTACH_TAGS(new_info.article_id), {tagids: new_info.Tags});
+        if (status == 201) return { data: data, success: true }
+    } catch (e) {
+        displayErrorHandler(e, ATTACH_TAGS(new_info.article_id));
+        return { success: false, error: e.response.data }
+    }
+}
