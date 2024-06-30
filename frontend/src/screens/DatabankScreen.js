@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from "react-router-dom";
-import { searchArticles, getAllTags } from "../store/actions/articles";
+import { searchArticles, searchGoogleArticles, getAllTags } from "../store/actions/articles";
 import { navigateToLogin } from "../functions/authFunctions";
 import SearchBar from "../components/DatabankComponents/SearchBar";
 import TagBar from "../components/DatabankComponents/TagBar";
@@ -22,6 +22,7 @@ const DatabankScreen = () => {
   const token = useSelector(state => state.user.token);
   const searchResults = useSelector(state => state.articles.search);
   const tags = useSelector(state => state.articles.tags);
+  const searchloader = useSelector(state => state.articles.searchloader)
 
 
   const handleSearch = () => {
@@ -60,8 +61,6 @@ const DatabankScreen = () => {
           setSearchQuery(query);
           await dispatch(searchArticles(query)).then((result) => {
             if (result.success) {
-              console.log("result")
-              console.log(result)
               setLoading(false);
             }
           });
@@ -88,7 +87,7 @@ const DatabankScreen = () => {
         searchResults.web?.length != 0 &&
         <DatabankSearchResults results={searchResults} />
         :
-        <DatabankLoad query={searchQuery} />
+        <DatabankLoad loadingMsg={searchloader} query={searchQuery} />
       )}
 
       {!searching &&

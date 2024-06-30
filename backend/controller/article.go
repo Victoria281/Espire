@@ -148,6 +148,21 @@ func (c *ArticleController) GetSimilarArticles(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusOK).JSON(response)
 }
 
+func (c *ArticleController) GetArticlesFromGoogle(ctx *fiber.Ctx) error {
+	query := ctx.Query("query")
+
+	googleArticles, err := c.Service.FetchArticlesFromGoogleSearch(query)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	response := map[string]interface{}{
+		"web": googleArticles,
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(response)
+}
+
 func (c *ArticleController) GetArticleInfoAndSuggestTags(ctx *fiber.Ctx) error {
 	url := ctx.Query("url")
 	if url == "" {

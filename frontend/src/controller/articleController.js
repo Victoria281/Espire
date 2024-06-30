@@ -14,6 +14,7 @@ import {
     UPDATE_ARTICLE_LINK,
     UPDATE_ARTICLE_QUOTE,
     SEARCH_ARTICLES,
+    SEARCH_GOOGLE_ARTICLES,
     GET_ALL_TAGS,
     GET_WEB_SCRAPE,
     CREATE_NEW_TAG,
@@ -107,6 +108,16 @@ export const searchArticleAPI = async (query) => {
         if (status == 200) return { data: data, success: true }
     } catch (e) {
         displayErrorHandler(e, SEARCH_ARTICLES);
+        return { success: false, error: e.response.data }
+    }
+}
+
+export const searchGoogleArticleAPI = async (query) => {
+    try {
+        const { data, status } = await axiosInstance.get(SEARCH_GOOGLE_ARTICLES, { params: { query } });
+        if (status == 200) return { data: data, success: true }
+    } catch (e) {
+        displayErrorHandler(e, SEARCH_GOOGLE_ARTICLES);
         return { success: false, error: e.response.data }
     }
 }

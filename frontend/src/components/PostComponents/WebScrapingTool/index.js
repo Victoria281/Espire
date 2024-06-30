@@ -29,7 +29,8 @@ const WebScrapingTool = ({ handleGoBack, tags }) => {
             manageLink = urlItem
         }
 
-        await dispatch(scrapeArticle(link)).then(({ success, data }) => {
+
+        await dispatch(scrapeArticle(manageLink)).then(({ success, data }) => {
             if (success) {
                 setInfo(data)
                 setScrapped(true)

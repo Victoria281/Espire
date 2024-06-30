@@ -19,7 +19,9 @@ const SearchWebResults = ({ web_results }) => {
     }
 
     const handleSelectWebResult = (item) => {
-        navigate(`/articles/${item.link}`)
+        const articleUrl = 'https://news.google.com/__i/rss/rd/articles/CBMiLWh0dHBzOi8vd3d3Lm5hdHVyZS5jb20vY29sbGVjdGlvbnMvYWZkZWpmYWZkYtIBAA?oc=5';
+        const encodedUrl = encodeURIComponent(articleUrl);
+        navigate(`/post/${encodedUrl}`)
     }
 
 
@@ -45,10 +47,10 @@ const SearchWebResults = ({ web_results }) => {
                             <a href={item.link}>{item.link}</a>
                             <p>{item.description}</p>
                             <div className={styles.createPostButton}>
-                            <Button type="main" onClick={() => handleSelectWebResult(item)}>
-                                Create article on this post
-                            </Button>
-                        </div>
+                                <Button type="main" onClick={() => handleSelectWebResult(item)}>
+                                    Create article on this post
+                                </Button>
+                            </div>
                         </div>
                         :
                         <span></span>

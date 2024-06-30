@@ -2,7 +2,7 @@ import React from "react";
 import styles from './styles.module.css'
 import { CircularProgress, Typography } from '@mui/material';
 
-const DatabankLoad = ({ query }) => {
+const DatabankLoad = ({ loadingMsg, query }) => {
 
 
     return (
@@ -14,6 +14,7 @@ const DatabankLoad = ({ query }) => {
                 Searching for
             </Typography>
             <p>{query}</p>
+            <p>{loadingMsg}</p>
         </div>
     );
 }

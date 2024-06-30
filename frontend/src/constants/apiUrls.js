@@ -19,6 +19,7 @@ export const DELETE_ARTICLE = (aid) => `/articles/${aid}`;
 
 
 export const SEARCH_ARTICLES = `/articles/search`;
+export const SEARCH_GOOGLE_ARTICLES = `/articles/googlesearch`;
 export const GET_ALL_TAGS = `/tags`;
 export const GET_WEB_SCRAPE = `/articles/webscrap`;
 export const CREATE_NEW_TAG = `/tags`;

@@ -11,7 +11,8 @@ import {
     getAllTagsAPI,
     scrapeArticleAPI,
     createNewTagAPI,
-    createNewArticleTagsAPI
+    createNewArticleTagsAPI,
+    searchGoogleArticleAPI
 } from '../../controller/articleController';
 import {
     ARTICLE_BASE_TEMPLATE,
@@ -107,11 +108,37 @@ export const handleUpdateNewArticlePost = (new_info) => async (dispatch, getStat
 export const searchArticles = (query) => async (dispatch, getState) => {
     console.log(query)
     const result = await searchArticleAPI(query);
+
+    let msg = ''
+
+    if (result.data.web == null) {
+        msg = "Blocked by Google Scholar. Fallback to Google API..."
+
+        console.log(msg)
+        dispatch({
+            type: SET_SEARCH_RESULTS,
+            search: result.data,
+            searchloader: msg
+        });
+        return dispatch(searchGoogleArticles(query))
+    }
+    return result;
+}
+
+export const searchGoogleArticles = (query) => async (dispatch, getState) => {
+    console.log("searchGoogleArticles")
+    const result = await searchGoogleArticleAPI(query);
+    const state = getState().articles;
+    console.log(result)
     dispatch({
         type: SET_SEARCH_RESULTS,
-        search: result.data
+        search: {
+            ...state.search,
+            web: result.data.web
+        },
+        searchloader: ''
     });
-    return result.success;
+    return result;
 }
 
 export const getAllTags = () => async (dispatch, getState) => {

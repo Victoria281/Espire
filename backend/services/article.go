@@ -1,11 +1,13 @@
 package services
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"log"
 	"net/http"
 	"net/url"
+	"os"
 	"sort"
 	"strings"
 	"time"
@@ -15,6 +17,8 @@ import (
 	"github.com/Victoria281/Espire/backend/repo"
 	"github.com/gocolly/colly/v2"
 	"github.com/jdkato/prose/v2"
+	"google.golang.org/api/customsearch/v1"
+	"google.golang.org/api/option"
 	"gorm.io/gorm"
 )
 
@@ -28,6 +32,7 @@ type ArticleService interface {
 	DeleteArticle(id uint) error
 	FetchArticlesFromGoogleScholar(query string) ([]ArticleSearch, error)
 	FindArticlesWithSimilarTitles(query string) ([]models.Articles, error)
+	FetchArticlesFromGoogleSearch(query string) ([]ArticleSearch, error)
 	GetArticleInfoAndSuggestTags(url string) (*models.Articles, error)
 }
 
@@ -165,6 +170,50 @@ func (s *articleService) FetchArticlesFromGoogleScholar(query string) ([]Article
 		}
 		articleSearch = append(articleSearch, article)
 	})
+
+	return articleSearch, nil
+}
+
+func (s *articleService) FetchArticlesFromGoogleSearch(query string) ([]ArticleSearch, error) {
+	googleAPIKey := os.Getenv("GOOGLE_API_KEY")
+	googleSearchCX := os.Getenv("CUSTOM_SEARCH_ENGINE_ID")
+	var articleSearch []ArticleSearch
+
+	ctx := context.Background()
+	service, err := customsearch.NewService(ctx, option.WithAPIKey(googleAPIKey))
+	if err != nil {
+		return articleSearch, err
+	}
+
+	search := service.Cse.List().
+		Q(query + " articles").
+		Cx(googleSearchCX)
+
+	call, err := search.Do()
+	if err != nil {
+		return articleSearch, err
+	}
+
+	for _, item := range call.Items {
+		title := item.Title
+		link := item.Link
+		snippet := item.Snippet
+
+		description, date, err := fetchAdditionalInfo(link)
+		if err != nil {
+			description = snippet
+			date = "No date available"
+		}
+
+		article := ArticleSearch{
+			Title:       title,
+			Authors:     "NA",
+			Description: description,
+			Link:        link,
+			Date:        date,
+		}
+		articleSearch = append(articleSearch, article)
+	}
 
 	return articleSearch, nil
 }

@@ -18,7 +18,8 @@ const initialState = {
   search: {
     database: [],
     web: []
-  }
+  },
+  searchloader: ''
 };
 
 const reducer = (state = initialState, action) => {
@@ -36,7 +37,8 @@ const reducer = (state = initialState, action) => {
     case SET_SEARCH_RESULTS:
       return {
         ...state,
-        search: action.search
+        search: action.search,
+        searchloader: action.searchloader,
       };
     case SET_TAGS:
       return {
