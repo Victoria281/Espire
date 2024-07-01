@@ -97,10 +97,11 @@ const PostScreen = () => {
     if (!info.date) {
       err_msg += "Start date cannot be empty. ";
       hasError = true;
-    } else if (!isValidDate(info.date)) {
-      err_msg += "Start date is not in the correct format (YYYY-MM-DD). ";
-      hasError = true;
-    }
+    } 
+    // else if (!isValidDate(info.date)) {
+    //   err_msg += "Start date is not in the correct format (YYYY-MM-DD). ";
+    //   hasError = true;
+    // }
 
     if (err_msg == "") {
       err_msg = "Ready to create!";
@@ -146,7 +147,7 @@ const PostScreen = () => {
             <QuoteManagement edit={true} quoteInfo={quoteInfo} setQuoteInfo={setQuoteInfo} />
 
             <InformationHeading title={TAG_MANAGEMENT} />
-            <TagManagement edit={true} tags={tags} tagInfo={tagInfo} setTagInfo={setTagInfo} />
+            <TagManagement edit={true} tags={tags} tagInfo={tagInfo} setTagsInfo={setTagInfo} />
 
             {/* <InformationHeading title={FLASHCARD_MANAGEMENT}/>
     <FlashcardManagement edit={false} info={workspace.article.Flashcards} /> */}
