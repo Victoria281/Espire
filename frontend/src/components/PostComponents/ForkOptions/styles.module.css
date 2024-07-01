@@ -1,0 +1,30 @@
+
+.divider {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 80vw;
+    margin: 0 10vw;
+}
+
+.line {
+    border-top: 2px solid #437FC7;
+    width: 35vw;
+}
+
+.dividerText {
+    font-size: 100%;
+    font-weight: bold;
+    color: #437FC7;
+    text-align: center;
+    margin: 0;
+}
+
+.forkTitle {
+    font-size: 100%;
+    font-weight: bold;
+    color: #437FC7;
+    text-align: left;
+    margin: 0 10vw;
+}

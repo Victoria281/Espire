@@ -120,7 +120,59 @@ func (c *ArticleController) DeleteArticle(ctx *fiber.Ctx) error {
 
 	err = c.Service.DeleteArticle(uint(articleID))
 	if err != nil {
-		return err // Service method errors will be handled by Fiber
+		return err
 	}
 	return ctx.JSON(fiber.Map{"message": "Article deleted successfully"})
+}
+
+func (c *ArticleController) GetSimilarArticles(ctx *fiber.Ctx) error {
+	query := ctx.Query("query")
+
+	googleArticles, err := c.Service.FetchArticlesFromGoogleScholar(query)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	// Check database for similar titles
+	dbArticles, err := c.Service.FindArticlesWithSimilarTitles(query)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	// Format response
+	response := map[string]interface{}{
+		"database": dbArticles,
+		"web":      googleArticles,
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(response)
+}
+
+func (c *ArticleController) GetArticlesFromGoogle(ctx *fiber.Ctx) error {
+	query := ctx.Query("query")
+
+	googleArticles, err := c.Service.FetchArticlesFromGoogleSearch(query)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	response := map[string]interface{}{
+		"web": googleArticles,
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(response)
+}
+
+func (c *ArticleController) GetArticleInfoAndSuggestTags(ctx *fiber.Ctx) error {
+	url := ctx.Query("url")
+	if url == "" {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "URL parameter is required"})
+	}
+
+	article, err := c.Service.GetArticleInfoAndSuggestTags(url)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"article": article})
 }

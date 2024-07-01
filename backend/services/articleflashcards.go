@@ -1,13 +1,15 @@
 package services
 
 import (
+	"time"
+
 	"github.com/Victoria281/Espire/backend/models"
 	"github.com/Victoria281/Espire/backend/repo"
 )
 
 type ArticleFlashcardService interface {
-	CreateFlashcard(articleID uint, answer string, question string, tries int, wrong int) error
-	UpdateFlashcard(flashcardID uint, updatedFlashcard models.ArticleFlashcards) error
+	CreateFlashcard(articleID uint, answer string, question string) error
+	UpdateFlashcard(flashcardID uint, answer *string, question *string, tries *int, wrong *int) error
 	DeleteFlashcard(flashcardID uint) error
 }
 
@@ -19,7 +21,7 @@ func NewArticleFlashcardService(repo repo.ArticleFlashcardRepository) ArticleFla
 	return &articleFlashcardService{repo: repo}
 }
 
-func (s *articleFlashcardService) CreateFlashcard(articleID uint, answer string, question string, tries int, wrong int) error {
+func (s *articleFlashcardService) CreateFlashcard(articleID uint, answer string, question string) error {
 	newFlashcard := models.ArticleFlashcards{
 		ArticleID: articleID,
 		Answer:    answer,
@@ -28,8 +30,25 @@ func (s *articleFlashcardService) CreateFlashcard(articleID uint, answer string,
 	return s.repo.CreateFlashcard(newFlashcard)
 }
 
-func (s *articleFlashcardService) UpdateFlashcard(flashcardID uint, updatedFlashcard models.ArticleFlashcards) error {
-	return s.repo.UpdateFlashcard(flashcardID, updatedFlashcard)
+func (s *articleFlashcardService) UpdateFlashcard(flashcardID uint, answer *string, question *string, tries *int, wrong *int) error {
+	updatedFlashcard := make(map[string]interface{})
+	if answer != nil {
+		updatedFlashcard["answer"] = *answer
+	}
+	if question != nil {
+		updatedFlashcard["question"] = *question
+	}
+	if tries != nil {
+		updatedFlashcard["tries"] = *tries
+	}
+	if wrong != nil {
+		updatedFlashcard["wrong"] = *wrong
+	}
+	updatedFlashcard["updated_at"] = time.Now()
+	if err := s.repo.UpdateFlashcard(flashcardID, updatedFlashcard); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (s *articleFlashcardService) DeleteFlashcard(flashcardID uint) error {

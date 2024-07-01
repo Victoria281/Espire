@@ -1,0 +1,11 @@
+.btnContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 5vh 10vw;
+}
+
+.Btn {
+    width: 36vw;
+    height: 5vh;
+}

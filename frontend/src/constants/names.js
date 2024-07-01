@@ -126,7 +126,7 @@ export const TAB1="Articles"
 export const TAB2="Folders"
 
 export const BASIC_INFO="Basic Information"
-export const TAG_MANAGEMENT="Tag Management"
+export const TAG_MANAGEMENT="Tags"
 export const QUOTE_MANAGEMENT="Quotes / Statistics"
 export const FLASHCARD_MANAGEMENT="Flashcard Management"
 
@@ -141,7 +141,7 @@ export const BASIC_INFO_CONTENT_P1 = [
     },
     {
         name: "Date Published",
-        tag: "createdat"
+        tag: "date"
     }
 ]
 

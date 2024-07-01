@@ -7,6 +7,7 @@ import (
 )
 
 type Users struct {
+	UserID         uint       `gorm:"autoIncrement;unique" json:"user_id"`
 	Username       string     `gorm:"primaryKey;unique" json:"username"`
 	Password       []byte     `json:"password"`
 	Role           string     `gorm:"default:user" json:"role"`
@@ -17,7 +18,27 @@ type Users struct {
 	ForkedArticles []Articles `gorm:"foreignKey:ParentUsername;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
 }
 
+type UserArticleVisit struct {
+	Username  string    `gorm:"not null" json:"username"`
+	ArticleID uint      `gorm:"not null" json:"article_id"`
+	VisitedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"visited_at"`
+	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"createdat"`
+}
+
+type UserTag struct {
+	Username string `gorm:"not null" json:"username"`
+	TagID    uint   `gorm:"not null" json:"tag_id"`
+}
+
 func MigrateUser(db *gorm.DB) error {
-	err := db.AutoMigrate(&Users{})
-	return err
+	if err := db.AutoMigrate(&Users{}); err != nil {
+		return err
+	}
+	if err := db.AutoMigrate(&UserArticleVisit{}); err != nil {
+		return err
+	}
+	if err := db.AutoMigrate(&UserTag{}); err != nil {
+		return err
+	}
+	return nil
 }

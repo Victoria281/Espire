@@ -6,12 +6,20 @@ import (
 
 	"golang.org/x/crypto/bcrypt"
 
+	"github.com/Victoria281/Espire/backend/models"
 	"github.com/Victoria281/Espire/backend/repo"
 )
 
 type UserService interface {
+	GetUserIndex(username string) (uint, error)
 	UpdatePassword(username, currentPassword, newPassword string) error
 	DeleteUser(username string) error
+
+	AddUserTag(username string, tagID uint) error
+	RemoveUserTag(username string, tagID uint) error
+	AddUserArticleVisit(username string, articleID uint) error
+	GetUserArticleVisits(username string, limit int) ([]models.UserArticleVisit, error)
+	GetUserTags(username string) ([]string, error)
 }
 
 type userService struct {
@@ -22,6 +30,10 @@ func NewUserService(repo repo.UserRepository) UserService {
 	return &userService{
 		repo: repo,
 	}
+}
+
+func (s *userService) GetUserIndex(username string) (uint, error) {
+	return s.repo.GetUserIndex(username)
 }
 
 func (s *userService) UpdatePassword(username, currentPassword, newPassword string) error {
@@ -61,4 +73,24 @@ func (s *userService) DeleteUser(username string) error {
 		return err
 	}
 	return nil
+}
+
+func (s *userService) AddUserTag(username string, tagID uint) error {
+	return s.repo.AddUserTag(username, tagID)
+}
+
+func (s *userService) RemoveUserTag(username string, tagID uint) error {
+	return s.repo.RemoveUserTag(username, tagID)
+}
+
+func (s *userService) AddUserArticleVisit(username string, articleID uint) error {
+	return s.repo.AddUserArticleVisit(username, articleID)
+}
+
+func (s *userService) GetUserArticleVisits(username string, limit int) ([]models.UserArticleVisit, error) {
+	return s.repo.GetUserArticleVisits(username, limit)
+}
+
+func (s *userService) GetUserTags(username string) ([]string, error) {
+	return s.repo.GetUserTags(username)
 }

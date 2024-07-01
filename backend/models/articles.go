@@ -14,12 +14,15 @@ type Articles struct {
 	Authors        string              `json:"authors"`
 	Use            string              `json:"use"`
 	Description    string              `json:"description"`
+	Date           time.Time           `gorm:"default:CURRENT_TIMESTAMP" json:"date"`
 	CreatedAt      time.Time           `gorm:"default:CURRENT_TIMESTAMP" json:"createdat"`
 	UpdatedAt      time.Time           `gorm:"default:CURRENT_TIMESTAMP" json:"updatedat"`
 	DeletedAt      *time.Time          `json:"deletedat"`
 	Links          []ArticleLinks      `gorm:"foreignKey:ArticleID"`
 	Quotes         []ArticleQuotes     `gorm:"foreignKey:ArticleID"`
 	Flashcards     []ArticleFlashcards `gorm:"foreignKey:ArticleID"`
+	Collections    []Collection        `gorm:"many2many:collection_articles;"`
+	Tags           []Tag               `gorm:"many2many:tag_articles;"`
 }
 
 type ArticleLinks struct {

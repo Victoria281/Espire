@@ -15,6 +15,7 @@ func main() {
 	// if err != nil {
 	// 	log.Panic(err)
 	// }
+
 	config := &storage.Config{
 		Host:     os.Getenv("DB_HOST"),
 		Port:     os.Getenv("DB_PORT"),
@@ -42,6 +43,8 @@ func main() {
 	routes.BookRouter(espireApi.Group("/books"))
 	routes.UserRouter(espireApi.Group("/users"))
 	routes.ArticleRouter(espireApi.Group("/articles"))
+	routes.CollectionRouter(espireApi.Group("/collections"))
+	routes.TagRouter(espireApi.Group("/tags"))
 
 	app.Listen(":8080")
 }
