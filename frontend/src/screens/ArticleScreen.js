@@ -46,8 +46,8 @@ const ArticleScreen = () => {
       <InformationHeading title={QUOTE_MANAGEMENT} />
       <QuoteManagement edit={false} quoteInfo={workspace.article.Quotes} />
 
-      <InformationHeading title={FLASHCARD_MANAGEMENT} />
-      <FlashcardManagement flashcards={flashcards} setFlashcards={setFlashcards}/>
+      {/* <InformationHeading title={FLASHCARD_MANAGEMENT} />
+      <FlashcardManagement flashcards={flashcards} setFlashcards={setFlashcards}/> */}
     </div>
   );
 };

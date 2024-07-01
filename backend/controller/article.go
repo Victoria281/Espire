@@ -120,7 +120,7 @@ func (c *ArticleController) DeleteArticle(ctx *fiber.Ctx) error {
 
 	err = c.Service.DeleteArticle(uint(articleID))
 	if err != nil {
-		return err // Service method errors will be handled by Fiber
+		return err
 	}
 	return ctx.JSON(fiber.Map{"message": "Article deleted successfully"})
 }

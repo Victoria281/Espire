@@ -94,7 +94,7 @@ const TagManagement = ({ edit, tags, tagInfo, setTagsInfo }) => {
                 :
 
                 <div className={styles.tagsDisplayContainer}>
-                    {tagInfo.length > 0 ? (
+                    {tagInfo!=undefined && tagInfo.length > 0 ? (
                         tagInfo.map((tag, index) => (
                             <Chip
                                 key={index}

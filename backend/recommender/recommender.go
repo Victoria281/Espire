@@ -24,94 +24,6 @@ func CosineSimilarity(v1, v2 []float64) float64 {
 	return dotProduct / (math.Sqrt(m1) * math.Sqrt(m2))
 }
 
-// HybridRecommendations -> use ALS + cosine similarity
-// GetHybridRecommendations calculates recommendations using both ALS and cosine similarity
-func GetHybridRecommendations(uid uint, userTags []string, interactions []models.UserArticleVisit, articles []models.Articles) []models.Articles {
-	userIndex, err := getUserIndex(uid)
-	if err != nil {
-		return nil // handle error appropriately
-	}
-
-	// Convert UserArticleVisit interactions to a matrix
-	userArticleMatrix, articleIDMap := createUserArticleMatrix(interactions, articles)
-
-	// Convert the matrix to a DenseMatrix
-	ratings := flattenInteractions(userArticleMatrix)
-	matrix := ALS.MakeRatingMatrix(ratings, len(userArticleMatrix), len(userArticleMatrix[0]))
-
-	// Train the ALS model
-	Q := ALS.TrainImplicit(matrix, 10, 20, 0.01) // TrainImplicit returns a single value: the trained model
-
-	// Generate recommendations
-	recommendations := make([]struct {
-		ID    int
-		Score float64
-	}, len(articles))
-
-	for i, article := range articles {
-		prediction, _ := ALS.Predict(Q, userIndex, articleIDMap[article.ID]) // Use the trained model to predict
-		recommendations[i] = struct {
-			ID    int
-			Score float64
-		}{ID: int(article.ID), Score: prediction}
-	}
-
-	// Sort recommendations by score
-	sort.Slice(recommendations, func(i, j int) bool {
-		return recommendations[i].Score > recommendations[j].Score
-	})
-
-	// Convert recommendations to articles
-	topArticles := make([]models.Articles, len(recommendations))
-	for i, rec := range recommendations {
-		topArticles[i] = articles[rec.ID]
-	}
-
-	return topArticles
-}
-
-// getUserIndex retrieves the user index from the UserID (uint)
-func getUserIndex(uid uint) (int, error) {
-	return int(uid), nil // Convert uint to int, handle any other logic if necessary
-}
-
-// createUserArticleMatrix converts the UserArticleVisit interactions into a matrix
-func createUserArticleMatrix(interactions []models.UserArticleVisit, articles []models.Articles) ([][]float64, map[uint]int) {
-	userArticleMap := make(map[string]map[uint]float64)
-	articleIDMap := make(map[uint]int)
-	for i, article := range articles {
-		articleIDMap[article.ID] = i
-	}
-	for _, interaction := range interactions {
-		if _, exists := userArticleMap[interaction.Username]; !exists {
-			userArticleMap[interaction.Username] = make(map[uint]float64)
-		}
-		userArticleMap[interaction.Username][interaction.ArticleID] = 1.0 // Assuming a binary interaction for simplicity
-	}
-	// Convert the map to a matrix
-	numUsers := len(userArticleMap)
-	numArticles := len(articles)
-	matrix := make([][]float64, numUsers)
-	userIndex := 0
-	for _, articleMap := range userArticleMap {
-		matrix[userIndex] = make([]float64, numArticles)
-		for articleID, rating := range articleMap {
-			matrix[userIndex][articleIDMap[articleID]] = rating
-		}
-		userIndex++
-	}
-	return matrix, articleIDMap
-}
-
-// flattenInteractions flattens the 2D interaction matrix into a 1D slice of ratings
-func flattenInteractions(interactions [][]float64) []float64 {
-	var ratings []float64
-	for _, row := range interactions {
-		ratings = append(ratings, row...)
-	}
-	return ratings
-}
-
 // // GetRecommendations provides a list of recommended articles for a user
 // // based on their tags and previous interactions with other articles.
 // func GetRecommendations(userTags string, username string, articles []Article, interactions [][]int) []Article {
@@ -213,3 +125,79 @@ func flattenInteractions(interactions [][]float64) []float64 {
 
 // 	return recommendedArticles
 // }
+
+// HybridRecommendations -> use ALS + cosine similarity
+// GetHybridRecommendations calculates recommendations using both ALS and cosine similarity
+func GetHybridRecommendations(uid uint, userTags []string, interactions []models.UserArticleVisit, articles []models.Articles) []models.Articles {
+	userIndex, err := getUserIndex(uid)
+	if err != nil {
+		return nil
+	}
+
+	userArticleMatrix, articleIDMap := createUserArticleMatrix(interactions, articles)
+	ratings := flattenInteractions(userArticleMatrix)
+	matrix := ALS.MakeRatingMatrix(ratings, len(userArticleMatrix), len(userArticleMatrix[0]))
+
+	Q := ALS.TrainImplicit(matrix, 10, 20, 0.01)
+
+	recommendations := make([]struct {
+		ID    int
+		Score float64
+	}, len(articles))
+
+	for i, article := range articles {
+		prediction, _ := ALS.Predict(Q, userIndex, articleIDMap[article.ID])
+		recommendations[i] = struct {
+			ID    int
+			Score float64
+		}{ID: int(article.ID), Score: prediction}
+	}
+
+	sort.Slice(recommendations, func(i, j int) bool {
+		return recommendations[i].Score > recommendations[j].Score
+	})
+	topArticles := make([]models.Articles, len(recommendations))
+	for i, rec := range recommendations {
+		topArticles[i] = articles[rec.ID]
+	}
+
+	return topArticles
+}
+
+func getUserIndex(uid uint) (int, error) {
+	return int(uid), nil
+}
+
+func createUserArticleMatrix(interactions []models.UserArticleVisit, articles []models.Articles) ([][]float64, map[uint]int) {
+	userArticleMap := make(map[string]map[uint]float64)
+	articleIDMap := make(map[uint]int)
+	for i, article := range articles {
+		articleIDMap[article.ID] = i
+	}
+	for _, interaction := range interactions {
+		if _, exists := userArticleMap[interaction.Username]; !exists {
+			userArticleMap[interaction.Username] = make(map[uint]float64)
+		}
+		userArticleMap[interaction.Username][interaction.ArticleID] = 1.0 // Assuming a binary interaction for simplicity
+	}
+	numUsers := len(userArticleMap)
+	numArticles := len(articles)
+	matrix := make([][]float64, numUsers)
+	userIndex := 0
+	for _, articleMap := range userArticleMap {
+		matrix[userIndex] = make([]float64, numArticles)
+		for articleID, rating := range articleMap {
+			matrix[userIndex][articleIDMap[articleID]] = rating
+		}
+		userIndex++
+	}
+	return matrix, articleIDMap
+}
+
+func flattenInteractions(interactions [][]float64) []float64 {
+	var ratings []float64
+	for _, row := range interactions {
+		ratings = append(ratings, row...)
+	}
+	return ratings
+}
