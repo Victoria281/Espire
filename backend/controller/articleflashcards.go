@@ -39,25 +39,38 @@ func (c *ArticleFlashcardController) CreateFlashcard(ctx *fiber.Ctx) error {
 }
 
 func (c *ArticleFlashcardController) UpdateFlashcard(ctx *fiber.Ctx) error {
-	flashcardID, err := strconv.ParseUint(ctx.Params("id"), 10, 64)
+	articleID, err := strconv.ParseUint(ctx.Params("id"), 10, 64)
 	if err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid flashcard ID"})
 	}
 
 	type UpdateFlashcardRequest struct {
-		Answer   *string `json:"answer"`
-		Question *string `json:"question"`
-		Tries    *int    `json:"tries"`
-		Wrong    *int    `json:"wrong"`
+		Data []struct {
+			Id       int     `json:"id"`
+			Answer   *string `json:"answer"`
+			Question *string `json:"question"`
+			Tries    *int    `json:"tries"`
+			Wrong    *int    `json:"wrong"`
+		} `json:"data"`
 	}
 
-	var updatedFlashcard UpdateFlashcardRequest
-	if err := ctx.BodyParser(&updatedFlashcard); err != nil {
+	var request UpdateFlashcardRequest
+	if err := ctx.BodyParser(&request); err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request body"})
 	}
 
-	if err := c.Service.UpdateFlashcard(uint(flashcardID), updatedFlashcard.Answer, updatedFlashcard.Question, updatedFlashcard.Tries, updatedFlashcard.Wrong); err != nil {
-		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Error updating flashcard"})
+	for _, flashcardUpdate := range request.Data {
+		if flashcardUpdate.Id == 0 {
+			err := c.Service.CreateFlashcard(uint(articleID), *flashcardUpdate.Answer, *flashcardUpdate.Question)
+			if err != nil {
+				return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Error creating flashcard"})
+			}
+			return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{"message": "Flashcard created successfully"})
+		} else {
+			if err := c.Service.UpdateFlashcard(uint(articleID), uint(flashcardUpdate.Id), flashcardUpdate.Answer, flashcardUpdate.Question, flashcardUpdate.Tries, flashcardUpdate.Wrong); err != nil {
+				return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Error updating flashcard"})
+			}
+		}
 	}
 
 	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"message": "Flashcard updated successfully"})

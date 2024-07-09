@@ -1,35 +1,20 @@
 .flashcardManagementContainer {
-    margin-bottom: 10vh;
-}
-
-/* flashcardStyles.module.css */
-
-/* Container for the flashcard management section */
-.flashcardManagementContainer {
-    padding: 16px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 800px;
+    width: 88%;
     margin: auto;
+    margin-bottom: 10vh;
+    margin-top: 2vh;
 }
 
-/* Container for flashcards in edit mode */
 .editModeContainer {
     display: flex;
     flex-direction: column;
-    gap: 10px;
 }
 
-/* Card style for flashcards in edit mode */
 .flashcardEditContainer {
     display: flex;
-    gap: 10px;
     align-items: center;
 }
 
-/* Style for each flashcard */
 .flashcardCard {
     display: flex;
     flex-direction: column;
@@ -41,44 +26,76 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     position: relative;
     width: 100%;
+    padding-left: 50px;
 }
 
-/* Input style for question and answer */
+.editOptions {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.editOptions button {
+    width: 45%;
+}
+
 .flashcardInput {
     background-color: #f0f0f0;
     border-radius: 4px;
     padding: 8px;
 }
 
-/* Button to delete a flashcard */
 .deleteButton {
-    position: absolute;
-    top: 10px;
-    left: 0;
-    background-color: #ef5350;
-    color: #fff;
-    border-radius: 4px;
+    position: absolute !important;
+    top: 10px !important;
+    left: 0 !important;
+    background-color: #ef5350 !important;
+    color: #fff !important;
+    border-radius: 4px !important;
 }
 
-/* Container for flashcards in view mode */
 .viewModeContainer {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-/* Style for chips in view mode */
 .viewModeChip {
-    background-color: #ffffff;
-    border: 2px solid #437FC7;
-    color: #437FC7;
+    background-color: #ebebeb !important;
+    border: 1px solid #ddd !important;
+    color: #437FC7 !important;
     font-weight: 700;
     border-radius: 4px;
+    width: 100%;
+    justify-content: flex-start !important;
+    height: 7vh;
 }
 
-/* Content of the dialog */
 .flashcardDialogContent {
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+
+.flashcardItemCorrect, .flashcardItemWrong, .flashcardItem {
+    width: 80%;
+    margin-bottom: 2vh;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+
+}
+
+.flashcardItem {
+    border: 2px solid #437FC7;
+}
+
+.flashcardItemWrong {
+    border: 2px solid #c74343;
+}
+
+.flashcardItemCorrect {
+    border: 2px solid #4ec743;
 }

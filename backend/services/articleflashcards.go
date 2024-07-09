@@ -9,7 +9,7 @@ import (
 
 type ArticleFlashcardService interface {
 	CreateFlashcard(articleID uint, answer string, question string) error
-	UpdateFlashcard(flashcardID uint, answer *string, question *string, tries *int, wrong *int) error
+	UpdateFlashcard(articleID uint, flashcardID uint, answer *string, question *string, tries *int, wrong *int) error
 	DeleteFlashcard(flashcardID uint) error
 }
 
@@ -30,7 +30,7 @@ func (s *articleFlashcardService) CreateFlashcard(articleID uint, answer string,
 	return s.repo.CreateFlashcard(newFlashcard)
 }
 
-func (s *articleFlashcardService) UpdateFlashcard(flashcardID uint, answer *string, question *string, tries *int, wrong *int) error {
+func (s *articleFlashcardService) UpdateFlashcard(articleID uint, flashcardID uint, answer *string, question *string, tries *int, wrong *int) error {
 	updatedFlashcard := make(map[string]interface{})
 	if answer != nil {
 		updatedFlashcard["answer"] = *answer

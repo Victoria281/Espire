@@ -48,6 +48,10 @@
     height: 100%;
 }
 
+.infoContainer {
+    max-height: 20px;
+    overflow-y: auto;
+}
 
 .basicInformationBottom {
     width: 86vw;

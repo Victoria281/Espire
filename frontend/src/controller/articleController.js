@@ -18,7 +18,9 @@ import {
     GET_ALL_TAGS,
     GET_WEB_SCRAPE,
     CREATE_NEW_TAG,
-    ATTACH_TAGS
+    ATTACH_TAGS,
+    UPDATE_FLASHCARDS,
+    DELETE_FLASHCARDS
 
 } from '../constants/apiUrls'
 
@@ -162,6 +164,28 @@ export const createNewArticleTagsAPI = async (new_info) => {
         if (status == 201) return { data: data, success: true }
     } catch (e) {
         displayErrorHandler(e, ATTACH_TAGS(new_info.article_id));
+        return { success: false, error: e.response.data }
+    }
+}
+
+export const updateFlashcardsAPI = async (new_info, id) => {
+    try {
+        const { status } = await axiosInstance.put(UPDATE_FLASHCARDS(id), {data: new_info});
+        if (status == 200) return { success: true }
+    } catch (e) {
+        displayErrorHandler(e, UPDATE_FLASHCARDS(id));
+        console.log(e.response)
+        return { success: false, error: e.response.data }
+    }
+}
+
+export const deleteFlashcardsAPI = async (id) => {
+    try {
+        const { status } = await axiosInstance.delete(DELETE_FLASHCARDS(id));
+        if (status == 200) return { success: true }
+    } catch (e) {
+        displayErrorHandler(e, DELETE_FLASHCARDS(id));
+        console.log(e.response)
         return { success: false, error: e.response.data }
     }
 }

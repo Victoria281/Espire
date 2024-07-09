@@ -12,7 +12,9 @@ import {
     scrapeArticleAPI,
     createNewTagAPI,
     createNewArticleTagsAPI,
-    searchGoogleArticleAPI
+    searchGoogleArticleAPI,
+    updateFlashcardsAPI,
+    deleteFlashcardsAPI
 } from '../../controller/articleController';
 import {
     ARTICLE_BASE_TEMPLATE,
@@ -23,6 +25,7 @@ export const SET_ARTICLES = 'SET_ARTICLES';
 export const SET_ARTICLE_WORKSPACE = 'SET_ARTICLE_WORKSPACE';
 export const SET_SEARCH_RESULTS = 'SET_SEARCH_RESULTS';
 export const SET_TAGS = 'SET_TAGS';
+
 
 export const getMyArticles = () => async (dispatch) => {
     const result = await getMyArticlesAPI();
@@ -143,16 +146,31 @@ export const searchGoogleArticles = (query) => async (dispatch, getState) => {
 
 export const getAllTags = () => async (dispatch, getState) => {
     const result = await getAllTagsAPI();
-    dispatch({
-        type: SET_TAGS,
-        tags: result.data
-    });
+    if (result.data != undefined)
+        dispatch({
+            type: SET_TAGS,
+            tags: result.data
+        });
     return result;
 }
 
 
 export const scrapeArticle = (link) => async (dispatch, getState) => {
     const result = await scrapeArticleAPI(link);
+    return result;
+}
+
+
+export const updateFlashcards = (info, id) => async (dispatch, getState) => {
+    const result = await updateFlashcardsAPI(info, id);
+    dispatch(getArticlesById(id));
+    return result;
+}
+
+
+export const deleteFlashcards = (id) => async (dispatch, getState) => {
+    const result = await deleteFlashcardsAPI(id);
+    dispatch(getArticlesById(id));
     return result;
 }
 

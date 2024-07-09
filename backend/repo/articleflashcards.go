@@ -1,8 +1,6 @@
 package repo
 
 import (
-	"time"
-
 	"github.com/Victoria281/Espire/backend/models"
 
 	"gorm.io/gorm"
@@ -37,9 +35,7 @@ func (r *articleFlashcardRepository) UpdateFlashcard(flashcardID uint, updatedFl
 }
 
 func (r *articleFlashcardRepository) DeleteFlashcard(flashcardID uint) error {
-	if err := r.DB.Model(&models.ArticleFlashcards{}).Where("id = ?", flashcardID).Updates(map[string]interface{}{
-		"deleted_at": time.Now(),
-	}).Error; err != nil {
+	if err := r.DB.Delete(&models.ArticleFlashcards{}, flashcardID).Error; err != nil {
 		return err
 	}
 	return nil

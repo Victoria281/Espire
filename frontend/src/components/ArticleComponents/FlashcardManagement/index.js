@@ -1,30 +1,74 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux'
+import { useParams } from "react-router-dom";
+
 import { Box, Button, TextField, Chip, Typography, IconButton, Dialog, DialogContent, DialogTitle } from '@mui/material';
 import { Delete as DeleteIcon, Flip as FlipIcon } from '@mui/icons-material';
+import { updateFlashcards, deleteFlashcards } from '../../../store/actions/articles';
 import styles from './styles.module.css';
 
-const FlashcardManagement = ({ flashcards, setFlashcards }) => {
+const FlashcardManagement = ({ id, flashcards, setFlashcards }) => {
     const [isEditMode, setIsEditMode] = useState(false);
     const [selectedFlashcard, setSelectedFlashcard] = useState(null);
-    const [openDialog, setOpenDialog] = useState(false);
+    const [userAnswer, setUserAnswer] = useState([]);
+    const [userAnswerResults, setUserAnswerResults] = useState([]);
+
+    const [submitted, setSubmitted] = useState(false);
+
+
+    useEffect(() => {
+        setUserAnswer(flashcards.map(() => ""));
+        setUserAnswerResults(flashcards.map(() => false));
+    }, [flashcards]);
+
+    const dispatch = useDispatch();
 
     const handleAddFlashcard = () => {
-        setFlashcards([...flashcards, { question: "", answer: "" }]);
+        setFlashcards([...flashcards, { question: "", answer: "", tries: 0, wrong: 0 }]);
+        setUserAnswer([...userAnswer, ""]);
+        setUserAnswerResults([...userAnswerResults, false]);
+    };
+
+    const handleSaveClicked = () => {
+        handleSaveFlashcard();
+        setIsEditMode(false);
+    };
+
+    const handleSaveFlashcard = () => {
+        dispatch(updateFlashcards(flashcards, id))
     };
 
     const handleDeleteFlashcard = (index) => {
         setFlashcards(flashcards.filter((_, i) => i !== index));
+        if (flashcards[index].id != undefined) {
+            dispatch(deleteFlashcards(flashcards[index].id))
+        }
+        setFlashcards(flashcards.filter((_, i) => i !== index));
+        setUserAnswer(userAnswer.filter((_, i) => i !== index));
+        setUserAnswerResults(userAnswerResults.filter((_, i) => i !== index));
     };
 
-    const handleFlashcardClick = (flashcard) => {
-        setSelectedFlashcard(flashcard);
-        setOpenDialog(true);
+    const handleSubmitAnswer = () => {
+        let nScore = 0;
+        for (let i = 0; i < flashcards.length; i++) {
+            console.log(flashcards[i].userAnswer)
+            let userAnswerInput = userAnswer[i].trim().toLowerCase().replace(/\s+/g, '');
+            let flashcardAnswer = flashcards[i].answer.trim().toLowerCase().replace(/\s+/g, '');
+
+            if (userAnswerInput === flashcardAnswer) {
+                userAnswerResults[i] = true;
+                flashcards[i].tries += 1;
+                nScore += 1;
+            } else {
+                userAnswerResults[i] = false;
+                flashcards[i].tries += 1;
+                flashcards[i].wrong += 1;
+            }
+        }
+        handleSaveFlashcard()
+        setSubmitted(true);
     };
 
-    const handleCloseDialog = () => {
-        setOpenDialog(false);
-        setSelectedFlashcard(null);
-    };
 
     return (
         <Box className={styles.flashcardManagementContainer}>
@@ -39,45 +83,45 @@ const FlashcardManagement = ({ flashcards, setFlashcards }) => {
             </Button>
 
             {isEditMode ? (
-                <>
-                    <Box className={styles.editModeContainer}>
-                        {flashcards.map((flashcard, index) => (
-                            <Box
-                                key={index}
-                                className={styles.flashcardEditContainer}
-                            >
-                                <Box className={styles.flashcardCard}>
-                                    <TextField
-                                        fullWidth
-                                        value={flashcard.question}
-                                        onChange={(e) => {
-                                            const newFlashcards = [...flashcards];
-                                            newFlashcards[index].question = e.target.value;
-                                            setFlashcards(newFlashcards);
-                                        }}
-                                        placeholder="Question"
-                                        className={styles.flashcardInput}
-                                    />
-                                    <TextField
-                                        fullWidth
-                                        value={flashcard.answer}
-                                        onChange={(e) => {
-                                            const newFlashcards = [...flashcards];
-                                            newFlashcards[index].answer = e.target.value;
-                                            setFlashcards(newFlashcards);
-                                        }}
-                                        placeholder="Answer"
-                                        className={styles.flashcardInput}
-                                    />
-                                    <IconButton
-                                        onClick={() => handleDeleteFlashcard(index)}
-                                        className={styles.deleteButton}
-                                    >
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </Box>
+                <Box className={styles.editModeContainer}>
+                    {flashcards.map((flashcard, index) => (
+                        <Box
+                            key={index}
+                            className={styles.flashcardEditContainer}
+                        >
+                            <Box className={styles.flashcardCard}>
+                                <TextField
+                                    fullWidth
+                                    value={flashcard.question}
+                                    onChange={(e) => {
+                                        const newFlashcards = [...flashcards];
+                                        newFlashcards[index].question = e.target.value;
+                                        setFlashcards(newFlashcards);
+                                    }}
+                                    placeholder="Question"
+                                    className={styles.flashcardInput}
+                                />
+                                <TextField
+                                    fullWidth
+                                    value={flashcard.answer}
+                                    onChange={(e) => {
+                                        const newFlashcards = [...flashcards];
+                                        newFlashcards[index].answer = e.target.value;
+                                        setFlashcards(newFlashcards);
+                                    }}
+                                    placeholder="Answer"
+                                    className={styles.flashcardInput}
+                                />
+                                <IconButton
+                                    onClick={() => handleDeleteFlashcard(index)}
+                                    className={styles.deleteButton}
+                                >
+                                    <DeleteIcon />
+                                </IconButton>
                             </Box>
-                        ))}
+                        </Box>
+                    ))}
+                    <div className={styles.editOptions}>
                         <Button
                             variant="contained"
                             color="secondary"
@@ -86,37 +130,69 @@ const FlashcardManagement = ({ flashcards, setFlashcards }) => {
                         >
                             Add New Flashcard
                         </Button>
-                    </Box>
-                </>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleSaveClicked}
+                            sx={{ mt: 2 }}
+                        >
+                            Save
+                        </Button>
+                    </div>
+                </Box>
             ) : (
                 <Box className={styles.viewModeContainer}>
+                    {
+                        submitted &&
+                        <>
+                            <p>Score: {userAnswerResults.filter(result => result.correct).length}/{flashcards.length}</p>
+                            {userAnswerResults.filter(result => result.correct).length / flashcards.length < 0.5 ?
+                                <p>Try harder next time!</p>
+                                :
+                                <p>Good Job!</p>
+                            }
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={handleSubmitAnswer}
+                                sx={{ mt: 2 }}
+                            >
+                                Try again
+                            </Button>
+                        </>
+                    }
                     {flashcards.map((flashcard, index) => (
-                        <Chip
-                            key={index}
-                            label={flashcard.question}
-                            onClick={() => handleFlashcardClick(flashcard)}
-                            className={styles.viewModeChip}
-                        />
+                        <Box key={"flashcard" + index}
+                            className={styles[`flashcardItem${submitted ? (userAnswerResults[index] ? "Correct" : "Wrong") : ""}`]}
+                        >
+                            <Chip
+                                label={`Question ${index + 1} : ${flashcard.question}`}
+                                className={styles.viewModeChip}
+                            />
+                            <TextField
+                                fullWidth
+                                value={userAnswer[index]}
+                                onChange={(e) => {
+                                    const newUserAnswers = [...userAnswer];
+                                    newUserAnswers[index] = e.target.value;
+                                    setUserAnswer(newUserAnswers);
+                                }}
+                                placeholder="Your Answer"
+                                className={styles.flashcardAnswer}
+                                sx={{ mt: 2 }}
+                            />
+                        </Box>
                     ))}
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleSubmitAnswer}
+                        sx={{ mt: 2 }}
+                    >
+                        Submit
+                    </Button>
                 </Box>
             )}
-
-            <Dialog
-                open={openDialog}
-                onClose={handleCloseDialog}
-                maxWidth="sm"
-                fullWidth
-            >
-                <DialogTitle>Flashcard</DialogTitle>
-                <DialogContent>
-                    <Box className={styles.flashcardDialogContent}>
-                        <Typography variant="h6">Question:</Typography>
-                        <Typography>{selectedFlashcard?.question}</Typography>
-                        <Typography variant="h6" mt={2}>Answer:</Typography>
-                        <Typography>{selectedFlashcard?.answer}</Typography>
-                    </Box>
-                </DialogContent>
-            </Dialog>
         </Box>
     );
 };

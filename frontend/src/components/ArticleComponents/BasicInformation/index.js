@@ -32,7 +32,7 @@ const BasicInformation = ({ editedInfo, setEditedInfo, edit }) => {
             day: '2-digit',
         });
     };
-    
+
     const formatString = (title, data) => {
         if (title == "date") {
             return formatTimestamp(data);
@@ -45,7 +45,7 @@ const BasicInformation = ({ editedInfo, setEditedInfo, edit }) => {
         <div className={styles.basicInformationContainer} >
             <div className={styles.basicInformationTop} >
                 {
-                    BASIC_INFO_CONTENT_P1.slice(0,3).map((item, index) =>
+                    BASIC_INFO_CONTENT_P1.slice(0, 3).map((item, index) =>
                         <div key={index}>
                             <p>{item.name}</p>
                             {edit ? (
@@ -56,7 +56,7 @@ const BasicInformation = ({ editedInfo, setEditedInfo, edit }) => {
                                     onChange={(e) => handleInputChange(e, item.tag)}
                                 />
                             ) : (
-                                <p>{formatString(item.tag, editedInfo[item.tag])}</p>
+                                <p className={styles.infoContainer}>{formatString(item.tag, editedInfo[item.tag])}</p>
                             )}
                         </div>
                     )
@@ -64,55 +64,66 @@ const BasicInformation = ({ editedInfo, setEditedInfo, edit }) => {
                 <div>
                     <p>{LINK_NAME}</p>
                     <div>
-                        {editedInfo.Links!=undefined && editedInfo.Links.map((linkItem, ind) => {
+                        {editedInfo.Links?.map((linkItem, ind) => {
                             if (linkItem.is_main) {
                                 if (edit) {
-                                    return <input
-                                        key=""
-                                        type="text"
-                                        value={linkItem.link}
-                                        onChange={(e) => {
-                                            const updatedLinks = [...editedInfo.Links];
-                                            updatedLinks[ind].link = e.target.value;
-                                            setEditedInfo({ ...editedInfo, Links: updatedLinks });
-                                        }}
-                                    />
+                                    return (
+                                        <input
+                                            key={ind}
+                                            type="text"
+                                            value={linkItem.link}
+                                            onChange={(e) => {
+                                                const updatedLinks = [...editedInfo.Links];
+                                                updatedLinks[ind].link = e.target.value;
+                                                setEditedInfo({ ...editedInfo, Links: updatedLinks });
+                                            }}
+                                        />
+                                    );
                                 } else {
-                                    return <a key="" className={styles.linkContainer}>{linkItem.link}</a>
+                                    return (
+                                        <a key={ind} className={styles.linkContainer}>
+                                            {linkItem.link}
+                                        </a>
+                                    );
                                 }
                             }
+                            return null;
                         })}
                     </div>
                 </div>
                 <div>
                     <p>{LINKS_NAME}</p>
-                    <div
-                        className={styles.linkBoxContainer}>
-                        {editedInfo.Links!=undefined && editedInfo.Links.map((linkItem, ind) => {
+                    <div className={styles.linkBoxContainer}>
+                        {editedInfo.Links?.map((linkItem, ind) => {
                             if (!linkItem.is_main) {
                                 if (edit) {
-                                    return <input
-                                        key={ind}
-                                        className={styles.linkContainer}
-                                        type="text"
-                                        value={linkItem.link}
-                                        onChange={(e) => {
-                                            const updatedLinks = [...editedInfo.Links];
-                                            updatedLinks[ind].link = e.target.value;
-                                            setEditedInfo({ ...editedInfo, Links: updatedLinks });
-                                        }}
-                                    />
+                                    return (
+                                        <input
+                                            key={ind}
+                                            className={styles.linkContainer}
+                                            type="text"
+                                            value={linkItem.link}
+                                            onChange={(e) => {
+                                                const updatedLinks = [...editedInfo.Links];
+                                                updatedLinks[ind].link = e.target.value;
+                                                setEditedInfo({ ...editedInfo, Links: updatedLinks });
+                                            }}
+                                        />
+                                    );
                                 } else {
-                                    return <a key="" className={styles.linkContainer}>{linkItem.link}</a>
+                                    return (
+                                        <a key={ind} className={styles.linkContainer}>
+                                            {linkItem.link}
+                                        </a>
+                                    );
                                 }
                             }
+                            return null;
                         })}
-                        {edit && (
-                            <button onClick={addNewLinkField}>Add New Link</button>
-                        )}
-
+                        {edit && <button onClick={addNewLinkField}>Add New Link</button>}
                     </div>
                 </div>
+
             </div>
             <div className={styles.basicInformationBottom}>
                 {
@@ -126,7 +137,7 @@ const BasicInformation = ({ editedInfo, setEditedInfo, edit }) => {
                                     onChange={(e) => handleInputChange(e, item.tag)}
                                 />
                             ) : (
-                                <p>{editedInfo[item.tag]}</p>
+                                <p className={styles.infoContainer}>{editedInfo[item.tag]}</p>
                             )}
                         </div>
                     )
