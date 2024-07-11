@@ -13,6 +13,7 @@ import {
     UPDATE_ARTICLE,
     UPDATE_ARTICLE_LINK,
     UPDATE_ARTICLE_QUOTE,
+    DELETE_ARTICLE_QUOTE,
     SEARCH_ARTICLES,
     SEARCH_GOOGLE_ARTICLES,
     GET_ALL_TAGS,
@@ -95,11 +96,23 @@ export const updateArticleLinkAPI = async (new_info) => {
 }
 
 export const updateArticleQuotesAPI = async (new_info) => {
+    console.log("updateArticleQuotesAPI")
+    console.log(new_info)
     try {
         const { data, status } = await axiosInstance.put(UPDATE_ARTICLE_QUOTE(new_info.article_id), new_info);
         if (status == 201) return { data: data, success: true }
     } catch (e) {
         displayErrorHandler(e, UPDATE_ARTICLE_QUOTE(new_info.article_id));
+        return { success: false, error: e.response.data }
+    }
+}
+
+export const deleteArticleQuotesAPI = async (id) => {
+    try {
+        const { data, status } = await axiosInstance.delete(DELETE_ARTICLE_QUOTE(id));
+        if (status == 201) return { data: data, success: true }
+    } catch (e) {
+        displayErrorHandler(e, DELETE_ARTICLE_QUOTE(id));
         return { success: false, error: e.response.data }
     }
 }

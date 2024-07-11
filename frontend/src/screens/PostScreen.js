@@ -21,9 +21,10 @@ const PostScreen = () => {
   const workspace_article = useSelector(state => state.articles.workspace.article);
   const [editedInfo, setEditedInfo] = useState(workspace_article);
   const [quoteInfo, setQuoteInfo] = useState(workspace_article.Quotes);
+  const [removedQuoteIds, setRemovedQuoteIds] = useState([]);
   const [tagInfo, setTagInfo] = useState(workspace_article.Tags);
   const [errMsg, setErrMsg] = useState("");
-
+  
   useEffect(() => {
     if (articleid != undefined) {
       retrieveArticleById(articleid, dispatch);
@@ -48,7 +49,7 @@ const PostScreen = () => {
         });
       } else {
         console.log("handling update  article");
-        dispatch(handleUpdateNewArticlePost(info)).then((success) => {
+        dispatch(handleUpdateNewArticlePost(info, removedQuoteIds)).then((success) => {
           if (success) navigate(`/articles/${articleid}`)
         });
       }
@@ -97,7 +98,7 @@ const PostScreen = () => {
     if (!info.date) {
       err_msg += "Start date cannot be empty. ";
       hasError = true;
-    } 
+    }
     // else if (!isValidDate(info.date)) {
     //   err_msg += "Start date is not in the correct format (YYYY-MM-DD). ";
     //   hasError = true;
@@ -143,14 +144,11 @@ const PostScreen = () => {
             <InformationHeading title={BASIC_INFO} />
             <BasicInformation edit={true} editedInfo={editedInfo} setEditedInfo={setEditedInfo} />
 
-            <InformationHeading title={QUOTE_MANAGEMENT} />
-            <QuoteManagement edit={true} quoteInfo={quoteInfo} setQuoteInfo={setQuoteInfo} />
-
             <InformationHeading title={TAG_MANAGEMENT} />
             <TagManagement edit={true} tags={tags} tagInfo={tagInfo} setTagsInfo={setTagInfo} />
 
-            {/* <InformationHeading title={FLASHCARD_MANAGEMENT}/>
-    <FlashcardManagement edit={false} info={workspace.article.Flashcards} /> */}
+            <InformationHeading title={QUOTE_MANAGEMENT} />
+            <QuoteManagement setRemovedQuoteIds={setRemovedQuoteIds} edit={true} quoteInfo={quoteInfo} setQuoteInfo={setQuoteInfo} />
 
             <PostButton msg={errMsg} editedInfo={editedInfo} onClick={(item) => handlePostClick(item)} />
           </>

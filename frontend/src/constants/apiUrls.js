@@ -14,6 +14,8 @@ export const CREATE_NEW_ARTICLE_QUOTE = `/articles/quotes`;
 export const UPDATE_ARTICLE = (aid) => `/articles/${aid}`;
 export const UPDATE_ARTICLE_LINK = (aid) => `/articles/links/${aid}`;
 export const UPDATE_ARTICLE_QUOTE = (aid) => `/articles/quotes/${aid}`;
+export const DELETE_ARTICLE_QUOTE = (aid) => `/articles/quotes/${aid}`;
+
 export const UPDATE_FLASHCARDS = (aid) => `/articles/flashcards/${aid}`;
 export const DELETE_FLASHCARDS = (aid) => `/articles/flashcards/${aid}`;
 

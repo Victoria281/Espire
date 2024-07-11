@@ -7,6 +7,7 @@ import {
     updateArticleAPI,
     updateArticleLinkAPI,
     updateArticleQuotesAPI,
+    deleteArticleQuotesAPI,
     searchArticleAPI,
     getAllTagsAPI,
     scrapeArticleAPI,
@@ -92,10 +93,25 @@ export const handleCreateNewArticlePost = (new_info) => async (dispatch, getStat
         await createNewArticleTagsAPI({ article_id: articleid.toString(), Tags: allTagIds });
     }
     return articleid;
-    return null
 }
 
-export const handleUpdateNewArticlePost = (new_info) => async (dispatch, getState) => {
+export const handleUpdateNewArticlePost = (new_info, removedQuoteIds) => async (dispatch, getState) => {
+    const tags = getState().articles.tags;
+    const existingTagNames = tags.map(tag => tag.name);
+    const oldTagIds = tags
+        .filter(tag => new_info.Tags.some(newTag => newTag.name === tag.name))
+        .map(tag => tag.ID);
+
+    const newTags = new_info.Tags.filter(tag => !existingTagNames.includes(tag.name));
+    const newTagIds = [];
+    for (const tag of newTags) {
+        const result = await createNewTagAPI({ name: tag.name });
+        if (result.success) {
+            newTagIds.push(result.data.id);
+        }
+    }
+    const allTagIds = [...oldTagIds, ...newTagIds];
+
     console.log(new_info);
     await updateArticleAPI(new_info.id, {
         name: new_info.name,
@@ -105,6 +121,11 @@ export const handleUpdateNewArticlePost = (new_info) => async (dispatch, getStat
     })
     await updateArticleLinkAPI({ article_id: new_info.id.toString(), Links: new_info.Links });
     await updateArticleQuotesAPI({ article_id: new_info.id.toString(), Quotes: new_info.Quotes });
+    for (const id of removedQuoteIds) {
+        await deleteArticleQuotesAPI(id);
+    }
+    await createNewArticleTagsAPI({ article_id: new_info.id.toString(), Tags: allTagIds });
+
     return true;
 }
 

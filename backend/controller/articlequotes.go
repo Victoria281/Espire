@@ -63,8 +63,14 @@ func (c *ArticleQuoteController) UpdateQuote(ctx *fiber.Ctx) error {
 	}
 
 	for _, quote := range updateRequest.Quotes {
-		if err := c.Service.UpdateQuote(uint(articleID), quote.ID, quote.GroupNum, quote.Priority, quote.Fact); err != nil {
-			return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Error updating quote"})
+		if quote.ID > 0 {
+			if err := c.Service.UpdateQuote(uint(articleID), quote.ID, quote.GroupNum, quote.Priority, quote.Fact); err != nil {
+				return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Error updating quote"})
+			}
+		} else {
+			if err := c.Service.CreateQuote(uint(articleID), quote.GroupNum, quote.Priority, quote.Fact); err != nil {
+				return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Error creating quote"})
+			}
 		}
 	}
 

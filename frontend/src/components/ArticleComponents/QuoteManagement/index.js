@@ -1,9 +1,10 @@
 import React from 'react';
-import { Button, Box, Typography, TextField, MenuItem } from '@mui/material';
+import { Button, Box, Typography, TextField, MenuItem, IconButton } from '@mui/material';
 import styles from './styles.module.css';
 import { QUOTES_GROUP, QUOTES_PRIORITY } from '../../../constants/names';
+import { Delete as DeleteIcon, Flip as FlipIcon } from '@mui/icons-material';
 
-const QuoteManagement = ({ edit, quoteInfo, setQuoteInfo }) => {
+const QuoteManagement = ({ setRemovedQuoteIds, edit, quoteInfo, setQuoteInfo }) => {
     const handlePrioritySelect = (id, priority) => {
         const updatedQuoteInfo = quoteInfo.map((item, index) =>
             index === id ? { ...item, priority: parseInt(priority) } : item
@@ -34,25 +35,42 @@ const QuoteManagement = ({ edit, quoteInfo, setQuoteInfo }) => {
         setQuoteInfo(updatedQuoteInfo);
     };
 
+    const handleRemoveQuote = (index) => {
+        const quoteToRemove = quoteInfo[index];
+
+        if (quoteToRemove?.id) {
+            setRemovedQuoteIds((prevIds) => [...prevIds, quoteToRemove.id]);
+        }
+
+        const updatedQuoteInfo = quoteInfo.filter((_, idx) => idx !== index);
+        setQuoteInfo(updatedQuoteInfo);
+    };
+
     const getColor = (id, bg, index) => {
         const grpBGColor = ['#ffebee', '#e0f7fa', '#f3e5f5']
         const grpColor = ['#d32f2f', '#00796b', '#6a1b9a']
         const priorityColor = ['#c8e6c9', '#ffeb3b', '#ef5350']
-        if (bg==1) {
-            return { backgroundColor: grpBGColor[index-1]}
+        if (bg == 1) {
+            return { backgroundColor: grpBGColor[index - 1] }
         } else if (id == 1) {
-            return { color: grpColor[index-1]}
+            return { color: grpColor[index - 1] }
         } else {
-            return { backgroundColor: priorityColor[index-1]}
+            return { backgroundColor: priorityColor[index - 1] }
         }
     }
 
     return (
         <Box className={edit ? styles.quoteManagementContainerEdit : styles.quoteManagementContainer}>
-            {quoteInfo && quoteInfo.map((item, index) =>
+            {quoteInfo?.map((item, index) =>
                 edit ? (
                     <Box key={index} className={styles.quoteItem}>
                         <Box className={styles.quoteControls}>
+                            <IconButton
+                                onClick={() => handleRemoveQuote(index)}
+                                className={styles.deleteButton}
+                            >
+                                <DeleteIcon />
+                            </IconButton>
                             <TextField
                                 select
                                 value={item.grp_num}
