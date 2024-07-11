@@ -163,7 +163,7 @@ export const scrapeArticle = (link) => async (dispatch, getState) => {
 
 export const updateFlashcards = (info, id) => async (dispatch, getState) => {
     const result = await updateFlashcardsAPI(info, id);
-    dispatch(getArticlesById(id));
+    await dispatch(getArticlesById(id));
     return result;
 }
 

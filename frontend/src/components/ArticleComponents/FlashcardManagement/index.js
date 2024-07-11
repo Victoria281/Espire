@@ -24,7 +24,7 @@ const FlashcardManagement = ({ id, flashcards, setFlashcards }) => {
     const dispatch = useDispatch();
 
     const handleAddFlashcard = () => {
-        setFlashcards([...flashcards, { question: "", answer: "", tries: 0, wrong: 0 }]);
+        setFlashcards([...flashcards, { id: 0, question: "", answer: "", tries: 0, wrong: 0 }]);
         setUserAnswer([...userAnswer, ""]);
         setUserAnswerResults([...userAnswerResults, false]);
     };
@@ -38,6 +38,10 @@ const FlashcardManagement = ({ id, flashcards, setFlashcards }) => {
         dispatch(updateFlashcards(flashcards, id))
     };
 
+    const handleReTry = () => {
+        setSubmitted(false)
+    };
+    
     const handleDeleteFlashcard = (index) => {
         setFlashcards(flashcards.filter((_, i) => i !== index));
         if (flashcards[index].id != undefined) {
@@ -50,22 +54,27 @@ const FlashcardManagement = ({ id, flashcards, setFlashcards }) => {
 
     const handleSubmitAnswer = () => {
         let nScore = 0;
-        for (let i = 0; i < flashcards.length; i++) {
-            console.log(flashcards[i].userAnswer)
-            let userAnswerInput = userAnswer[i].trim().toLowerCase().replace(/\s+/g, '');
-            let flashcardAnswer = flashcards[i].answer.trim().toLowerCase().replace(/\s+/g, '');
-
-            if (userAnswerInput === flashcardAnswer) {
-                userAnswerResults[i] = true;
-                flashcards[i].tries += 1;
+        const newFlashcards = flashcards.map((flashcard, index) => {
+            const userAnswerInput = userAnswer[index].trim().toLowerCase().replace(/\s+/g, '');
+            const flashcardAnswer = flashcard.answer.trim().toLowerCase().replace(/\s+/g, '');
+            
+            const isCorrect = userAnswerInput === flashcardAnswer;
+            const updatedFlashcard = {
+                ...flashcard,
+                tries: flashcard.tries + 1,
+                wrong: isCorrect ? flashcard.wrong : flashcard.wrong + 1,
+            };
+    
+            userAnswerResults[index] = isCorrect;
+            if (isCorrect) {
                 nScore += 1;
-            } else {
-                userAnswerResults[i] = false;
-                flashcards[i].tries += 1;
-                flashcards[i].wrong += 1;
             }
-        }
-        handleSaveFlashcard()
+    
+            return updatedFlashcard;
+        });
+    
+        setFlashcards(newFlashcards);
+        handleSaveFlashcard();
         setSubmitted(true);
     };
 
@@ -154,7 +163,7 @@ const FlashcardManagement = ({ id, flashcards, setFlashcards }) => {
                             <Button
                                 variant="contained"
                                 color="primary"
-                                onClick={handleSubmitAnswer}
+                                onClick={handleReTry}
                                 sx={{ mt: 2 }}
                             >
                                 Try again
