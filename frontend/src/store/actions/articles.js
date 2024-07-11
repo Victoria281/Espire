@@ -1,5 +1,6 @@
 import {
     getMyArticlesAPI,
+    getMyCollectionsAPI,
     getArticlesByIdAPI,
     createNewArticleAPI,
     createNewArticleLinkAPI,
@@ -26,6 +27,7 @@ export const SET_ARTICLES = 'SET_ARTICLES';
 export const SET_ARTICLE_WORKSPACE = 'SET_ARTICLE_WORKSPACE';
 export const SET_SEARCH_RESULTS = 'SET_SEARCH_RESULTS';
 export const SET_TAGS = 'SET_TAGS';
+export const SET_COLLECTIONS = 'SET_COLLECTIONS';
 
 
 export const getMyArticles = () => async (dispatch) => {
@@ -34,6 +36,16 @@ export const getMyArticles = () => async (dispatch) => {
     dispatch({
         type: SET_ARTICLES,
         articles: result.data
+    });
+    return result;
+};
+
+export const getMyCollections = () => async (dispatch) => {
+    const result = await getMyCollectionsAPI();
+    if (!result.success) return null;
+    dispatch({
+        type: SET_COLLECTIONS,
+        collections: result.data
     });
     return result;
 };

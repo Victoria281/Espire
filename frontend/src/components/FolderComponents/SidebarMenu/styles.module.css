@@ -1,0 +1,15 @@
+.sidebar {
+    width: 200px;
+    background-color: #f0f0f0; /* Light grey */
+    padding: 16px;
+}
+
+.selectedMenuItem {
+    background-color: #003366; /* Dark blue */
+    color: white;
+}
+
+.icon {
+    width: 24px;
+    height: 24px;
+}

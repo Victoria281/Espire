@@ -1,3 +1,202 @@
+export const mockCollection = {
+    "id": 1,
+    "username": "test",
+    "parentusername": null,
+    "name": "Color Psychology",
+    "authors": "NEW AUTHOR",
+    "use": "fdsfs",
+    "description": "Exploring the effects of colors on psychological processes.",
+    "date": "2024-06-30T03:09:56.398493+08:00",
+    "createdat": "2024-06-10T23:46:34.45662+08:00",
+    "updatedat": "2024-06-13T00:00:38.252653+08:00",
+    "deletedat": null,
+    "Links": null,
+    "Articles": [
+        {
+            "id": 1,
+            "username": "test",
+            "parentusername": null,
+            "name": "Article 1",
+            "authors": "Author A",
+            "use": "Some use",
+            "description": "Description of Article 1.",
+            "date": "2024-06-01T03:09:56.398493+08:00",
+            "createdat": "2024-05-20T23:46:34.45662+08:00",
+            "updatedat": "2024-06-05T00:00:38.252653+08:00",
+            "deletedat": null,
+            "Links": null,
+            "Quotes": [
+                {
+                    "id": 1,
+                    "article_id": 1,
+                    "grp_num": 1,
+                    "priority": 1,
+                    "fact": "Quote from Article 1 - Fact 1.",
+                    "createdat": "2024-06-01T03:09:56.398493+08:00",
+                    "updatedat": "2024-06-05T00:00:38.252653+08:00",
+                },
+                {
+                    "id": 2,
+                    "article_id": 1,
+                    "grp_num": 2,
+                    "priority": 2,
+                    "fact": "Quote from Article 1 - Fact 2.",
+                    "createdat": "2024-06-01T03:09:56.398493+08:00",
+                    "updatedat": "2024-06-05T00:00:38.252653+08:00",
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "username": "test",
+            "parentusername": null,
+            "name": "Article 2",
+            "authors": "Author B",
+            "use": "Some other use",
+            "description": "Description of Article 2.",
+            "date": "2024-06-05T03:09:56.398493+08:00",
+            "createdat": "2024-05-25T23:46:34.45662+08:00",
+            "updatedat": "2024-06-07T00:00:38.252653+08:00",
+            "deletedat": null,
+            "Links": null,
+            "Quotes": [
+                {
+                    "id": 3,
+                    "article_id": 2,
+                    "grp_num": 1,
+                    "priority": 1,
+                    "fact": "Quote from Article 2 - Fact 1.",
+                    "createdat": "2024-06-05T03:09:56.398493+08:00",
+                    "updatedat": "2024-06-07T00:00:38.252653+08:00",
+                },
+                {
+                    "id": 4,
+                    "article_id": 2,
+                    "grp_num": 2,
+                    "priority": 2,
+                    "fact": "Quote from Article 2 - Fact 2.",
+                    "createdat": "2024-06-05T03:09:56.398493+08:00",
+                    "updatedat": "2024-06-07T00:00:38.252653+08:00",
+                },
+                {
+                    "id": 5,
+                    "article_id": 2,
+                    "grp_num": 3,
+                    "priority": 3,
+                    "fact": "Quote from Article 2 - Fact 3.",
+                    "createdat": "2024-06-05T03:09:56.398493+08:00",
+                    "updatedat": "2024-06-07T00:00:38.252653+08:00",
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "username": "test",
+            "parentusername": null,
+            "name": "Article 3",
+            "authors": "Author C",
+            "use": "Another use",
+            "description": "Description of Article 3.",
+            "date": "2024-06-10T03:09:56.398493+08:00",
+            "createdat": "2024-06-01T23:46:34.45662+08:00",
+            "updatedat": "2024-06-12T00:00:38.252653+08:00",
+            "deletedat": null,
+            "Links": null,
+            "Quotes": [
+                {
+                    "id": 6,
+                    "article_id": 3,
+                    "grp_num": 1,
+                    "priority": 1,
+                    "fact": "Quote from Article 3 - Fact 1.",
+                    "createdat": "2024-06-10T03:09:56.398493+08:00",
+                    "updatedat": "2024-06-12T00:00:38.252653+08:00",
+                },
+                {
+                    "id": 7,
+                    "article_id": 3,
+                    "grp_num": 2,
+                    "priority": 2,
+                    "fact": "Quote from Article 3 - Fact 2.",
+                    "createdat": "2024-06-10T03:09:56.398493+08:00",
+                    "updatedat": "2024-06-12T00:00:38.252653+08:00",
+                },
+                {
+                    "id": 8,
+                    "article_id": 3,
+                    "grp_num": 3,
+                    "priority": 3,
+                    "fact": "Quote from Article 3 - Fact 3.",
+                    "createdat": "2024-06-10T03:09:56.398493+08:00",
+                    "updatedat": "2024-06-12T00:00:38.252653+08:00",
+                },
+                {
+                    "id": 9,
+                    "article_id": 3,
+                    "grp_num": 4,
+                    "priority": 1,
+                    "fact": "Quote from Article 3 - Fact 4.",
+                    "createdat": "2024-06-10T03:09:56.398493+08:00",
+                    "updatedat": "2024-06-12T00:00:38.252653+08:00",
+                },
+                {
+                    "id": 10,
+                    "article_id": 3,
+                    "grp_num": 5,
+                    "priority": 2,
+                    "fact": "Quote from Article 3 - Fact 5.",
+                    "createdat": "2024-06-10T03:09:56.398493+08:00",
+                    "updatedat": "2024-06-12T00:00:38.252653+08:00",
+                }
+            ]
+        }
+    ],
+    "Flashcards": [
+        {
+            "id": 1,
+            "term": "Red",
+            "definition": "Can increase heart rate and is often associated with urgency.",
+        },
+        {
+            "id": 2,
+            "term": "Blue",
+            "definition": "Conveys calmness and can lower heart rates.",
+        },
+        {
+            "id": 3,
+            "term": "Green",
+            "definition": "Represents nature and is calming.",
+        }
+    ],
+    "Synthesis": [
+        {
+            "key": "1,3-4,5",
+            "leftQuotes": [
+                { "id": 1, "text": "Quote from Article 1 - Fact 1." }
+            ],
+            "rightQuotes": [
+                { "id": 3, "text": "Quote from Article 2 - Fact 1." },
+                { "id": 4, "text": "Quote from Article 2 - Fact 2." }
+            ],
+            "text": "Synthesis between Quote 1 from Article 1 and Quotes 3 and 4 from Article 2."
+        },
+        {
+            "key": "6,7-8,9",
+            "leftQuotes": [
+                { "id": 6, "text": "Quote from Article 3 - Fact 1." },
+                { "id": 7, "text": "Quote from Article 3 - Fact 2." }
+            ],
+            "rightQuotes": [
+                { "id": 8, "text": "Quote from Article 3 - Fact 3." },
+                { "id": 9, "text": "Quote from Article 3 - Fact 4." }
+            ],
+            "text": "Synthesis between Quotes 6 and 7 from Article 3 and Quotes 8 and 9 from Article 3."
+        }
+    ]
+};
+
+
+
 export const LOGO_IMAGE_PATH = '../images/espire-logo.svg'
 
 export const LOGO_NOWORDS_IMAGE_PATH = '../images/espire-logo-noname.png'

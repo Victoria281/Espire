@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { retrieveownArticles } from "../functions/articles";
 import TabSelection from "../components/ArticleComponents/TabSelection";
 import ArticleCollection from "../components/ArticleComponents/ArticleCollection";
+import FolderCollection from "../components/FolderComponents/FolderCollection";
 
 const LibraryScreen = () => {
   const [articleView, setArticleView] = useState(true);
@@ -12,6 +13,7 @@ const LibraryScreen = () => {
 
   const token = useSelector(state => state.user.token);
   const articles = useSelector(state => state.articles.articles);
+  const collections = useSelector(state => state.articles.collections);
 
   const switchTabs = () => {
     setArticleView(!articleView);
@@ -30,9 +32,7 @@ const LibraryScreen = () => {
         articleView ?
           <ArticleCollection articles={articles} />
           :
-          <div>
-            Coming Soon
-          </div>
+          <FolderCollection collections={collections} />
       }
 
     </div>

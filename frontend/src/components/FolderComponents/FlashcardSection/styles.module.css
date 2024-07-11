@@ -1,0 +1,32 @@
+.flashcardSection {
+    padding: 16px;
+    background-color: #f0f0f0; /* Light grey */
+}
+
+.flashcardTitle {
+    margin-bottom: 16px;
+}
+
+.flashcardList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.flashcard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff; /* White */
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.flashcardTerm {
+    font-size: 14px;
+}
+
+.learnMoreButton {
+    padding: 4px 8px;
+}

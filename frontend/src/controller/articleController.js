@@ -2,6 +2,7 @@ import axiosInstance from "../config/AxiosInstance";
 import { displayErrorHandler } from "../config/ErrorHandler";
 import {
     GET_OWN_ARTICLES,
+    GET_OWN_COLLECTIONS,
     GET_ARTICLES_BY_ID,
     // GET_ARTICLES_BY_USER,
     // GET_ARTICLES_BY_NAME,
@@ -31,6 +32,16 @@ export const getMyArticlesAPI = async () => {
         if (status == 200) return { data: data, success: true }
     } catch (e) {
         displayErrorHandler(e, GET_OWN_ARTICLES);
+        return { success: false }
+    }
+}
+
+export const getMyCollectionsAPI = async () => {
+    try {
+        const { data, status } = await axiosInstance.get(GET_OWN_COLLECTIONS);
+        if (status == 200) return { data: data, success: true }
+    } catch (e) {
+        displayErrorHandler(e, GET_OWN_COLLECTIONS);
         return { success: false }
     }
 }

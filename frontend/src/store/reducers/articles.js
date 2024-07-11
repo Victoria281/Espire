@@ -2,7 +2,8 @@ import {
   SET_ARTICLES,
   SET_ARTICLE_WORKSPACE,
   SET_SEARCH_RESULTS,
-  SET_TAGS
+  SET_TAGS,
+  SET_COLLECTIONS
 } from '../actions/articles';
 import {
   CLEAR_STATE
@@ -28,6 +29,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         articles: action.articles
+      };
+    case SET_COLLECTIONS:
+      return {
+        ...state,
+        collections: action.collections
       };
     case SET_ARTICLE_WORKSPACE:
       return {

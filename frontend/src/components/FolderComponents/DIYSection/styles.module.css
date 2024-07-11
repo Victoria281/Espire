@@ -1,0 +1,250 @@
+/* Container */
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Logo */
+.logo {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+/* Header Actions */
+.headerActions {
+    display: flex;
+    align-items: center;
+}
+
+/* Search Bar */
+.searchBar {
+    width: 200px;
+    margin-right: 16px;
+}
+
+/* Icons */
+.icon {
+    margin-left: 16px;
+    cursor: pointer;
+}
+
+/* Main Content */
+.mainContent {
+    display: flex;
+    flex: 1;
+}
+
+/* Sidebar Menu */
+.sidebarMenu {
+    width: 200px;
+    background-color: #fff;
+    box-shadow: 2px 0 4px rgba(0,0,0,0.1);
+}
+
+/* Sidebar Menu Item */
+.menuItem {
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+}
+
+/* Selected Menu Item */
+.selectedMenuItem {
+    background-color: #f0f0f0;
+    font-weight: bold;
+}
+
+/* Sidebar Icon */
+.icon {
+    margin-right: 8px;
+}
+
+/* Content Area */
+.contentArea {
+    flex: 1;
+    padding: 16px;
+}
+
+/* Tabs */
+.tabs {
+    margin-bottom: 16px;
+}
+
+/* Row and Column Layout */
+.rowLayout {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
+
+/* Column Layout */
+.columnLayout {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* DIY Column */
+.diyColumn {
+    border: 2px dashed #ccc;
+    min-height: 200px;
+    background-color: #fff;
+    padding: 8px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.diyColumn:hover {
+    background-color: #e0e0e0;
+}
+
+/* Synthesis Column */
+.synthesisColumn {
+    background-color: #fff;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    min-width: 250px; /* Minimum width for the synthesis column */
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Synthesis Text Area */
+.synthesisTextArea {
+    flex: 1;
+}
+
+/* Save Button */
+.saveButton {
+    align-self: flex-end;
+}
+
+/* Quotes Area */
+.quotesArea {
+    margin-top: 16px;
+}
+
+/* Quotes List */
+.quotesList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+
+
+
+/* Toggle Button */
+.toggleButton {
+    margin-bottom: 16px;
+}
+
+/* All Content Section */
+.allContent {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Save Synthesis Button */
+.saveSynthesisButton {
+    align-self: flex-end;
+}
+
+
+/* Quote Card */
+.quoteCard {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 8px;
+    margin-bottom: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+    width: 120px;
+    height: 150px; /* Add a fixed height */
+    text-align: center;
+    position: relative;
+    overflow: hidden; /* Ensure content does not overflow */
+}
+
+/* Quote Content */
+.quoteContent {
+    padding-bottom: 32px; /* Ensure space for the footer */
+    overflow: hidden; /* Ensure content does not overflow */
+}
+
+/* Article Name */
+.articleName {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    font-size: 0.75rem;
+    color: #555;
+    text-overflow: ellipsis; /* Handle long article names */
+    white-space: nowrap; /* Prevent wrapping */
+    overflow: hidden; /* Hide overflow text */
+}
+
+/* Quote Footer */
+.quoteFooter {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    width: calc(100% - 16px); /* Full width minus padding */
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* Quote Fact */
+.quoteFact {
+    font-size: 0.75rem;
+    color: #555;
+    text-overflow: ellipsis; /* Handle long facts */
+    white-space: nowrap; /* Prevent wrapping */
+    overflow: hidden; /* Hide overflow text */
+}
+
+/* Priority and Group Number */
+.priorityGroup {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 0.75rem;
+    color: #555;
+}
+
+/* Priority */
+.priority {
+    color: #f44336; /* Example color for priority */
+}
+
+/* Group Number */
+.groupNum {
+    color: #2196f3; /* Example color for group number */
+}
+
+/* Dragging */
+.dragging {
+    opacity: 0.5;
+}
+
+/* Highlight */
+.highlight {
+    background-color: #e0f7fa;
+}

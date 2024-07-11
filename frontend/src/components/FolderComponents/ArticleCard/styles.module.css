@@ -1,0 +1,114 @@
+.articleCard {
+    background-color: #fff;
+    padding: 8px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 8px;
+    cursor: move;
+    transition: background-color 0.3s ease;
+}
+
+.articleCard.dragging {
+    opacity: 0.5;
+}
+
+.quoteCard {
+    background-color: #f9f9f9;
+    padding: 8px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 8px;
+    cursor: grab;
+    transition: background-color 0.3s ease;
+}
+
+.quoteCard:hover {
+    background-color: #e0e0e0;
+}
+
+.diyContainer {
+    display: flex;
+    gap: 16px;
+}
+
+.diyColumn {
+    flex: 1;
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    min-height: 300px; /* Default size for the columns */
+    display: flex;
+    flex-direction: column;
+}
+
+.quoteContainer {
+    background-color: #fff;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 2px dashed #007bff;
+    min-height: 200px; /* Default size for the quote container */
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.emptyState {
+    text-align: center;
+    color: #7f8c8d;
+}
+
+.formatButton {
+    margin-top: 16px;
+    align-self: flex-start;
+    transition: background-color 0.3s ease;
+}
+
+.formatButton:hover {
+    background-color: #0056b3;
+}
+
+.diyTabContent {
+    padding: 16px;
+}
+
+.allTabContent {
+    padding: 16px;
+}
+
+.articlesList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.tabs {
+    margin-bottom: 16px;
+}
+
+.sidebarMenu {
+    background-color: #f4f4f4;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.menuItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    padding: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.menuItem:hover {
+    background-color: #e0e0e0;
+}
+
+.selectedMenuItem {
+    background-color: #007bff;
+    color: #fff;
+}

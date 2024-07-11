@@ -3,6 +3,8 @@ export const LOGIN = "/auth/login";
 export const REGISTER = "/auth/register";
 
 export const GET_OWN_ARTICLES = "/articles";
+export const GET_OWN_COLLECTIONS = "/collections";
+
 export const GET_ARTICLES_BY_ID = (aid) => `/articles/id/${aid}`;
 
 export const GET_ARTICLES_BY_USER = (aid) => `/articles/${aid}`;
