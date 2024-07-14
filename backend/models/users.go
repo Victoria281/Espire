@@ -9,6 +9,7 @@ import (
 type Users struct {
 	UserID         uint       `gorm:"autoIncrement;unique" json:"user_id"`
 	Username       string     `gorm:"primaryKey;unique" json:"username"`
+	Email          string     `json:"email"`
 	Password       []byte     `json:"password"`
 	Role           string     `gorm:"default:user" json:"role"`
 	CreatedAt      time.Time  `gorm:"default:CURRENT_TIMESTAMP" json:"createdat"`

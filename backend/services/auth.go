@@ -13,7 +13,7 @@ import (
 
 type AuthService interface {
 	Login(username, password string) (string, error)
-	Register(username, password string) error
+	Register(username, email, password string) error
 }
 
 type authService struct {
@@ -45,7 +45,7 @@ func (s *authService) Login(username, password string) (string, error) {
 	return token, nil
 }
 
-func (s *authService) Register(username, password string) error {
+func (s *authService) Register(username, email, password string) error {
 	// Hash
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
@@ -61,6 +61,7 @@ func (s *authService) Register(username, password string) error {
 	// Create new user
 	newUser := models.Users{
 		Username: username,
+		Email:    email,
 		Password: hashedPassword,
 	}
 	if err := s.repo.InsertUser(newUser); err != nil {

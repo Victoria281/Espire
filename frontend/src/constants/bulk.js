@@ -9,8 +9,8 @@ export const bulkCollection = [
 ]
 
 export const sectionIds = [
-    [0, 9],
-    [10, 14],
+    [0, 8],
+    [9, 14],
     [15, 19],
     [20, 24],
     [25, 29]

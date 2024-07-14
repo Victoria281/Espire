@@ -37,6 +37,7 @@ const PostScreen = () => {
   const handlePostClick = (new_article) => {
     let info = editedInfo;
     info.Quotes = quoteInfo;
+    info.Tags = tagInfo;
 
     console.log(info);
 

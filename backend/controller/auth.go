@@ -29,12 +29,13 @@ func (c *AuthController) Login(ctx *fiber.Ctx) error {
 func (c *AuthController) Register(ctx *fiber.Ctx) error {
 	var registerRequest struct {
 		Username string `json:"username"`
+		Email    string `json:"email"`
 		Password string `json:"password"`
 	}
 	if err := ctx.BodyParser(&registerRequest); err != nil {
 		return err
 	}
-	if err := c.Service.Register(registerRequest.Username, registerRequest.Password); err != nil {
+	if err := c.Service.Register(registerRequest.Username, registerRequest.Email, registerRequest.Password); err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
 	return ctx.JSON(fiber.Map{"message": "User registered"})

@@ -12,13 +12,16 @@ const FlashcardManagement = ({ id, flashcards, setFlashcards }) => {
     const [selectedFlashcard, setSelectedFlashcard] = useState(null);
     const [userAnswer, setUserAnswer] = useState([]);
     const [userAnswerResults, setUserAnswerResults] = useState([]);
+    const [score, setScore] = useState(0);
 
     const [submitted, setSubmitted] = useState(false);
 
 
     useEffect(() => {
-        setUserAnswer(flashcards.map(() => ""));
-        setUserAnswerResults(flashcards.map(() => false));
+        if (submitted==false){
+            setUserAnswer(flashcards.map(() => ""));
+            setUserAnswerResults(flashcards.map(() => false));
+        }
     }, [flashcards]);
 
     const dispatch = useDispatch();
@@ -54,6 +57,8 @@ const FlashcardManagement = ({ id, flashcards, setFlashcards }) => {
 
     const handleSubmitAnswer = () => {
         let nScore = 0;
+        const updatedResults = [...userAnswerResults];
+        console.log("handleSubmitAnswer")
         const newFlashcards = flashcards.map((flashcard, index) => {
             const userAnswerInput = userAnswer[index].trim().toLowerCase().replace(/\s+/g, '');
             const flashcardAnswer = flashcard.answer.trim().toLowerCase().replace(/\s+/g, '');
@@ -65,7 +70,7 @@ const FlashcardManagement = ({ id, flashcards, setFlashcards }) => {
                 wrong: isCorrect ? flashcard.wrong : flashcard.wrong + 1,
             };
     
-            userAnswerResults[index] = isCorrect;
+            updatedResults[index] = isCorrect;
             if (isCorrect) {
                 nScore += 1;
             }
@@ -76,6 +81,8 @@ const FlashcardManagement = ({ id, flashcards, setFlashcards }) => {
         setFlashcards(newFlashcards);
         handleSaveFlashcard();
         setSubmitted(true);
+        setScore(nScore)
+        setUserAnswerResults(updatedResults)
     };
 
 
@@ -154,8 +161,8 @@ const FlashcardManagement = ({ id, flashcards, setFlashcards }) => {
                     {
                         submitted &&
                         <>
-                            <p>Score: {userAnswerResults.filter(result => result.correct).length}/{flashcards.length}</p>
-                            {userAnswerResults.filter(result => result.correct).length / flashcards.length < 0.5 ?
+                            <p>Score: {score}/{flashcards.length}</p>
+                            {score / flashcards.length < 0.5 ?
                                 <p>Try harder next time!</p>
                                 :
                                 <p>Good Job!</p>

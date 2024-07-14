@@ -139,26 +139,19 @@ function formatDateToCustomString(date) {
 
 export const handleCreateNewArticlePost = (new_info) => async (dispatch, getState) => {
     let articleid = -1;
-
-    const tags = getState().articles.tags;
-    const existingTagMap = tags.reduce((map, tag) => {
-        if (!map[tag.name]) {
-            map[tag.name] = tag.ID;
+    
+    const allTagIds = [];
+    for (const tag of new_info.Tags) {
+        if (tag.id!= undefined) {
+            allTagIds.push(tag.id)
+        } else {
+                const result = await createNewTagAPI({ name: tag.name });
+                if (result.success) {
+                    allTagIds.push(result.data.id);
+                }
         }
-        return map;
-    }, {});
 
-    const newTags = new_info.Tags.filter(tag => !Object.hasOwn(existingTagMap, tag.name));
-    const newTagIds = [];
-    for (const tag of newTags) {
-        const result = await createNewTagAPI({ name: tag.name });
-        if (result.success) {
-            existingTagMap[tag.name] = result.data.id;
-            newTagIds.push(result.data.id);
-        }
     }
-    const oldTagIds = Object.values(existingTagMap);
-    const allTagIds = [...oldTagIds, ...newTagIds];
 
     const result = await createNewArticleAPI({
         name: new_info.name,
@@ -177,25 +170,19 @@ export const handleCreateNewArticlePost = (new_info) => async (dispatch, getStat
 }
 
 export const handleUpdateNewArticlePost = (new_info, removedQuoteIds) => async (dispatch, getState) => {
-    const tags = getState().articles.tags;
-    const existingTagMap = tags.reduce((map, tag) => {
-        if (!map[tag.name]) {
-            map[tag.name] = tag.ID;
-        }
-        return map;
-    }, {});
 
-    const newTags = new_info.Tags.filter(tag => !Object.hasOwn(existingTagMap, tag.name));
-    const newTagIds = [];
-    for (const tag of newTags) {
-        const result = await createNewTagAPI({ name: tag.name });
-        if (result.success) {
-            existingTagMap[tag.name] = result.data.id;
-            newTagIds.push(result.data.id);
+    const allTagIds = [];
+    for (const tag of new_info.Tags) {
+        if (tag.id!= undefined) {
+            allTagIds.push(tag.id)
+        } else {
+                const result = await createNewTagAPI({ name: tag.name });
+                if (result.success) {
+                    allTagIds.push(result.data.id);
+                }
         }
+
     }
-    const oldTagIds = Object.values(existingTagMap);
-    const allTagIds = [...oldTagIds, ...newTagIds];
 
     console.log(new_info);
     await updateArticleAPI(new_info.id, {
