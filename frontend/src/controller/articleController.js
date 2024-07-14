@@ -26,7 +26,8 @@ import {
     CREATE_COLLECTION,
     DELETE_COLLECTION,
     ARTICLE_TO_COLLECTION,
-    ARTICLE_FROM_COLLECTION
+    ARTICLE_FROM_COLLECTION,
+    SAVE_SYNTHESIS
 } from '../constants/apiUrls'
 
 export const getMyArticlesAPI = async () => {
@@ -257,6 +258,17 @@ export const removeArticleFromCollectionAPI = async (articleid, collectionid) =>
         if (status == 200) return { success: true }
     } catch (e) {
         displayErrorHandler(e, ARTICLE_FROM_COLLECTION(articleid, collectionid));
+        console.log(e.response)
+        return { success: false, error: e.response.data }
+    }
+}
+
+export const saveSynthesisAPI = async (info) => {
+    try {
+        const { status } = await axiosInstance.post(SAVE_SYNTHESIS, info);
+        if (status == 200) return { success: true }
+    } catch (e) {
+        displayErrorHandler(e, SAVE_SYNTHESIS);
         console.log(e.response)
         return { success: false, error: e.response.data }
     }

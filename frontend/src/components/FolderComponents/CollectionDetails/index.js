@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Box, Typography, Button, TextField } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faCog, faPlus, faArrowsAltH, faArrowsAltV } from '@fortawesome/free-solid-svg-icons';
+import { saveSynthesis } from '../../../store/actions/articles';
 import QuoteCard from './QuoteCard';
 import Tabs from './Tabs';
 import styles from './styles.module.css';
@@ -9,6 +9,8 @@ import { DndProvider, useDrop, useDrag } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { QUOTES_GROUP } from '../../../constants/names';
 import FolderIcon from '@mui/icons-material/Folder';
+import { useSelector, useDispatch } from 'react-redux'
+import { Subscript } from '@mui/icons-material';
 
 const CollectionDetails = ({ collection }) => {
     const [selectedMTab, setSelectedMTab] = useState("Synthesize");
@@ -20,11 +22,24 @@ const CollectionDetails = ({ collection }) => {
     const [showMessage, setShowMessage] = useState(false);
     const [message, setMessage] = useState('');
 
+    const dispatch = useDispatch();
     const mainTabList = ["Synthesize", "View All Quotes"]
     const tabList = ["Important", "Fun Fact", "Extra", "All Synthesis"]
 
     const toggleLayout = () => {
         setIsRowLayout(!isRowLayout);
+    };
+
+    const findQuoteById = (id) => {
+        console.log(id)
+        for (let article of collection.Articles) {
+            for (let quote of article.Quotes) {
+                if (quote.id == id) {
+                    return quote;
+                }
+            }
+        }
+        return null;
     };
 
     const moveQuote = (quote, column) => {
@@ -80,7 +95,7 @@ const CollectionDetails = ({ collection }) => {
         if (existingIndex !== -1) {
             collection.Synthesis[existingIndex].text = synthesis;
         } else {
-            collection.Synthesis.push({ key: synthesisKey, text: synthesis });
+            dispatch(saveSynthesis({ collectionid: collection.ID, key: synthesisKey, text: synthesis }));
         }
         console.log('Synthesis saved:', synthesis);
     };
@@ -186,7 +201,7 @@ const CollectionDetails = ({ collection }) => {
                             </Box>
                         </Box>
                         <Box className={styles.quotesArea}>
-                            <p>All Quotes</p>
+                            <p>All Quotes <span>Drag and drop quotes into the 2 columns and create your connections! Double click them to remove from the column</span></p>
                             <Box className={styles.quotesList}>
                                 {allQuotes.map((quote) => (
                                     <QuoteCard
@@ -201,87 +216,101 @@ const CollectionDetails = ({ collection }) => {
                     </>
                 ) : (
                     <Box>
-                        <Box className={styles.allContent}>
-                            <Tabs tablist={tabList} selectedTab={selectedTab} handleChange={handleTabChange} />
+                        <Tabs tablist={tabList} selectedTab={selectedTab} handleChange={handleTabChange} />
+                        {selectedTab === tabList[3] ? (
+                            <div className={styles.synthesisSection}>
+                                {collection.Synthesis.map((item, index) => {
+                                    let leftids = item.key.split("-")[0].split(",")
+                                    let rightids = item.key.split("-")[1].split(",")
 
-                            {selectedTab === tabList[3] ? (
-                                <div className={styles.synthesisSection}>
-                                    <Typography variant="h6" className={styles.synthesisHeader}>Synthesis</Typography>
-                                    {collection.Synthesis.map((item, index) => {
-                                        let leftids = item.key.split("-")[0].split(",")
-                                        let rightids = item.key.split("-")[1].split(",")
-
-                                        return (
-                                            <div className={styles.synthesisContent}>
-                                                <div className={styles.columnInfo}>
-                                                    <div className={styles.column}>
-                                                        <Typography variant="subtitle1" className={styles.columnTitle}>Left Column</Typography>
-                                                        {leftids.length > 0 ? (
-                                                            <ul className={styles.columnList}>
-                                                                {leftids.map((id) => (
+                                    return (
+                                        <div className={styles.synthesisContent}>
+                                            <div className={styles.columnInfo}>
+                                                <div className={styles.column}>
+                                                    <Typography variant="subtitle1" className={styles.columnTitle}>Left Column</Typography>
+                                                    {leftids.length > 0 ? (
+                                                        <ul className={styles.columnList}>
+                                                            {leftids.map((id) => {
+                                                                const quote = findQuoteById(id);
+                                                                return quote ? (
                                                                     <li key={id} className={styles.columnItem}>
-                                                                        <div className={styles.quoteCard}>
-                                                                            <Typography variant="body2" className={styles.quoteArticle}>{id}</Typography>
-                                                                            <Typography variant="body2" className={styles.quoteText}>{id}</Typography>
-                                                                        </div>
+                                                                        <QuoteCard
+                                                                            key={quote.id}
+                                                                            quote={quote}
+                                                                            onDoubleClick={() => moveQuote(quote, 'left')}
+                                                                        />
                                                                     </li>
-                                                                ))}
-                                                            </ul>
-                                                        ) : (
-                                                            <Typography variant="body2" color="textSecondary">No quotes in the left column.</Typography>
-                                                        )}
-                                                    </div>
-                                                    <div className={styles.column}>
-                                                        <Typography variant="subtitle1" className={styles.columnTitle}>Right Column</Typography>
-                                                        {rightids.length > 0 ? (
-                                                            <ul className={styles.columnList}>
-                                                                {rightids.map((id) => (
+                                                                ) : (
                                                                     <li key={id} className={styles.columnItem}>
-                                                                        <div className={styles.quoteCard}>
-                                                                            <Typography variant="body2" className={styles.quoteArticle}>{id}</Typography>
-                                                                            <Typography variant="body2" className={styles.quoteText}>{id}</Typography>
-                                                                        </div>
+                                                                        <Typography variant="body2" className={styles.quoteArticle}>{id}</Typography>
+                                                                        <Typography variant="body2" className={styles.quoteText}>{id}</Typography>
                                                                     </li>
-                                                                ))}
-                                                            </ul>
-                                                        ) : (
-                                                            <Typography variant="body2" color="textSecondary">No quotes in the right column.</Typography>
-                                                        )}
-                                                    </div>
+                                                                );
+                                                            })}
+                                                        </ul>
+                                                    ) : (
+                                                        <Typography variant="body2" color="textSecondary">No quotes in the left column.</Typography>
+                                                    )}
                                                 </div>
-                                                <div className={styles.synthesisDetails}>
-                                                    {item.text}
+                                                <div className={styles.column}>
+                                                    <Typography variant="subtitle1" className={styles.columnTitle}>Right Column</Typography>
+                                                    {rightids.length > 0 ? (
+                                                        <ul className={styles.columnList}>
+                                                            {rightids.map((id) => {
+                                                                const quote = findQuoteById(id);
+                                                                return quote ? (
+                                                                    <li key={id} className={styles.columnItem}>
+                                                                        <QuoteCard
+                                                                            key={quote.id}
+                                                                            quote={quote}
+                                                                            onDoubleClick={() => moveQuote(quote, 'right')}
+                                                                        />
+                                                                    </li>
+                                                                ) : (
+                                                                    <li key={id} className={styles.columnItem}>
+                                                                        <Typography variant="body2" className={styles.quoteArticle}>{id}</Typography>
+                                                                        <Typography variant="body2" className={styles.quoteText}>{id}</Typography>
+                                                                    </li>
+                                                                );
+                                                            })}
+                                                        </ul>
+                                                    ) : (
+                                                        <Typography variant="body2" color="textSecondary">No quotes in the right column.</Typography>
+                                                    )}
                                                 </div>
                                             </div>
+                                            <div className={styles.synthesisDetails}>
+                                                {item.text}
+                                            </div>
+                                        </div>
 
-                                        )
+                                    )
 
-                                    }
+                                }
 
-                                    )}
-                                </div>
-                            )
-                                : (
-                                    ['Important', 'Fun Fact', 'Extra'].map((group) => (
-                                        <Box key={group} className={styles.groupSection}>
-                                            {selectedTab === group && (
-                                                <>
-                                                    <Typography variant="h6">{group} Quotes</Typography>
-                                                    <Box className={styles.quotesList}>
-                                                        {allQuotes.filter(quote => QUOTES_GROUP[quote.grp_num] === group).map((quote) => (
-                                                            <QuoteCard
-                                                                key={quote.id}
-                                                                quote={quote}
-                                                                onDoubleClick={() => moveQuote(quote, 'left')}
-                                                            />
-                                                        ))}
-                                                    </Box>
-                                                </>
-                                            )}
-                                        </Box>
-                                    ))
                                 )}
-                        </Box>
+                            </div>
+                        )
+                            : (
+                                ['Important', 'Fun Fact', 'Extra'].map((group) => (
+                                    <Box key={group} className={styles.groupSection}>
+                                        {selectedTab === group && (
+                                            <>
+                                                <Typography variant="h6">{group} Quotes</Typography>
+                                                <Box className={styles.quotesList}>
+                                                    {allQuotes.filter(quote => QUOTES_GROUP[quote.grp_num] === group).map((quote) => (
+                                                        <QuoteCard
+                                                            key={quote.id}
+                                                            quote={quote}
+                                                            onDoubleClick={() => moveQuote(quote, 'left')}
+                                                        />
+                                                    ))}
+                                                </Box>
+                                            </>
+                                        )}
+                                    </Box>
+                                ))
+                            )}
                     </Box>
 
                 )}

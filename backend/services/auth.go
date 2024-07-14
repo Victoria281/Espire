@@ -27,18 +27,15 @@ func NewAuthService(repo repo.UserRepository) AuthService {
 }
 
 func (s *authService) Login(username, password string) (string, error) {
-	// Retrieve user by username
 	user, err := s.repo.SelectByUsername(username)
 	if err != nil {
 		return "", err
 	}
 
-	// Compare hashed password
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
 		return "", errors.New("incorrect password")
 	}
 
-	// Generate JWT token
 	fmt.Println(user.Role)
 	token, err := auth.GenerateJWT(user.Username, user.Role)
 	if err != nil {
@@ -49,7 +46,7 @@ func (s *authService) Login(username, password string) (string, error) {
 }
 
 func (s *authService) Register(username, password string) error {
-	// Hash password
+	// Hash
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		return err

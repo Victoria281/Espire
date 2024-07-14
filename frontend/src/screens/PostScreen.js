@@ -70,7 +70,7 @@ const PostScreen = () => {
       hasError = true;
     }
     if (!info.use) {
-      err_msg += "Use cannot be empty. ";
+      err_msg += "Use column (i.e. Research, School) cannot be empty. ";
       hasError = true;
     }
     if (!info.description) {

@@ -15,9 +15,9 @@ const _backend_config = {
 }
 
 const getConfiguration = (env) => {
-    const platform = 'development';
+    // const platform = 'development';
     // const platform = 'production';
-    // const platform = 'staging';
+    const platform = 'staging';
     return _backend_config[platform];
 }
 

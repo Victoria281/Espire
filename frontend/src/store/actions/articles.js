@@ -21,6 +21,7 @@ import {
     deleteCollectionAPI,
     assignArticleToCollectionAPI,
     removeArticleFromCollectionAPI,
+    saveSynthesisAPI
 } from '../../controller/articleController';
 import {
     ARTICLE_BASE_TEMPLATE,
@@ -98,7 +99,7 @@ export const handleBulkCreate = () => async (dispatch, getState) => {
         for (var e = start; e <= end; e++) {
             console.log(`Adding ${bulkinfo[e].name} to collection ${bulkCollection[i]}`)
             const aresult = await dispatch(handleCreateNewArticlePost(bulkinfo[e]));
-            if (aresult!=null && i!=(cIds.length-1)) {
+            if (aresult != null && i != (cIds.length - 1)) {
                 await updateFlashcardsAPI(bulkinfo[e].Flashcards, aresult.toString());
                 console.log(`Assigning ${aresult} to collection ${cIds[i]}`)
                 await assignArticleToCollectionAPI(aresult, cIds[i]);
@@ -140,19 +141,23 @@ export const handleCreateNewArticlePost = (new_info) => async (dispatch, getStat
     let articleid = -1;
 
     const tags = getState().articles.tags;
-    const existingTagNames = tags.map(tag => tag.name);
-    const oldTagIds = tags
-        .filter(tag => new_info.Tags.some(newTag => newTag.name === tag.name))
-        .map(tag => tag.ID);
+    const existingTagMap = tags.reduce((map, tag) => {
+        if (!map[tag.name]) {
+            map[tag.name] = tag.ID;
+        }
+        return map;
+    }, {});
 
-    const newTags = new_info.Tags.filter(tag => !existingTagNames.includes(tag.name));
+    const newTags = new_info.Tags.filter(tag => !Object.hasOwn(existingTagMap, tag.name));
     const newTagIds = [];
     for (const tag of newTags) {
         const result = await createNewTagAPI({ name: tag.name });
         if (result.success) {
+            existingTagMap[tag.name] = result.data.id;
             newTagIds.push(result.data.id);
         }
     }
+    const oldTagIds = Object.values(existingTagMap);
     const allTagIds = [...oldTagIds, ...newTagIds];
 
     const result = await createNewArticleAPI({
@@ -173,19 +178,23 @@ export const handleCreateNewArticlePost = (new_info) => async (dispatch, getStat
 
 export const handleUpdateNewArticlePost = (new_info, removedQuoteIds) => async (dispatch, getState) => {
     const tags = getState().articles.tags;
-    const existingTagNames = tags.map(tag => tag.name);
-    const oldTagIds = tags
-        .filter(tag => new_info.Tags.some(newTag => newTag.name === tag.name))
-        .map(tag => tag.ID);
+    const existingTagMap = tags.reduce((map, tag) => {
+        if (!map[tag.name]) {
+            map[tag.name] = tag.ID;
+        }
+        return map;
+    }, {});
 
-    const newTags = new_info.Tags.filter(tag => !existingTagNames.includes(tag.name));
+    const newTags = new_info.Tags.filter(tag => !Object.hasOwn(existingTagMap, tag.name));
     const newTagIds = [];
     for (const tag of newTags) {
         const result = await createNewTagAPI({ name: tag.name });
         if (result.success) {
+            existingTagMap[tag.name] = result.data.id;
             newTagIds.push(result.data.id);
         }
     }
+    const oldTagIds = Object.values(existingTagMap);
     const allTagIds = [...oldTagIds, ...newTagIds];
 
     console.log(new_info);
@@ -304,6 +313,13 @@ export const removeArticleFromCollection = (articleids, collectionid) => async (
         await removeArticleFromCollectionAPI(aid, collectionid);
     }
     dispatch(getMyCollections());
+}
+
+
+export const saveSynthesis = (info) => async (dispatch, getState) => {
+    const result = await saveSynthesisAPI(info);
+    dispatch(getMyCollections());
+    return result;
 }
 
 
