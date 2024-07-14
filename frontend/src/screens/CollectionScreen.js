@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux'
 import { useParams } from "react-router-dom";
-import CollectionDetails from '../components/FolderComponents/CollectionDetails';
+import CollectionSectioning from '../components/FolderComponents/CollectionSectioning';
 
 const CollectionScreen = () => {
   const { collectionid } = useParams();
@@ -13,7 +13,7 @@ const CollectionScreen = () => {
 
   return (
     <>
-      {collections.length != 0 && <CollectionDetails collection={getCollections()} />}
+      {collections.length != 0 && <CollectionSectioning collection={getCollections()} />}
     </>
   );
 };

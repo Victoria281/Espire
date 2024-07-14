@@ -99,6 +99,7 @@ export const handleBulkCreate = () => async (dispatch, getState) => {
             console.log(`Adding ${bulkinfo[e].name} to collection ${bulkCollection[i]}`)
             const aresult = await dispatch(handleCreateNewArticlePost(bulkinfo[e]));
             if (aresult!=null && i!=(cIds.length-1)) {
+                await updateFlashcardsAPI(bulkinfo[e].Flashcards, aresult.toString());
                 console.log(`Assigning ${aresult} to collection ${cIds[i]}`)
                 await assignArticleToCollectionAPI(aresult, cIds[i]);
             }
@@ -107,6 +108,32 @@ export const handleBulkCreate = () => async (dispatch, getState) => {
 
     console.log("Completed")
     return true;
+}
+
+function formatDateToCustomString(date) {
+    const d = new Date(date);
+
+    const pad = (num, size) => {
+        let s = String(num);
+        while (s.length < size) s = "0" + s;
+        return s;
+    };
+
+    const year = d.getFullYear();
+    const month = pad(d.getMonth() + 1, 2);
+    const day = pad(d.getDate(), 2);
+    const hours = pad(d.getHours(), 2);
+    const minutes = pad(d.getMinutes(), 2);
+    const seconds = pad(d.getSeconds(), 2);
+    const milliseconds = pad(d.getMilliseconds(), 3);
+
+    const timezoneOffset = -d.getTimezoneOffset();
+    const tzHours = pad(Math.floor(Math.abs(timezoneOffset) / 60), 2);
+    const tzMinutes = pad(Math.abs(timezoneOffset) % 60, 2);
+    const tzSign = timezoneOffset >= 0 ? "+" : "-";
+
+    const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}${tzSign}${tzHours}:${tzMinutes}`;
+    return formattedDate;
 }
 
 export const handleCreateNewArticlePost = (new_info) => async (dispatch, getState) => {
@@ -132,7 +159,7 @@ export const handleCreateNewArticlePost = (new_info) => async (dispatch, getStat
         name: new_info.name,
         authors: new_info.authors,
         use: new_info.use,
-        date: new_info.date,
+        date: formatDateToCustomString(new_info.date),
         description: new_info.description
     })
     if (result.success) {
@@ -140,8 +167,6 @@ export const handleCreateNewArticlePost = (new_info) => async (dispatch, getStat
         await createNewArticleLinkAPI({ article_id: articleid.toString(), Links: new_info.Links });
         await createNewArticleQuotesAPI({ article_id: articleid.toString(), Quotes: new_info.Quotes });
         await createNewArticleTagsAPI({ article_id: articleid.toString(), Tags: allTagIds });
-        await createNewArticleTagsAPI({ article_id: articleid.toString(), Tags: allTagIds });
-        await updateFlashcardsAPI(new_info.Flashcards, articleid.toString());
     }
     return articleid;
 }

@@ -8,12 +8,12 @@ import Button from "../Button";
 import { useDispatch, useSelector } from "react-redux";
 import { clear_store } from "../../../store/actions/user";
 
-const Navbar = () => {
+const Navbar = (show) => {
     const token = useSelector(state => state.user.token)
     const navigate = useNavigate();
     const location = useLocation();
     const dispatch = useDispatch();
-    
+
 
     const handleClick = (pathname) => {
         navigate(pathname)
@@ -42,37 +42,39 @@ const Navbar = () => {
     }
 
 
-    return (
-        <div className={styles.navbarContainer}>
-            <div className={styles.navbarContainerLeft}>
-                <Logo />
-                {
-                    NAVBAR_ITEMS.map((item, index) =>
-                        <NavItem key={index} index={index} name={item.name} linkTo={item.link} disabled={handleDisabled(item.link)} />
-                    )
-                }
-            </div>
-            <div className={styles.navbarContainerRight}>
-                {isAtArticles() && !isAtPost() &&
-                    <Button type="main" onClick={() => handleEditClick()}>
-                        Edit
-                    </Button>
-                }
-                {!isAtArticles() && !isAtPost() &&
-                    NAVBAR_BTNS(token == undefined).map((item, index) =>
-                        <Button key={index} type="main" onClick={() => handleClick(item.link)}>
-                            {item.name}
+    if (location.pathname.split('/').slice(0, 2).join('/') != "/collection") {
+        return (
+            <div className={styles.navbarContainer}>
+                <div className={styles.navbarContainerLeft}>
+                    <Logo />
+                    {
+                        NAVBAR_ITEMS.map((item, index) =>
+                            <NavItem key={index} index={index} name={item.name} linkTo={item.link} disabled={handleDisabled(item.link)} />
+                        )
+                    }
+                </div>
+                <div className={styles.navbarContainerRight}>
+                    {isAtArticles() && !isAtPost() &&
+                        <Button type="main" onClick={() => handleEditClick()}>
+                            Edit
                         </Button>
-                    )
-                }
-                {!(token == undefined) &&
-                    <Button type="main" onClick={() => handleLogout()}>
-                        Logout
-                    </Button>
-                }
+                    }
+                    {!isAtArticles() && !isAtPost() &&
+                        NAVBAR_BTNS(token == undefined).map((item, index) =>
+                            <Button key={index} type="main" onClick={() => handleClick(item.link)}>
+                                {item.name}
+                            </Button>
+                        )
+                    }
+                    {!(token == undefined) &&
+                        <Button type="main" onClick={() => handleLogout()}>
+                            Logout
+                        </Button>
+                    }
+                </div>
             </div>
-        </div>
-    );
+        );
+    }
 }
 
 export default Navbar;

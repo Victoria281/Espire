@@ -1,0 +1,39 @@
+.mainContainer {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+.leftContainer {
+    width: 30vw;
+    border-right: 1px solid #437FC7;
+}
+
+.rightContainer {
+    width: 70vw;    
+}
+
+.returnContainer {
+    height: 15vh;
+    border-bottom: 1px solid #437FC7;
+}
+
+.articlesContainer {
+    height: 55vh;
+    border-bottom: 1px solid #437FC7;
+}
+
+.overviewContainer {
+    height: 30vh;
+}
+
+.synthesisContainer {
+    height: 100vh;
+    border-bottom: 1px solid #437FC7;
+}
+
+.flashcardsContainer {
+    height: 40vh;
+}
