@@ -14,7 +14,7 @@ type Collection struct {
 	UpdatedAt time.Time   `gorm:"default:CURRENT_TIMESTAMP" json:"updatedat"`
 	DeletedAt *time.Time  `json:"deletedat"`
 	Articles  []Articles  `gorm:"many2many:collection_articles;"`
-	Synthesis []Synthesis `gorm:"many2many:collection_synthesis;"`
+	Synthesis []Synthesis `gorm:"foreignKey:CollectionID"`
 }
 
 type Synthesis struct {

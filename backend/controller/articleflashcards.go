@@ -23,7 +23,7 @@ func (c *ArticleFlashcardController) CreateFlashcard(ctx *fiber.Ctx) error {
 		Question  string `json:"question"`
 	}
 	if err := ctx.BodyParser(&createRequest); err != nil {
-		return err // Fiber will handle parsing errors automatically
+		return err
 	}
 
 	articleID, err := strconv.ParseUint(createRequest.ArticleID, 10, 64)

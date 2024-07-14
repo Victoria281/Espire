@@ -132,6 +132,7 @@ export const handleCreateNewArticlePost = (new_info) => async (dispatch, getStat
         name: new_info.name,
         authors: new_info.authors,
         use: new_info.use,
+        date: new_info.date,
         description: new_info.description
     })
     if (result.success) {
@@ -139,6 +140,8 @@ export const handleCreateNewArticlePost = (new_info) => async (dispatch, getStat
         await createNewArticleLinkAPI({ article_id: articleid.toString(), Links: new_info.Links });
         await createNewArticleQuotesAPI({ article_id: articleid.toString(), Quotes: new_info.Quotes });
         await createNewArticleTagsAPI({ article_id: articleid.toString(), Tags: allTagIds });
+        await createNewArticleTagsAPI({ article_id: articleid.toString(), Tags: allTagIds });
+        await updateFlashcardsAPI(new_info.Flashcards, articleid.toString());
     }
     return articleid;
 }

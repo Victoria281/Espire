@@ -22,6 +22,7 @@ export const bulkinfo = [
         "name": "The Future of Artificial Intelligence",
         "authors": "Author A",
         "use": "Research",
+        "date": "2024-07-14T15:37:12.576949+08:00",
         "description": "Exploring the future advancements and implications of AI.",
         "Quotes": [
             {
@@ -64,6 +65,7 @@ export const bulkinfo = [
         "name": "Ethics in AI Development",
         "authors": "Author B",
         "use": "Study",
+        "date": "2024-07-14T15:37:12.576949+08:00",
         "description": "Examining the ethical considerations in the development of AI technologies.",
         "Quotes": [
             {
@@ -106,6 +108,7 @@ export const bulkinfo = [
         "name": "AI in Healthcare",
         "authors": "Author C",
         "use": "Research",
+        "date": "2024-07-14T15:37:12.576949+08:00",
         "description": "Investigating how AI is transforming the healthcare industry.",
         "Quotes": [
             {
@@ -147,6 +150,7 @@ export const bulkinfo = [
     {
         "name": "AI in Finance",
         "authors": "Author D",
+        "date": "2024-07-14T15:37:12.576949+08:00",
         "use": "Study",
         "description": "Exploring the role of AI in transforming financial services.",
         "Quotes": [
@@ -190,6 +194,7 @@ export const bulkinfo = [
         "name": "AI in Education",
         "authors": "Author E",
         "use": "Research",
+        "date": "2024-07-14T15:37:12.576949+08:00",
         "description": "Analyzing the impact of AI on the education sector.",
         "Quotes": [
             {
@@ -234,6 +239,7 @@ export const bulkinfo = [
         "name": "Introduction to Artificial Intelligence",
         "authors": "Author U",
         "use": "Guide",
+        "date": "2024-07-14T15:37:12.576949+08:00",
         "description": "A beginner's guide to understanding artificial intelligence.",
         "Quotes": [
             {
@@ -276,6 +282,7 @@ export const bulkinfo = [
         "name": "AI in Healthcare",
         "authors": "Author V",
         "use": "Research",
+        "date": "2024-07-14T15:37:12.576949+08:00",
         "description": "Exploring how artificial intelligence is transforming the healthcare industry.",
         "Quotes": [
             {
@@ -318,6 +325,7 @@ export const bulkinfo = [
         "name": "AI in Education",
         "authors": "Author W",
         "use": "Research",
+        "date": "2024-07-14T15:37:12.576949+08:00",
         "description": "Investigating the impact of artificial intelligence on the education sector.",
         "Quotes": [
             {
@@ -360,6 +368,7 @@ export const bulkinfo = [
         "name": "AI and Robotics",
         "authors": "Author X",
         "use": "Study",
+        "date": "2024-07-14T15:37:12.576949+08:00",
         "description": "Examining the relationship between artificial intelligence and robotics.",
         "Quotes": [
             {
@@ -402,6 +411,7 @@ export const bulkinfo = [
         "name": "Ethics of Artificial Intelligence",
         "authors": "Author Y",
         "use": "Research",
+        "date": "2024-07-14T15:37:12.576949+08:00",
         "description": "Exploring the ethical considerations and challenges of artificial intelligence.",
         "Quotes": [
             {
@@ -446,6 +456,7 @@ export const bulkinfo = [
         "name": "Introduction to Machine Learning",
         "authors": "Author F",
         "use": "Guide",
+        "date": "2024-07-14T15:37:12.576949+08:00",
         "description": "A beginner's guide to understanding machine learning.",
         "Quotes": [
             {
@@ -488,6 +499,7 @@ export const bulkinfo = [
         "name": "Supervised vs Unsupervised Learning",
         "authors": "Author G",
         "use": "Research",
+        "date": "2024-07-14T15:37:12.576949+08:00",
         "description": "A comprehensive comparison between supervised and unsupervised learning techniques.",
         "Quotes": [
             {
@@ -531,6 +543,7 @@ export const bulkinfo = [
         "name": "Applications of Machine Learning",
         "authors": "Author H",
         "use": "Study",
+        "date": "2024-07-14T15:37:12.576949+08:00",
         "description": "Exploring various applications of machine learning in different industries.",
         "Quotes": [
             {
@@ -573,6 +586,7 @@ export const bulkinfo = [
         "name": "Deep Learning vs Traditional Machine Learning",
         "authors": "Author I",
         "use": "Research",
+        "date": "2024-07-14T15:37:12.576949+08:00",
         "description": "Comparing deep learning techniques with traditional machine learning approaches.",
         "Quotes": [
             {
@@ -616,6 +630,7 @@ export const bulkinfo = [
         "name": "Machine Learning in Autonomous Vehicles",
         "authors": "Author J",
         "use": "Study",
+        "date": "2024-07-14T15:37:12.576949+08:00",
         "description": "Exploring the role of machine learning in developing autonomous vehicles.",
         "Quotes": [
             {
@@ -660,6 +675,7 @@ export const bulkinfo = [
         "name": "Introduction to Cybersecurity",
         "authors": "Author K",
         "use": "Guide",
+        "date": "2024-07-14T15:37:12.576949+08:00",
         "description": "A comprehensive guide to the basics of cybersecurity.",
         "Quotes": [
             {
@@ -702,6 +718,7 @@ export const bulkinfo = [
         "name": "The Importance of Cybersecurity in the Digital Age",
         "authors": "Author L",
         "use": "Research",
+        "date": "2024-07-14T15:37:12.576949+08:00",
         "description": "Discussing the critical role of cybersecurity in protecting digital assets.",
         "Quotes": [
             {
@@ -744,6 +761,7 @@ export const bulkinfo = [
         "name": "Cybersecurity Best Practices",
         "authors": "Author M",
         "use": "Guide",
+        "date": "2024-07-14T15:37:12.576949+08:00",
         "description": "A guide to the best practices for maintaining cybersecurity.",
         "Quotes": [
             {
@@ -786,6 +804,7 @@ export const bulkinfo = [
         "name": "The Role of AI in Cybersecurity",
         "authors": "Author N",
         "use": "Research",
+        "date": "2024-07-14T15:37:12.576949+08:00",
         "description": "Exploring how artificial intelligence is enhancing cybersecurity measures.",
         "Quotes": [
             {
@@ -828,6 +847,7 @@ export const bulkinfo = [
         "name": "Understanding Cyber Threats",
         "authors": "Author O",
         "use": "Study",
+        "date": "2024-07-14T15:37:12.576949+08:00",
         "description": "A detailed study of various cyber threats and how to mitigate them.",
         "Quotes": [
             {
@@ -872,6 +892,7 @@ export const bulkinfo = [
         "name": "Introduction to Blockchain Technology",
         "authors": "Author P",
         "use": "Guide",
+        "date": "2024-07-14T15:37:12.576949+08:00",
         "description": "A beginner's guide to understanding blockchain technology.",
         "Quotes": [
             {
@@ -914,6 +935,7 @@ export const bulkinfo = [
         "name": "Blockchain in Financial Services",
         "authors": "Author Q",
         "use": "Research",
+        "date": "2024-07-14T15:37:12.576949+08:00",
         "description": "Exploring how blockchain is transforming the financial services industry.",
         "Quotes": [
             {
@@ -956,6 +978,7 @@ export const bulkinfo = [
         "name": "Blockchain and Supply Chain Management",
         "authors": "Author R",
         "use": "Study",
+        "date": "2024-07-14T15:37:12.576949+08:00",
         "description": "Investigating the impact of blockchain on supply chain management.",
         "Quotes": [
             {
@@ -998,6 +1021,7 @@ export const bulkinfo = [
         "name": "Blockchain in Healthcare",
         "authors": "Author S",
         "use": "Research",
+        "date": "2024-07-14T15:37:12.576949+08:00",
         "description": "Exploring how blockchain is transforming the healthcare industry.",
         "Quotes": [
             {
@@ -1040,6 +1064,7 @@ export const bulkinfo = [
         "name": "Blockchain and Cryptocurrencies",
         "authors": "Author T",
         "use": "Guide",
+        "date": "2024-07-14T15:37:12.576949+08:00",
         "description": "A guide to understanding the relationship between blockchain and cryptocurrencies.",
         "Quotes": [
             {
@@ -1084,6 +1109,7 @@ export const bulkinfo = [
         "name": "Introduction to Quantum Computing",
         "authors": "Author A",
         "use": "Guide",
+        "date": "2024-07-14T15:37:12.576949+08:00",
         "description": "A beginner's guide to understanding the fundamentals of quantum computing.",
         "Quotes": [
             {
@@ -1126,6 +1152,7 @@ export const bulkinfo = [
         "name": "Quantum Supremacy Explained",
         "authors": "Author B",
         "use": "Research",
+        "date": "2024-07-14T15:37:12.576949+08:00",
         "description": "Exploring the concept of quantum supremacy and its implications for computing.",
         "Quotes": [
             {
@@ -1168,6 +1195,7 @@ export const bulkinfo = [
         "name": "Quantum Algorithms for Optimization Problems",
         "authors": "Author C",
         "use": "Study",
+        "date": "2024-07-14T15:37:12.576949+08:00",
         "description": "An examination of quantum algorithms designed to solve optimization problems more efficiently.",
         "Quotes": [
             {
@@ -1210,6 +1238,7 @@ export const bulkinfo = [
         "name": "Quantum Computing and Cryptography",
         "authors": "Author D",
         "use": "Research",
+        "date": "2024-07-14T15:37:12.576949+08:00",
         "description": "Investigating the impact of quantum computing on modern cryptographic systems.",
         "Quotes": [
             {
@@ -1252,6 +1281,7 @@ export const bulkinfo = [
         "name": "Applications of Quantum Computing in Medicine",
         "authors": "Author E",
         "use": "Study",
+        "date": "2024-07-14T15:37:12.576949+08:00",
         "description": "Exploring how quantum computing can advance medical research and healthcare.",
         "Quotes": [
             {

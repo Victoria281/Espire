@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"strconv"
 
 	"github.com/Victoria281/Espire/backend/services"
@@ -17,7 +16,6 @@ func NewSynthesisController(service services.SynthesisService) *SynthesisControl
 }
 
 func (c *SynthesisController) CreateSynthesis(ctx *fiber.Ctx) error {
-	fmt.Println("CreateSynthesis")
 
 	var request struct {
 		CollectionID uint   `json:"collectionid" binding:"required"`

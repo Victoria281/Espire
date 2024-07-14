@@ -41,7 +41,7 @@ func (r *collectionSqlRepository) Update(collectionID uint, updatedCollection in
 
 func (r *collectionSqlRepository) FindAll(username string) ([]models.Collection, error) {
 	var collections []models.Collection
-	err := r.DB.Preload("Articles").Where("username = ?", username).Where("deleted_at IS NULL").Find(&collections).Error
+	err := r.DB.Preload("Articles").Preload("Articles.Links").Preload("Articles.Quotes").Preload("Articles.Flashcards").Preload("Synthesis").Where("username = ?", username).Where("deleted_at IS NULL").Find(&collections).Error
 	return collections, err
 }
 

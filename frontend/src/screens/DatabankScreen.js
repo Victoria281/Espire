@@ -59,7 +59,7 @@ const DatabankScreen = () => {
           setSearching(true);
           setLoading(true);
           setSearchQuery(query);
-          await dispatch(searchArticles(query)).then((result) => {
+          await dispatch(searchGoogleArticles(query)).then((result) => {
             if (result.success) {
               setLoading(false);
             }
