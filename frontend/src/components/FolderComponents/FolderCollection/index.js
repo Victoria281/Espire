@@ -1,65 +1,120 @@
 import React, { useState } from 'react';
 import { Box, Typography, Button } from '@mui/material';
 import { useNavigate } from "react-router-dom";
-import { Folder, FolderOpen } from '@mui/icons-material'; // Import the file icons
+import { Folder, FolderOpen } from '@mui/icons-material';
+import TabSelection from "../../ArticleComponents/TabSelection";
+import AdminModal from "./AdminModal";
+import ArticlesModal from "./ArticlesModal";
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import styles from './styles.module.css';
+import { useDispatch } from 'react-redux';
+import { handleBulkCreate, assignArticleToCollection, removeArticleFromCollection } from "../../../store/actions/articles"
+import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
 
-const FolderCollection = ({ collections }) => {
-    const [isRowLayout, setIsRowLayout] = useState(true);
-    const [isOpen, setIsOpen] = useState(true); // State for file icon open/close
-
-    const toggleLayout = () => {
-        setIsRowLayout(!isRowLayout);
-    };
+const FolderCollection = ({ articles, collections }) => {
+    const [rowView, setRowView] = useState(true);
+    const [isOpen, setIsOpen] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const toggleFileIcon = () => {
         setIsOpen(!isOpen);
     };
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const handleOpenAdminModal = () => {
+        setIsAdminModalOpen(true);
+    };
 
     const handleSelectCollections = (ind) => {
         navigate(`/collection/${collections[ind].ID}`);
     }
 
+    const handlePasswordSubmit = async () => {
+        console.log('Admin password accepted');
+        setLoading(true);
+        await dispatch(handleBulkCreate()).then((success) => {
+            if (success) {
+                setLoading(false);
+                setIsAdminModalOpen(false);
+            }
+        })
+    };
+
+    const handleOpenModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleUpdate = (cid, action, aid) => {
+        if (action === 'add') {
+            dispatch(assignArticleToCollection([aid], cid))
+        } else if (action === 'remove') {
+            dispatch(removeArticleFromCollection([aid], cid))
+        }
+    };
+
     return (
-        <div>
-            <Button
-                onClick={toggleLayout}
-                variant="contained"
-                color="primary"
-                className={styles.toggleButton}
-            >
-                {isRowLayout ? 'Switch to Column View' : 'Switch to Row View'}
-            </Button>
-            <Box
-                className={isRowLayout ? styles.rowLayout : styles.columnLayout}
-            >
-                {collections.map((collection, index) => (
-                    <Box
-                        key={collection.ID}
-                        className={styles.collectionItem}
-                        onClick={() => handleSelectCollections(index)}
-                    >
-                        <div
-                            className={`${styles.fileIcon} ${isOpen ? styles.fileIconOpen : ''}`}
-                            onClick={toggleFileIcon}
-                        >
-                            {isOpen ? <FolderOpen /> : <Folder />}
+        <>
+            <ArticlesModal
+                open={isModalOpen}
+                onClose={handleCloseModal}
+                collections={collections}
+                articles={articles}
+                onUpdate={handleUpdate}
+            />
+            <AdminModal
+                loading={loading}
+                open={isAdminModalOpen}
+                onSubmit={handlePasswordSubmit}
+                setIsOpen={setIsAdminModalOpen}
+            />
+            <div className={styles.collectionMainContainer}>
+                <div className={styles.collectionHead}>
+                    <div className={styles.collectionAdmin}>
+                        <p>Personal Collections</p>
+                        <div onClick={() => handleOpenAdminModal()}>
+                            <AdminPanelSettingsIcon />
                         </div>
-                        <Typography variant="h6" className={styles.collectionName}>
-                            {collection.name}
-                        </Typography>
-                        <Typography variant="body2" className={styles.collectionDate}>
-                            Created: {new Date(collection.createdat).toLocaleDateString()}
-                        </Typography>
-                        <Typography variant="body2" className={styles.articleCount}>
-                            Articles: {collection.Articles.length}
-                        </Typography>
-                    </Box>
-                ))}
-            </Box>
-        </div>
+                        <div onClick={() => handleOpenModal()}>
+                            <DriveFileMoveIcon />
+                        </div>
+                    </div>
+                    <TabSelection rowView={rowView} setRowView={setRowView} />
+                </div>
+                <div className={styles[`collection${rowView ? '' : 'Column'}Container`]}>
+                    {collections.map((collection, index) => (
+                        <Box
+                            key={collection.ID}
+                            className={styles.collectionItem}
+                            onClick={() => handleSelectCollections(index)}
+                        >
+                            <div
+                                className={`${styles.fileIcon} ${isOpen ? styles.fileIconOpen : ''}`}
+                                onClick={toggleFileIcon}
+                            >
+                                {isOpen ? <FolderOpen /> : <Folder />}
+                            </div>
+                            <p className={styles.collectionName}>
+                                {collection.name}
+                            </p>
+                            <p variant="body2" className={styles.collectionDate}>
+                                Created: {new Date(collection.createdat).toLocaleDateString()}
+                            </p>
+                            <p variant="body2" className={styles.articleCount}>
+                                Articles: {collection.Articles.length}
+                            </p>
+                        </Box>
+                    ))}
+                </div>
+            </div>
+        </>
     );
 }
 

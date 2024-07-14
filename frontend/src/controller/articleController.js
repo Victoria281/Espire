@@ -22,8 +22,11 @@ import {
     CREATE_NEW_TAG,
     ATTACH_TAGS,
     UPDATE_FLASHCARDS,
-    DELETE_FLASHCARDS
-
+    DELETE_FLASHCARDS,
+    CREATE_COLLECTION,
+    DELETE_COLLECTION,
+    ARTICLE_TO_COLLECTION,
+    ARTICLE_FROM_COLLECTION
 } from '../constants/apiUrls'
 
 export const getMyArticlesAPI = async () => {
@@ -32,6 +35,7 @@ export const getMyArticlesAPI = async () => {
         if (status == 200) return { data: data, success: true }
     } catch (e) {
         displayErrorHandler(e, GET_OWN_ARTICLES);
+        console.log(e)
         return { success: false }
     }
 }
@@ -209,6 +213,50 @@ export const deleteFlashcardsAPI = async (id) => {
         if (status == 200) return { success: true }
     } catch (e) {
         displayErrorHandler(e, DELETE_FLASHCARDS(id));
+        console.log(e.response)
+        return { success: false, error: e.response.data }
+    }
+}
+
+export const createCollectionAPI = async (name) => {
+    try {
+        const { data, status } = await axiosInstance.post(CREATE_COLLECTION, {name: name});
+        if (status == 201) return { data: data, success: true }
+    } catch (e) {
+        displayErrorHandler(e, CREATE_COLLECTION);
+        console.log(e.response)
+        return { success: false, error: e.response.data }
+    }
+}
+
+export const deleteCollectionAPI = async (id) => {
+    try {
+        const { status } = await axiosInstance.delete(DELETE_COLLECTION(id));
+        if (status == 200) return { success: true }
+    } catch (e) {
+        displayErrorHandler(e, DELETE_COLLECTION(id));
+        console.log(e.response)
+        return { success: false, error: e.response.data }
+    }
+}
+
+export const assignArticleToCollectionAPI = async (articleid, collectionid) => {
+    try {
+        const { status } = await axiosInstance.post(ARTICLE_TO_COLLECTION(articleid, collectionid));
+        if (status == 200) return { success: true }
+    } catch (e) {
+        displayErrorHandler(e, ARTICLE_TO_COLLECTION(articleid, collectionid));
+        console.log(e.response)
+        return { success: false, error: e.response.data }
+    }
+}
+
+export const removeArticleFromCollectionAPI = async (articleid, collectionid) => {
+    try {
+        const { status } = await axiosInstance.delete(ARTICLE_FROM_COLLECTION(articleid, collectionid));
+        if (status == 200) return { success: true }
+    } catch (e) {
+        displayErrorHandler(e, ARTICLE_FROM_COLLECTION(articleid, collectionid));
         console.log(e.response)
         return { success: false, error: e.response.data }
     }

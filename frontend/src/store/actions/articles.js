@@ -16,12 +16,21 @@ import {
     createNewArticleTagsAPI,
     searchGoogleArticleAPI,
     updateFlashcardsAPI,
-    deleteFlashcardsAPI
+    deleteFlashcardsAPI,
+    createCollectionAPI,
+    deleteCollectionAPI,
+    assignArticleToCollectionAPI,
+    removeArticleFromCollectionAPI,
 } from '../../controller/articleController';
 import {
     ARTICLE_BASE_TEMPLATE,
     ARTICLE_BASE_TEMPLATE_FILLED
 } from "../../constants/names";
+import {
+    bulkCollection,
+    sectionIds,
+    bulkinfo
+} from "../../constants/bulk";
 
 export const SET_ARTICLES = 'SET_ARTICLES';
 export const SET_ARTICLE_WORKSPACE = 'SET_ARTICLE_WORKSPACE';
@@ -72,6 +81,33 @@ export const newArticleWorkspace = () => async (dispatch) => {
         }
     });
 };
+
+export const handleBulkCreate = () => async (dispatch, getState) => {
+    let cIds = [];
+    for (const cname of bulkCollection) {
+        const result = await createCollectionAPI(cname);
+        if (result.success) {
+            cIds.push(result.data.id);
+        }
+    }
+
+    for (var i = 0; i < cIds.length; i++) {
+        let start = sectionIds[i][0];
+        let end = sectionIds[i][1];
+
+        for (var e = start; e <= end; e++) {
+            console.log(`Adding ${bulkinfo[e].name} to collection ${bulkCollection[i]}`)
+            const aresult = await dispatch(handleCreateNewArticlePost(bulkinfo[e]));
+            if (aresult!=null && i!=(cIds.length-1)) {
+                console.log(`Assigning ${aresult} to collection ${cIds[i]}`)
+                await assignArticleToCollectionAPI(aresult, cIds[i]);
+            }
+        }
+    }
+
+    console.log("Completed")
+    return true;
+}
 
 export const handleCreateNewArticlePost = (new_info) => async (dispatch, getState) => {
     let articleid = -1;
@@ -205,6 +241,41 @@ export const deleteFlashcards = (id) => async (dispatch, getState) => {
     const result = await deleteFlashcardsAPI(id);
     dispatch(getArticlesById(id));
     return result;
+}
+
+
+// export const getCollectionById = (id) => async (dispatch) => {
+//     const result = await getCollectionByIdAPI(id);
+//     return result;
+// };
+
+export const createCollection = (name) => async (dispatch, getState) => {
+    const result = await createCollectionAPI(name);
+    dispatch(getMyCollections());
+    return result;
+}
+
+
+export const deleteCollection = (id) => async (dispatch, getState) => {
+    const result = await deleteCollectionAPI(id);
+    dispatch(getMyCollections());
+    return result;
+}
+
+
+export const assignArticleToCollection = (articleids, collectionid) => async (dispatch, getState) => {
+    for (const aid of articleids) {
+        await assignArticleToCollectionAPI(aid, collectionid);
+    }
+    dispatch(getMyCollections());
+}
+
+
+export const removeArticleFromCollection = (articleids, collectionid) => async (dispatch, getState) => {
+    for (const aid of articleids) {
+        await removeArticleFromCollectionAPI(aid, collectionid);
+    }
+    dispatch(getMyCollections());
 }
 
 

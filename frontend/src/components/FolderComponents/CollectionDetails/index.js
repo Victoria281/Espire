@@ -9,7 +9,8 @@ import { DndProvider, useDrop, useDrag } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { QUOTES_GROUP } from '../../../constants/names';
 
-const CollectionDetails = ({ collection = {} }) => {
+const CollectionDetails = ({ collection }) => {
+    console.log(collection)
     const [selectedTab, setSelectedTab] = useState('DIY');
     const [isRowLayout, setIsRowLayout] = useState(true);
     const [leftColumn, setLeftColumn] = useState([]);

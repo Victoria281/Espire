@@ -11,6 +11,7 @@ import {
 
 const initialState = {
   collections: [],
+  tags: [],
   articles: [],
   workspace: {
     article: {},

@@ -28,6 +28,7 @@ const ArticleCollection = ({ search, articles }) => {
 
     return (
         <div className={styles.articleListContainter} >
+            <p>Personal Articles</p>
             <div className={styles.articleListTitle}>
                 <p>Date</p>
                 <p>Name</p>

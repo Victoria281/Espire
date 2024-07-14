@@ -30,3 +30,9 @@ export const GET_ALL_TAGS = `/tags`;
 export const GET_WEB_SCRAPE = `/articles/webscrap`;
 export const CREATE_NEW_TAG = `/tags`;
 export const ATTACH_TAGS = (aid) => `/tags/articles/${aid}`;
+
+
+export const CREATE_COLLECTION =  `/collections`;
+export const DELETE_COLLECTION = (aid) => `/collections/${aid}`;
+export const ARTICLE_TO_COLLECTION = (aid, cid) => `/collections/${cid}/articles/${aid}`;
+export const ARTICLE_FROM_COLLECTION = (aid, cid) => `/collections/${cid}/articles/${aid}`;

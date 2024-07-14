@@ -1,12 +1,58 @@
-/* styles.module.css */
+.collectionMainContainer {
+    width: 96vw;
+    margin: 0 2vw;
+}
 
 .toggleButton {
     margin-bottom: 16px;
 }
 
-.rowLayout {
+.collectionHead {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.collectionAdmin{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.collectionAdmin div{
+    color: #437FC780; 
+    cursor: pointer;
+    font-size: 20px;
+    padding-top: 7px;
+    margin-left: 10px;
+}
+
+.collectionHead p {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.collectionContainer {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 16px;
+}
+
+.collectionContainer::-webkit-scrollbar {
+    height: 4px; 
+}
+
+.collectionContainer::-webkit-scrollbar-thumb {
+    background-color: #437FC780; 
+    border-radius: 4px; 
+}
+
+.collectionColumnContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 16px;
 }
 
@@ -17,32 +63,44 @@
 }
 
 .collectionItem {
+    width: 15vw;
     background-color: #ffffff;
     border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 16px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 16px;
     text-align: center;
     cursor: pointer;
     transition: transform 0.3s, box-shadow 0.3s;
+    flex: 0 0 auto; 
 }
 
 .collectionItem:hover {
     transform: scale(1.05);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .collectionName {
-    font-weight: bold;
-    color: #333333;
+    font-weight: bolder;
+    color: #437FC7;
+    font-size: 18px;
+    margin-bottom: 5px;
+    margin-top: 5px;
 }
 
 .collectionDate,
 .articleCount {
     color: #555555;
+    font-size: 12px;
+    font-weight: bold;
+    margin: 0;
 }
 
 .fileIcon {
-    margin-bottom: 12px;
+    margin-bottom: 5px;
     font-size: 40px;
     color: #007bff;
     transition: color 0.3s, transform 0.3s;
@@ -54,7 +112,7 @@
 }
 
 .fileIconOpen {
-    color: #28a745; /* Green color for open folder */
+    color: #28a745;
 }
 
 .toggleButton {
@@ -62,4 +120,105 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
+}
+
+
+
+
+
+
+
+
+
+.adminmodal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.adminmodalContent {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+}
+
+.adminheader {
+    margin-bottom: 20px;
+}
+
+.admintextField {
+    margin-bottom: 16px;
+}
+
+.adminsubmitButton {
+    margin-right: 8px;
+}
+
+.admincancelButton {
+    margin-left: 8px;
+}
+
+
+
+
+.modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modalContent {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.header {
+    margin-bottom: 16px;
+}
+
+.select {
+    margin-bottom: 16px;
+}
+
+.listsContainer {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.listContainer {
+    flex: 1;
+}
+
+.listTitle {
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.listItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.addButton {
+    color: #28a745;
+}
+
+.removeButton {
+    color: #dc3545;
+}
+
+.closeButton {
+    display: block;
+    margin: 0 auto;
 }

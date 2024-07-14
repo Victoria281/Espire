@@ -111,6 +111,11 @@ func CollectionRouter(router fiber.Router) {
 	collectionController := &controller.CollectionController{
 		Service: collectionService,
 	}
+	synthesisRepo := repo.NewSynthesisRepo(db)
+	synthesisService := services.NewSynthesisService(synthesisRepo)
+	synthesisController := &controller.SynthesisController{
+		Service: synthesisService,
+	}
 
 	router.Get("/", collectionController.GetCollection)
 	router.Post("/", collectionController.CreateCollection)
@@ -118,6 +123,9 @@ func CollectionRouter(router fiber.Router) {
 	router.Post("/:id/articles/:article_id", collectionController.AddArticleToCollection)
 	router.Delete("/:id/articles/:article_id", collectionController.RemoveArticleFromCollection)
 	router.Delete("/:id", collectionController.DeleteCollection)
+
+	router.Post("/synthesis", synthesisController.CreateSynthesis)
+	router.Delete("/synthesis/:id", synthesisController.DeleteSynthesis)
 }
 
 func TagRouter(router fiber.Router) {

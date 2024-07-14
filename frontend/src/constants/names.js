@@ -170,26 +170,11 @@ export const mockCollection = {
     ],
     "Synthesis": [
         {
-            "key": "1,3-4,5",
-            "leftQuotes": [
-                { "id": 1, "text": "Quote from Article 1 - Fact 1." }
-            ],
-            "rightQuotes": [
-                { "id": 3, "text": "Quote from Article 2 - Fact 1." },
-                { "id": 4, "text": "Quote from Article 2 - Fact 2." }
-            ],
+            "key": "1-3,4",
             "text": "Synthesis between Quote 1 from Article 1 and Quotes 3 and 4 from Article 2."
         },
         {
             "key": "6,7-8,9",
-            "leftQuotes": [
-                { "id": 6, "text": "Quote from Article 3 - Fact 1." },
-                { "id": 7, "text": "Quote from Article 3 - Fact 2." }
-            ],
-            "rightQuotes": [
-                { "id": 8, "text": "Quote from Article 3 - Fact 3." },
-                { "id": 9, "text": "Quote from Article 3 - Fact 4." }
-            ],
             "text": "Synthesis between Quotes 6 and 7 from Article 3 and Quotes 8 and 9 from Article 3."
         }
     ]

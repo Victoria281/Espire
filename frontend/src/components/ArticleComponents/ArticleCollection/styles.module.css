@@ -1,3 +1,8 @@
+.articleListContainter p {
+    font-weight: bold;
+    font-size: 20px;
+    margin: 5vh 2vw 0 2vw;
+}
 
 .articleListTitle{
     margin: 2vh 4vw 1vh 4vw;

@@ -90,6 +90,7 @@ func (c *ArticleController) CreateNewArticle(ctx *fiber.Ctx) error {
 
 	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{"id": index})
 }
+
 func (c *ArticleController) UpdateArticle(ctx *fiber.Ctx) error {
 
 	username := auth.ParseUsername(ctx)

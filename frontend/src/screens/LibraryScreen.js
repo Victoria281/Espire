@@ -2,12 +2,10 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from "react-router-dom";
 import { retrieveownArticles } from "../functions/articles";
-import TabSelection from "../components/ArticleComponents/TabSelection";
 import ArticleCollection from "../components/ArticleComponents/ArticleCollection";
 import FolderCollection from "../components/FolderComponents/FolderCollection";
 
 const LibraryScreen = () => {
-  const [articleView, setArticleView] = useState(true);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -15,9 +13,6 @@ const LibraryScreen = () => {
   const articles = useSelector(state => state.articles.articles);
   const collections = useSelector(state => state.articles.collections);
 
-  const switchTabs = () => {
-    setArticleView(!articleView);
-  }
 
   useEffect(() => {
     if (token != undefined) {
@@ -27,14 +22,8 @@ const LibraryScreen = () => {
 
   return (
     <div className="mainContainer restrictScroll">
-      <TabSelection articleView={articleView} setArticleView={setArticleView} />
-      {
-        articleView ?
-          <ArticleCollection articles={articles} />
-          :
-          <FolderCollection collections={collections} />
-      }
-
+      <FolderCollection articles={articles} collections={collections} />
+      <ArticleCollection articles={articles} />
     </div>
   );
 };

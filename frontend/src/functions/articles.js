@@ -11,3 +11,8 @@ export const retrieveArticleById = (id, dispatch) => {
     console.log('Retrieving Article ...');
     dispatch(getArticlesById(id))
 }
+
+// export const retrieveCollectionById = (id, dispatch) => {
+//     console.log('Retrieving Collection ...');
+//     dispatch(getCollectionById(id))
+// }
