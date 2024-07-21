@@ -8,11 +8,13 @@ import InputComponent from "../components/AuthComponents/InputComponent"
 import { useNavigate } from "react-router-dom";
 import { SIGNIN, REGISTER, LOGIN_PATHNAME, REGISTER_SIDEBAR_TITLE, SIGNUP } from "../constants/names";
 import { handleRegisterUser } from "../store/actions/user";
+import { CircularProgress, Typography } from '@mui/material';
 
 const RegisterScreen = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  // const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const dispatch = useDispatch();
@@ -22,7 +24,7 @@ const RegisterScreen = () => {
   }
   const handleRegisterCheck = () => {
     const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (username.length < 8) {
       setErrMsg("Username must be longer than 8 characters");
@@ -30,19 +32,22 @@ const RegisterScreen = () => {
     else if (!passwordRegex.test(password)) {
       setErrMsg("Password must contain at least 8 characters, including at least one uppercase letter, one lowercase letter, and one number");
     }
-    else if (!emailRegex.test(email)) {
-      setErrMsg("Invalid email address");
-    }
+    // else if (!emailRegex.test(email)) {
+    //   setErrMsg("Invalid email address");
+    // }
     else {
-      handleRegister(username, email, password);
+      handleRegister(username, password);
     }
   }
 
-  const handleRegister = (username, email, password) => {
-    dispatch(handleRegisterUser(username, email, password)).then(({ success, error }) => {
+  const handleRegister = (username, password) => {
+    setLoading(true)
+    dispatch(handleRegisterUser(username, password)).then(({ success, error }) => {
       if (success) {
+        setLoading(false)
         navigate('/library')
       } else {
+        setLoading(false)
         setErrMsg(error);
       }
     })
@@ -54,26 +59,36 @@ const RegisterScreen = () => {
         onClick={() => { handleSignIn() }}
         title={REGISTER_SIDEBAR_TITLE}
         btn={SIGNIN} />
-      <AuthMainBar
-        btn={SIGNUP} title={REGISTER} onClick={handleRegisterCheck}>
-        <InputComponent
-          title="Username"
-          col={username}
-          setCol={setUsername}
-        />
-        <InputComponent
+      {loading ?
+        <>
+
+          <CircularProgress
+            size={60} />
+          <Typography variant="h6" color="textSecondary">
+            Registering user...
+          </Typography>
+        </>
+        :
+        <AuthMainBar
+          btn={SIGNUP} title={REGISTER} onClick={handleRegisterCheck}>
+          <InputComponent
+            title="Username"
+            col={username}
+            setCol={setUsername}
+          />
+          {/* <InputComponent
           title="Email"
           col={email}
           setCol={setEmail}
-        />
-        <InputComponent
-          title="Password"
-          col={password}
-          setCol={setPassword}
-        />
-        <ErrorMessage msg={errMsg} />
-      </AuthMainBar>
-    </AuthBackground>
+        /> */}
+          <InputComponent
+            title="Password"
+            col={password}
+            setCol={setPassword}
+          />
+          <ErrorMessage msg={errMsg} />
+        </AuthMainBar>}
+    </AuthBackground >
   );
 };
 
