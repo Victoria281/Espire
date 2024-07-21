@@ -1,3 +1,4 @@
+export { default as HealthCheck } from './HealthCheck';
 export { default as Advertisement } from './Advertisement';
 export { default as Services } from './Services';
 export { default as Flow } from './Flow';

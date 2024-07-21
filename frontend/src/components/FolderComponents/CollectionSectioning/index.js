@@ -17,7 +17,7 @@ const CollectionSectioning = ({ collection }) => {
         <div className={styles.mainContainer}>
             <div className={styles.leftContainer}>
                 <div className={styles.returnContainer}>
-                    <LeftHeader />
+                    <LeftHeader collectionID={collection.ID}/>
                 </div>
                 <div className={styles.articlesContainer}>
                     <ArticlesList articles={collection.Articles} selectedArticle={selectedArticle} setSelectedArticle={setSelectedArticle}/>

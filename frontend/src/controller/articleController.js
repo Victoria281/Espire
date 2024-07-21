@@ -27,7 +27,11 @@ import {
     DELETE_COLLECTION,
     ARTICLE_TO_COLLECTION,
     ARTICLE_FROM_COLLECTION,
-    SAVE_SYNTHESIS
+    SAVE_SYNTHESIS,
+    SEARCH_USER,
+    GET_INVITED,
+    INVITE,
+    GET_SHARED_COLLECTIONS
 } from '../constants/apiUrls'
 
 export const getMyArticlesAPI = async () => {
@@ -47,6 +51,16 @@ export const getMyCollectionsAPI = async () => {
         if (status == 200) return { data: data, success: true }
     } catch (e) {
         displayErrorHandler(e, GET_OWN_COLLECTIONS);
+        return { success: false }
+    }
+}
+
+export const getMySharedCollectionsAPI = async () => {
+    try {
+        const { data, status } = await axiosInstance.get(GET_SHARED_COLLECTIONS);
+        if (status == 200) return { data: data, success: true }
+    } catch (e) {
+        displayErrorHandler(e, GET_SHARED_COLLECTIONS);
         return { success: false }
     }
 }
@@ -273,3 +287,49 @@ export const saveSynthesisAPI = async (info) => {
         return { success: false, error: e.response.data }
     }
 }
+
+export const searchUserAPI = async (collectionID, query) => {
+    try {
+        const { data, status } = await axiosInstance.get(SEARCH_USER(collectionID), { params: { query } });
+        if (status === 200) return { success: true, users: data };
+    } catch (e) {
+        displayErrorHandler(e, SEARCH_USER(collectionID));
+        console.log(e.response);
+        return { success: false, error: e.response.data };
+    }
+}
+
+export const removeUserAPI = async (collectionID, username) => {
+    try {
+        const { status } = await axiosInstance.delete(INVITE(collectionID), { data: { username } });
+        if (status === 200) return { success: true };
+    } catch (e) {
+        displayErrorHandler(e, INVITE(collectionID));
+        console.log(e.response);
+        return { success: false, error: e.response.data };
+    }
+}
+
+export const inviteUserAPI = async (collectionID, username) => {
+    try {
+        const { status } = await axiosInstance.post(INVITE(collectionID), { username });
+        if (status === 200) return { success: true };
+    } catch (e) {
+        displayErrorHandler(e, INVITE(collectionID));
+        console.log(e.response);
+        return { success: false, error: e.response.data };
+    }
+}
+
+export const getInvitedUsersAPI = async (collectionID) => {
+    try {
+        const { data, status } = await axiosInstance.get(GET_INVITED(collectionID));
+        if (status === 200) return { success: true, users: data };
+    } catch (e) {
+        displayErrorHandler(e, GET_INVITED(collectionID));
+        console.log(e.response);
+        return { success: false, error: e.response.data };
+    }
+}
+
+

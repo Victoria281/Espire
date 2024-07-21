@@ -37,3 +37,8 @@ export const DELETE_COLLECTION = (aid) => `/collections/${aid}`;
 export const ARTICLE_TO_COLLECTION = (aid, cid) => `/collections/${cid}/articles/${aid}`;
 export const ARTICLE_FROM_COLLECTION = (aid, cid) => `/collections/${cid}/articles/${aid}`;
 export const SAVE_SYNTHESIS = `/collections/synthesis`;
+
+export const SEARCH_USER = (cid) => `/collections/${cid}/users/search`;
+export const GET_INVITED = (cid) => `/collections/${cid}/users`;
+export const INVITE = (cid) => `/collections/${cid}/users/invite`;
+export const GET_SHARED_COLLECTIONS = `/collections/shared`;

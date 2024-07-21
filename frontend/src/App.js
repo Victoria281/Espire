@@ -14,6 +14,7 @@ import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import ArticleScreen from "./screens/ArticleScreen";
 import CollectionScreen from "./screens/CollectionScreen";
+import SharedCollectionScreen from "./screens/SharedCollectionScreen";
 import Template from "./screens/Template";
 import LibraryScreen from "./screens/LibraryScreen";
 import DatabankScreen from "./screens/DatabankScreen";
@@ -37,6 +38,14 @@ const App = () => {
           element={
             <DndProvider backend={HTML5Backend}>
               <CollectionScreen />
+            </DndProvider>
+          }
+        />
+        <Route
+          path="/shared/collection/:collectionid"
+          element={
+            <DndProvider backend={HTML5Backend}>
+              <SharedCollectionScreen />
             </DndProvider>
           }
         />

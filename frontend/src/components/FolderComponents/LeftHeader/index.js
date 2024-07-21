@@ -1,13 +1,23 @@
-import React from 'react';
+import React, { useState } from "react";
 import styles from './styles.module.css';
 import { useNavigate } from "react-router-dom";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
-import Logo from '../../common/Navbar/Logo';
+import ShareButtonModal from './ShareButtonModal';
 
-const LeftHeader = () => {
+const LeftHeader = ({ collectionID }) => {
     const navigate = useNavigate();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    
     const handleReturnClick = () => {
         navigate("/library")
+    }
+
+    const handleShareButtonClick = () => {
+        setIsModalOpen(true);
+    }
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
     }
 
     return (
@@ -16,9 +26,12 @@ const LeftHeader = () => {
                 <div className={styles.backButton} onClick={() => handleReturnClick()}>
                     <KeyboardBackspaceIcon />
                 </div>
-                <Logo />
+                <div className={styles.shareButton} onClick={handleShareButtonClick}>
+                    Share
+                </div>
             </div>
             <p>All Articles</p>
+            <ShareButtonModal isOpen={isModalOpen} onClose={handleCloseModal} collectionID={collectionID}/>
         </div>
     );
 };

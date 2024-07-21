@@ -7,16 +7,16 @@ import (
 )
 
 type Users struct {
-	UserID         uint       `gorm:"autoIncrement;unique" json:"user_id"`
-	Username       string     `gorm:"primaryKey;unique" json:"username"`
-	Email          string     `json:"email"`
-	Password       []byte     `json:"password"`
-	Role           string     `gorm:"default:user" json:"role"`
-	CreatedAt      time.Time  `gorm:"default:CURRENT_TIMESTAMP" json:"createdat"`
-	UpdatedAt      time.Time  `gorm:"default:CURRENT_TIMESTAMP" json:"updatedat"`
-	DeletedAt      *time.Time `json:"deletedat"`
-	Articles       []Articles `gorm:"foreignKey:Username;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
-	ForkedArticles []Articles `gorm:"foreignKey:ParentUsername;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
+	UserID         uint         `gorm:"autoIncrement;unique" json:"user_id"`
+	Username       string       `gorm:"primaryKey;unique" json:"username"`
+	Password       []byte       `json:"password"`
+	Role           string       `gorm:"default:user" json:"role"`
+	CreatedAt      time.Time    `gorm:"default:CURRENT_TIMESTAMP" json:"createdat"`
+	UpdatedAt      time.Time    `gorm:"default:CURRENT_TIMESTAMP" json:"updatedat"`
+	DeletedAt      *time.Time   `json:"deletedat"`
+	Articles       []Articles   `gorm:"foreignKey:Username;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
+	ForkedArticles []Articles   `gorm:"foreignKey:ParentUsername;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
+	Collections    []Collection `gorm:"many2many:collection_users;"`
 }
 
 type UserArticleVisit struct {

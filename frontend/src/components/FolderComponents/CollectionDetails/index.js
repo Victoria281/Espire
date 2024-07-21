@@ -88,18 +88,6 @@ const CollectionDetails = ({ collection }) => {
         }
     }, [leftColumn, rightColumn, collection.Synthesis]);
 
-    const handleSaveSynthesis = () => {
-        const synthesisKey = `${leftColumn.map(q => q.id).join(',')}-${rightColumn.map(q => q.id).join(',')}`;
-        const existingIndex = collection.Synthesis.findIndex(s => s.key === synthesisKey);
-
-        if (existingIndex !== -1) {
-            collection.Synthesis[existingIndex].text = synthesis;
-        } else {
-            dispatch(saveSynthesis({ collectionid: collection.ID, key: synthesisKey, text: synthesis }));
-        }
-        console.log('Synthesis saved:', synthesis);
-    };
-
     const handleDragOut = (quote, column) => {
         removeQuote(quote, column);
         if (leftColumn.length === 0 && rightColumn.length === 0) {
@@ -182,22 +170,14 @@ const CollectionDetails = ({ collection }) => {
                                     </Typography>
                                 )}
                                 <TextField
+                                    disabled
                                     multiline
                                     rows={3}
                                     variant="outlined"
                                     placeholder="Write your synthesis here..."
                                     value={synthesis}
-                                    onChange={(e) => setSynthesis(e.target.value)}
                                     className={styles.synthesisTextArea}
                                 />
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={handleSaveSynthesis}
-                                    className={styles.saveButton}
-                                >
-                                    Save Synthesis
-                                </Button>
                             </Box>
                         </Box>
                         <Box className={styles.quotesArea}>

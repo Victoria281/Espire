@@ -21,7 +21,8 @@ import {
     deleteCollectionAPI,
     assignArticleToCollectionAPI,
     removeArticleFromCollectionAPI,
-    saveSynthesisAPI
+    saveSynthesisAPI,
+    getMySharedCollectionsAPI
 } from '../../controller/articleController';
 import {
     ARTICLE_BASE_TEMPLATE,
@@ -38,6 +39,7 @@ export const SET_ARTICLE_WORKSPACE = 'SET_ARTICLE_WORKSPACE';
 export const SET_SEARCH_RESULTS = 'SET_SEARCH_RESULTS';
 export const SET_TAGS = 'SET_TAGS';
 export const SET_COLLECTIONS = 'SET_COLLECTIONS';
+export const SET_SHAREDCOLLECTIONS = 'SET_SHAREDCOLLECTIONS';
 
 
 export const getMyArticles = () => async (dispatch) => {
@@ -56,6 +58,16 @@ export const getMyCollections = () => async (dispatch) => {
     dispatch({
         type: SET_COLLECTIONS,
         collections: result.data
+    });
+    return result;
+};
+
+export const getMySharedCollections = () => async (dispatch) => {
+    const result = await getMySharedCollectionsAPI();
+    if (!result.success) return null;
+    dispatch({
+        type: SET_SHAREDCOLLECTIONS,
+        shared_collections: result.data
     });
     return result;
 };

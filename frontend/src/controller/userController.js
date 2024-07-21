@@ -5,6 +5,15 @@ import {
     REGISTER,
 } from '../constants/apiUrls'
 
+export const getEspireAPI = async () => {
+    try {
+        const { data, status } = await axiosInstance.get();
+        if (status == 200) return data;
+    } catch (e) {
+        displayErrorHandler(e, LOGIN);
+        return "Backend is not running!"
+    }
+}
 export const loginAPI = async (username, password) => {
     try {
         const { data, status } = await axiosInstance.post(LOGIN, {

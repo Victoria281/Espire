@@ -3,11 +3,11 @@ package main
 import (
 	"os"
 
-	"github.com/Victoria281/Espire/backend/routes"
-	"github.com/Victoria281/Espire/backend/storage"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+
+	"github.com/Victoria281/Espire/backend/routes"
+	"github.com/Victoria281/Espire/backend/storage"
 )
 
 func main() {
@@ -37,6 +37,7 @@ func main() {
 	app.Use(cors.New())
 	//public routes
 	routes.AuthRouter(espireApi.Group("/auth"))
+	routes.TestRouter(espireApi.Group("/"))
 
 	// Protected routes
 	routes.SecureRoutes(espireApi)

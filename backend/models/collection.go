@@ -15,6 +15,7 @@ type Collection struct {
 	DeletedAt *time.Time  `json:"deletedat"`
 	Articles  []Articles  `gorm:"many2many:collection_articles;"`
 	Synthesis []Synthesis `gorm:"foreignKey:CollectionID"`
+	Users     []Users     `gorm:"many2many:collection_users;"`
 }
 
 type Synthesis struct {
@@ -31,6 +32,11 @@ type Synthesis struct {
 type CollectionArticle struct {
 	CollectionID uint `gorm:"primaryKey"`
 	ArticlesID   uint `gorm:"primaryKey"`
+}
+
+type CollectionUser struct {
+	UsersUsername string `gorm:"primaryKey"`
+	CollectionID  uint   `gorm:"primaryKey"`
 }
 
 func MigrateCollection(db *gorm.DB) error {

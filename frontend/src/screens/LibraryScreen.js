@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { retrieveownArticles } from "../functions/articles";
 import ArticleCollection from "../components/ArticleComponents/ArticleCollection";
 import FolderCollection from "../components/FolderComponents/FolderCollection";
+import SharedCollection from "../components/FolderComponents/SharedCollection";
 
 const LibraryScreen = () => {
   const dispatch = useDispatch();
@@ -12,6 +13,7 @@ const LibraryScreen = () => {
   const token = useSelector(state => state.user.token);
   const articles = useSelector(state => state.articles.articles);
   const collections = useSelector(state => state.articles.collections);
+  const shared_collections = useSelector(state => state.articles.shared_collections);
 
 
   useEffect(() => {
@@ -23,6 +25,7 @@ const LibraryScreen = () => {
   return (
     <div className="mainContainer restrictScroll">
       <FolderCollection articles={articles} collections={collections} />
+      <SharedCollection articles={articles} collections={shared_collections} />
       <ArticleCollection articles={articles} />
     </div>
   );

@@ -1,3 +1,45 @@
+/* HealthCheck */
+
+.healthCheck {
+    position: fixed;
+    top: 12vh;
+    right: 1vw;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+}
+
+.healthCheckContent {
+    width: 0px;
+}
+
+.healthCheckContent.open {
+    width: 150px;
+}
+
+.healthCheck p {
+    padding: 2px 0px 0px 8px;
+    margin: 0px;
+}
+
+.healthCheckButton {
+    background-color: #437FC780;
+    color: white;
+    border: none;
+    padding: 1px 1px 0px 1px;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.healthCheckButton:hover {
+    background-color: #356BA0;
+}
+
 /* Advertisement */
 
 .advertisementContainer {

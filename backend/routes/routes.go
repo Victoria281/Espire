@@ -18,6 +18,13 @@ func SecureRoutes(router fiber.Router) {
 	router.Use(middleware.JWTMiddleware())
 }
 
+func TestRouter(router fiber.Router) {
+	router.Use(middleware.PrintingDebugInfo)
+	testController := &controller.TestController{}
+
+	router.Get("/", testController.HealthCheck)
+}
+
 func AuthRouter(router fiber.Router) {
 	router.Use(middleware.PrintingDebugInfo)
 	db := storage.GetDB()
@@ -117,6 +124,12 @@ func CollectionRouter(router fiber.Router) {
 		Service: synthesisService,
 	}
 
+	collectionUserRepo := repo.NewCollectionUserRepository(db)
+	collectionUserService := services.NewCollectionUserService(collectionUserRepo)
+	collectionUserController := &controller.CollectionUserController{
+		Service: collectionUserService,
+	}
+
 	router.Get("/", collectionController.GetCollection)
 	router.Post("/", collectionController.CreateCollection)
 	router.Put("/:id", collectionController.UpdateCollection)
@@ -126,6 +139,12 @@ func CollectionRouter(router fiber.Router) {
 
 	router.Post("/synthesis", synthesisController.CreateSynthesis)
 	router.Delete("/synthesis/:id", synthesisController.DeleteSynthesis)
+
+	router.Get("/:id/users", collectionUserController.GetInvitedUsers)
+	router.Post("/:id/users/invite", collectionUserController.InviteUser)
+	router.Delete("/:id/users/invite", collectionUserController.RemoveUser)
+	router.Get("/:id/users/search", collectionUserController.SearchUser)
+	router.Get("/shared", collectionUserController.GetSharedCollections)
 }
 
 func TagRouter(router fiber.Router) {

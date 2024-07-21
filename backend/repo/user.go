@@ -39,9 +39,7 @@ func (m *userSqlRepository) GetUserIndex(username string) (uint, error) {
 func (m *userSqlRepository) SelectByUsername(username string) (*models.Users, error) {
 	var user models.Users
 	if err := m.DB.Where("username = ?", username).Where("deleted_at IS NULL").First(&user).Error; err != nil {
-		if err := m.DB.Where("email = ?", username).Where("deleted_at IS NULL").First(&user).Error; err != nil {
-			return nil, err
-		}
+		return nil, err
 	}
 	return &user, nil
 }

@@ -3,7 +3,8 @@ import {
   SET_ARTICLE_WORKSPACE,
   SET_SEARCH_RESULTS,
   SET_TAGS,
-  SET_COLLECTIONS
+  SET_COLLECTIONS,
+  SET_SHAREDCOLLECTIONS
 } from '../actions/articles';
 import {
   CLEAR_STATE
@@ -11,6 +12,7 @@ import {
 
 const initialState = {
   collections: [],
+  shared_collections: [],
   tags: [],
   articles: [],
   workspace: {
@@ -35,6 +37,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         collections: action.collections
+      };
+    case SET_SHAREDCOLLECTIONS:
+      return {
+        ...state,
+        shared_collections: action.shared_collections
       };
     case SET_ARTICLE_WORKSPACE:
       return {
