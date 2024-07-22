@@ -53,10 +53,11 @@
     background-color: #f1f1f1;
     border-radius: 5px;
     margin: 0 10px;
-    padding: 2vh 0px;
-    overflow-x: scroll;
+    padding: 2vh 0;
+    overflow-x: auto;
+    white-space: nowrap;
+    font-size: 14px;
 }
-
 
 .tagItemContainer::-webkit-scrollbar {
     height: 5px; 
@@ -77,23 +78,21 @@
 
 .tagItem {
     border: 2px solid black;
-    margin-right: 3vw;
+    margin-right: 1vw;
     border-radius: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
 }
 
 .tagItem p {
-    margin: 0 auto;
-    padding: 0px 4vw;
+    margin: 0;
+    padding: 0;
 }
 
-.tagItem-selected {
+.selected {
     border: 2px solid #437FC7;
-    margin-right: 3vw;
-    border-radius: 10px;
 }
 
-.tagItem-selected p {
+.selected p {
     color: #437FC7;
-    margin: 0 auto;
-    padding: 0px 4vw;
 }

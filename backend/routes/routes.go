@@ -45,7 +45,7 @@ func UserRouter(router fiber.Router) {
 	userRepo := repo.NewUserRepository(db)
 	articleRepo := repo.NewArticleRepository(db)
 	userService := services.NewUserService(userRepo)
-	articleService := services.NewArticleService(articleRepo)
+	articleService := services.NewArticleService(articleRepo, userRepo)
 
 	userController := &controller.UserController{
 		Service:        userService,
@@ -56,19 +56,21 @@ func UserRouter(router fiber.Router) {
 	router.Put("/delete", userController.Delete)
 
 	router.Post("/add-tag", userController.AddUserTag)
-	router.Delete("/remove-tag", userController.RemoveUserTag)
+	router.Delete("/remove-tag/:id", userController.RemoveUserTag)
 	router.Post("/add-visit", userController.AddUserArticleVisit)
 	router.Get("/get-visits", userController.GetUserArticleVisits)
 	router.Get("/get-tags", userController.GetUserTags)
-	router.Get("/get-tags", userController.GetUserTags)
 	router.Get("/get-reccomendations", userController.GetRecommendations)
+
+	router.Post("/save/:id", userController.ToggleSavedArticle)
+	router.Get("/save", userController.GetSavedArticles)
 }
 
 func ArticleRouter(router fiber.Router) {
 	db := storage.GetDB()
-
+	userRepo := repo.NewUserRepository(db)
 	articleRepo := repo.NewArticleRepository(db)
-	articleService := services.NewArticleService(articleRepo)
+	articleService := services.NewArticleService(articleRepo, userRepo)
 	articleController := &controller.ArticleController{
 		Service: articleService,
 	}
@@ -110,12 +112,12 @@ func ArticleRouter(router fiber.Router) {
 	router.Post("/flashcards", articleFlashcardController.CreateFlashcard)
 	router.Put("/flashcards/:id", articleFlashcardController.UpdateFlashcard)
 	router.Delete("/flashcards/:id", articleFlashcardController.DeleteFlashcard)
+	router.Post("/flashcards/generate/:article_id", articleFlashcardController.GenerateFlashcardsFromQuotes)
 
 	router.Get("/search", articleController.GetSimilarArticles)
 	router.Get("/googlesearch", articleController.GetArticlesFromGoogle)
 	router.Get("/webscrap", articleController.GetArticleInfoAndSuggestTags)
 
-	router.Post("/flashcards/generate/:article_id", articleFlashcardController.GenerateFlashcardsFromQuotes)
 }
 
 func CollectionRouter(router fiber.Router) {

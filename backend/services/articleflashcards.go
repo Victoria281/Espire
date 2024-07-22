@@ -1,7 +1,6 @@
 package services
 
 import (
-	"fmt"
 	"regexp"
 	"strings"
 	"time"
@@ -14,7 +13,7 @@ type ArticleFlashcardService interface {
 	CreateFlashcard(articleID uint, answer string, question string) error
 	UpdateFlashcard(articleID uint, flashcardID uint, answer *string, question *string, tries *int, wrong *int) error
 	DeleteFlashcard(flashcardID uint) error
-	GenerateFlashcardsFromQuotes(articleID uint) error
+	GenerateFlashcardsFromQuotes(articleID uint) ([]models.ArticleFlashcards, error)
 }
 
 var (
@@ -65,35 +64,28 @@ func (s *articleFlashcardService) DeleteFlashcard(flashcardID uint) error {
 	return s.repo.DeleteFlashcard(flashcardID)
 }
 
-func (s *articleFlashcardService) GenerateFlashcardsFromQuotes(articleID uint) error {
+func (s *articleFlashcardService) GenerateFlashcardsFromQuotes(articleID uint) ([]models.ArticleFlashcards, error) {
 	var quotes []models.ArticleQuotes
 	if err := s.quoteRepo.GetQuotesByArticleID(articleID, &quotes); err != nil {
-		return err
+		return nil, err
 	}
 
+	var flashcards []models.ArticleFlashcards
+
 	for _, quote := range quotes {
-		// Approach 1: Quote as Question, Author/Context as Answer
-		// question := quote.Fact
-		// answer := quote.Author // Assuming Author field is available
-
-		// Approach 2: Extract Keywords
-
 		question, answer := createQuestionAndAnswerFromQuote(quote.Fact)
 
-		fmt.Println("question")
-		fmt.Println(question)
-		fmt.Println(answer)
 		flashcard := models.ArticleFlashcards{
 			ArticleID: articleID,
 			Question:  question,
 			Answer:    answer,
 		}
-		if err := s.repo.CreateFlashcard(flashcard); err != nil {
-			return err
-		}
+
+		// Add to the list of generated flashcards
+		flashcards = append(flashcards, flashcard)
 	}
 
-	return nil
+	return flashcards, nil
 }
 
 // Create question and answer by extracting keywords

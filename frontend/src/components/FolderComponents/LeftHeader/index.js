@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import ShareButtonModal from './ShareButtonModal';
 
-const LeftHeader = ({ collectionID }) => {
+const LeftHeader = ({ collectionID, owner }) => {
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
     
@@ -26,9 +26,9 @@ const LeftHeader = ({ collectionID }) => {
                 <div className={styles.backButton} onClick={() => handleReturnClick()}>
                     <KeyboardBackspaceIcon />
                 </div>
-                <div className={styles.shareButton} onClick={handleShareButtonClick}>
+                {(owner==true) && <div className={styles.shareButton} onClick={handleShareButtonClick}>
                     Share
-                </div>
+                </div>}
             </div>
             <p>All Articles</p>
             <ShareButtonModal isOpen={isModalOpen} onClose={handleCloseModal} collectionID={collectionID}/>

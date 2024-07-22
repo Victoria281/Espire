@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/Victoria281/Espire/backend/services"
@@ -60,12 +61,12 @@ func (c *ArticleFlashcardController) UpdateFlashcard(ctx *fiber.Ctx) error {
 	}
 
 	for _, flashcardUpdate := range request.Data {
+		fmt.Println(flashcardUpdate.Id)
 		if flashcardUpdate.Id == 0 {
 			err := c.Service.CreateFlashcard(uint(articleID), *flashcardUpdate.Answer, *flashcardUpdate.Question)
 			if err != nil {
 				return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Error creating flashcard"})
 			}
-			return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{"message": "Flashcard created successfully"})
 		} else {
 			if err := c.Service.UpdateFlashcard(uint(articleID), uint(flashcardUpdate.Id), flashcardUpdate.Answer, flashcardUpdate.Question, flashcardUpdate.Tries, flashcardUpdate.Wrong); err != nil {
 				return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Error updating flashcard"})
@@ -95,9 +96,12 @@ func (c *ArticleFlashcardController) GenerateFlashcardsFromQuotes(ctx *fiber.Ctx
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid article ID"})
 	}
 
-	if err := c.Service.GenerateFlashcardsFromQuotes(uint(articleID)); err != nil {
+	flashcards, err := c.Service.GenerateFlashcardsFromQuotes(uint(articleID))
+	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Error generating flashcards from quotes"})
 	}
 
-	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"message": "Flashcards generated from quotes successfully"})
+	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
+		"flashcards": flashcards,
+	})
 }

@@ -1,0 +1,72 @@
+.recommendedList {
+    margin-bottom: 0;
+    margin-top: auto;
+    height: 64vh;
+    overflow-Y: scroll;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+    background-color: #f4f4f9;
+  }
+  
+
+.recommendedList::-webkit-scrollbar {
+    width: 4px; 
+}
+
+.recommendedList::-webkit-scrollbar-thumb {
+    background-color: #437FC780; 
+    border-radius: 4px; 
+}
+  .articleCard {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.2s;
+    width: calc(32% - 40px);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    max-height: 25vh;
+  }
+  
+  .articleCard:hover {
+    transform: translateY(-10px);
+  }
+  
+  .articleTitle {
+    font-size: 1.3rem;
+    color: #437FC7;
+    margin-bottom: 10px;
+  }
+  
+  .articleDescription {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 20px;
+  }
+  
+  .articleMeta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: #999;
+    margin-bottom: 10px;
+  }
+  
+  .articleTags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .articleTag {
+    background-color: #437FC7;
+    color: white;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 0.8rem;
+  }
+  

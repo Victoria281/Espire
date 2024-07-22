@@ -37,3 +37,16 @@
 .flashcardsContainer {
     height: 40vh;
 }
+
+.noArticlesContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+}
+
+.addArticleButton {
+    margin-top: 16px;
+}

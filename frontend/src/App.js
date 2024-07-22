@@ -15,7 +15,7 @@ import RegisterScreen from "./screens/RegisterScreen";
 import ArticleScreen from "./screens/ArticleScreen";
 import CollectionScreen from "./screens/CollectionScreen";
 import SharedCollectionScreen from "./screens/SharedCollectionScreen";
-import Template from "./screens/Template";
+import DashboardScreen from "./screens/DashboardScreen";
 import LibraryScreen from "./screens/LibraryScreen";
 import DatabankScreen from "./screens/DatabankScreen";
 import Navbar from './components/common/Navbar'
@@ -53,7 +53,7 @@ const App = () => {
         <Route path="/post/:url" element={<PrePostScreen />} />
         <Route path="/manpost" element={<PostScreen />} />
         <Route path="/manpost/:articleid" element={<PostScreen />} />
-        <Route path="/dashboard" element={<Template />} />
+        <Route path="/dashboard" element={<DashboardScreen />} />
       </Routes>
     </Router>
   );

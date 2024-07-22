@@ -20,6 +20,7 @@ export const DELETE_ARTICLE_QUOTE = (aid) => `/articles/quotes/${aid}`;
 
 export const UPDATE_FLASHCARDS = (aid) => `/articles/flashcards/${aid}`;
 export const DELETE_FLASHCARDS = (aid) => `/articles/flashcards/${aid}`;
+export const GENERATE_FLASHCARDS = (aid) => `/articles/flashcards/generate/${aid}`;
 
 export const DELETE_ARTICLE = (aid) => `/articles/${aid}`;
 
@@ -42,3 +43,12 @@ export const SEARCH_USER = (cid) => `/collections/${cid}/users/search`;
 export const GET_INVITED = (cid) => `/collections/${cid}/users`;
 export const INVITE = (cid) => `/collections/${cid}/users/invite`;
 export const GET_SHARED_COLLECTIONS = `/collections/shared`;
+
+export const GET_RECCS = `/users/get-reccomendations`;
+export const ADD_VISIT = `/users/add-visit`;
+export const GET_VISIT = `/users/get-visits`;
+export const ADD_UTAGS = `/users/add-tag`;
+export const GET_UTAGS = `/users/get-tags`;
+export const REMOVE_UTAGS = (tag_id) =>  `/users/remove-tag/${tag_id}`;
+export const SAVE_ARTICLE = (id) => `/users/save/${id}`;
+export const GET_SAVE = `/users/save`;

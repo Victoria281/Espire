@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 
 import { Box, Button, TextField, Chip, Typography, IconButton, Dialog, DialogContent, DialogTitle } from '@mui/material';
 import { Delete as DeleteIcon, Flip as FlipIcon } from '@mui/icons-material';
-import { updateFlashcards, deleteFlashcards } from '../../../store/actions/articles';
+import { generateFlashcards, updateFlashcards, deleteFlashcards } from '../../../store/actions/articles';
 import styles from './styles.module.css';
 
 const FlashcardManagement = ({ id, flashcards, setFlashcards }) => {
@@ -16,6 +16,15 @@ const FlashcardManagement = ({ id, flashcards, setFlashcards }) => {
 
     const [submitted, setSubmitted] = useState(false);
 
+    const handleGenerateFlashcards = async () => {
+        await dispatch(generateFlashcards(id)).then((result) => {
+            if (result.success) {
+                console.log(result.data.flashcards)
+                console.log(result.data.flashcards)
+                setFlashcards([...flashcards, ...result.data.flashcards]);
+            }
+        })
+    }
 
     useEffect(() => {
         if (submitted==false){
@@ -145,6 +154,14 @@ const FlashcardManagement = ({ id, flashcards, setFlashcards }) => {
                             sx={{ mt: 2 }}
                         >
                             Add New Flashcard
+                        </Button>
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            onClick={handleGenerateFlashcards}
+                            sx={{ mt: 2 }}
+                        >
+                            Generate
                         </Button>
                         <Button
                             variant="contained"

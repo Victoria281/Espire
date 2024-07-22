@@ -54,11 +54,7 @@ const SharedCollection = ({ articles, collections }) => {
                 <div className={styles.collectionHead}>
                     <div className={styles.collectionAdmin}>
                         <p>Shared Collections</p>
-                        <div onClick={() => handleOpenModal()}>
-                            <DriveFileMoveIcon />
-                        </div>
                     </div>
-                    <TabSelection rowView={rowView} setRowView={setRowView} />
                 </div>
                 <div className={styles[`collection${rowView ? '' : 'Column'}Container`]}>
                     {collections.map((collection, index) => (
