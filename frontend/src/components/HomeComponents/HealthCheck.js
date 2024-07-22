@@ -8,17 +8,16 @@ const HealthCheck = () => {
     const [status, setStatus] = useState("Checking...");
     const [open, setOpen] = useState(false);
 
-    useEffect(() => {
-        if (open) {
+    const handleOpen = () => {
+        if (!open) {
             const fetchHealthStatus = async () => {
                 const healthStatus = await checkHealthFn();
                 setStatus(healthStatus);
             };
             fetchHealthStatus();
+        } else {
+            setStatus("Checking...");
         }
-    }, [open]);
-
-    const handleOpen = () => {
         setOpen(!open);
     }
 
