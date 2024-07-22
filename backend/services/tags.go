@@ -10,6 +10,7 @@ type TagService interface {
 	UpdateArticleTags(articleID uint, tagIDs []uint) error
 	GetAllTags() ([]models.Tag, error)
 	DeleteTag(tagID uint) error
+	GetTagByName(name string) (models.Tag, error)
 }
 
 type tagService struct {
@@ -25,6 +26,10 @@ func (s *tagService) CreateTag(tag models.Tag) (uint, error) {
 		Name: tag.Name,
 	}
 	return s.repo.Create(newTag)
+}
+
+func (s *tagService) GetTagByName(name string) (models.Tag, error) {
+	return s.repo.GetByName(name)
 }
 
 func (s *tagService) UpdateArticleTags(articleID uint, tagIDs []uint) error {
