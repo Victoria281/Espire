@@ -1,6 +1,9 @@
 package services
 
 import (
+	"fmt"
+	"regexp"
+	"strings"
 	"time"
 
 	"github.com/Victoria281/Espire/backend/models"
@@ -11,14 +14,21 @@ type ArticleFlashcardService interface {
 	CreateFlashcard(articleID uint, answer string, question string) error
 	UpdateFlashcard(articleID uint, flashcardID uint, answer *string, question *string, tries *int, wrong *int) error
 	DeleteFlashcard(flashcardID uint) error
+	GenerateFlashcardsFromQuotes(articleID uint) error
 }
+
+var (
+	numberPattern = regexp.MustCompile(`\d+`)
+	datePattern   = regexp.MustCompile(`\b\d{4}-\d{2}-\d{2}\b|\b\d{2}/\d{2}/\d{4}\b`)
+)
 
 type articleFlashcardService struct {
-	repo repo.ArticleFlashcardRepository
+	repo      repo.ArticleFlashcardRepository
+	quoteRepo repo.ArticleQuoteRepository
 }
 
-func NewArticleFlashcardService(repo repo.ArticleFlashcardRepository) ArticleFlashcardService {
-	return &articleFlashcardService{repo: repo}
+func NewArticleFlashcardService(repo repo.ArticleFlashcardRepository, quoteRepo repo.ArticleQuoteRepository) ArticleFlashcardService {
+	return &articleFlashcardService{repo: repo, quoteRepo: quoteRepo}
 }
 
 func (s *articleFlashcardService) CreateFlashcard(articleID uint, answer string, question string) error {
@@ -53,4 +63,85 @@ func (s *articleFlashcardService) UpdateFlashcard(articleID uint, flashcardID ui
 
 func (s *articleFlashcardService) DeleteFlashcard(flashcardID uint) error {
 	return s.repo.DeleteFlashcard(flashcardID)
+}
+
+func (s *articleFlashcardService) GenerateFlashcardsFromQuotes(articleID uint) error {
+	var quotes []models.ArticleQuotes
+	if err := s.quoteRepo.GetQuotesByArticleID(articleID, &quotes); err != nil {
+		return err
+	}
+
+	for _, quote := range quotes {
+		// Approach 1: Quote as Question, Author/Context as Answer
+		// question := quote.Fact
+		// answer := quote.Author // Assuming Author field is available
+
+		// Approach 2: Extract Keywords
+
+		question, answer := createQuestionAndAnswerFromQuote(quote.Fact)
+
+		fmt.Println("question")
+		fmt.Println(question)
+		fmt.Println(answer)
+		flashcard := models.ArticleFlashcards{
+			ArticleID: articleID,
+			Question:  question,
+			Answer:    answer,
+		}
+		if err := s.repo.CreateFlashcard(flashcard); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// Create question and answer by extracting keywords
+func createQuestionAndAnswerFromQuote(quote string) (string, string) {
+	// Extract keywords or phrases
+	keywords := extractKeywords(quote)
+
+	// Create question by removing keywords from the quote
+	question := quote
+	for _, keyword := range keywords {
+		question = strings.ReplaceAll(question, keyword, "[...]")
+	}
+
+	// Create answer as a comma-separated list of keywords
+	answer := strings.Join(keywords, ", ")
+
+	return question, answer
+}
+
+// Extract keywords or relevant phrases from the quote
+func extractKeywords(quote string) []string {
+	// Example of keyword extraction logic
+	// Here, you would use a more sophisticated NLP library or API for better results
+
+	// Simple approach: Extract words that are capitalized or considered important
+	words := strings.Fields(quote)
+	var keywords []string
+	for _, word := range words {
+		if isCapitalized(word) && !isCommonWord(word) {
+			keywords = append(keywords, word)
+		}
+	}
+
+	return keywords
+}
+
+// Check if the word is capitalized (naive approach)
+func isCapitalized(word string) bool {
+	if len(word) > 0 {
+		return word[0] >= 'A' && word[0] <= 'Z'
+	}
+	return false
+}
+
+// Check if the word is common (naive approach)
+func isCommonWord(word string) bool {
+	commonWords := map[string]bool{
+		"the": true, "is": true, "in": true, "and": true, "of": true,
+	}
+	return commonWords[strings.ToLower(word)]
 }

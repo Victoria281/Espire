@@ -88,3 +88,16 @@ func (c *ArticleFlashcardController) DeleteFlashcard(ctx *fiber.Ctx) error {
 
 	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"message": "Flashcard deleted successfully"})
 }
+
+func (c *ArticleFlashcardController) GenerateFlashcardsFromQuotes(ctx *fiber.Ctx) error {
+	articleID, err := strconv.ParseUint(ctx.Params("article_id"), 10, 64)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid article ID"})
+	}
+
+	if err := c.Service.GenerateFlashcardsFromQuotes(uint(articleID)); err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Error generating flashcards from quotes"})
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"message": "Flashcards generated from quotes successfully"})
+}
