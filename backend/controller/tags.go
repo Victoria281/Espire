@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/Victoria281/Espire/backend/models"
@@ -22,12 +23,23 @@ func (c *TagController) CreateTag(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request body"})
 	}
 
-	index, err := c.Service.CreateTag(tag)
+	existingTag, err := c.Service.GetTagByName(tag.Name)
+	if err != nil {
+		fmt.Printf("Error checking tag existence: %v\n", err)
+
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Error checking tag existence"})
+	}
+
+	if existingTag.ID != 0 {
+		return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"id": existingTag.ID})
+	}
+
+	newTagID, err := c.Service.CreateTag(tag)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Error creating tag"})
 	}
 
-	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{"id": index})
+	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{"id": newTagID})
 }
 
 func (c *TagController) UpdateArticleTags(ctx *fiber.Ctx) error {
