@@ -12,7 +12,7 @@ import FolderIcon from '@mui/icons-material/Folder';
 import { useSelector, useDispatch } from 'react-redux'
 import { Subscript } from '@mui/icons-material';
 
-const CollectionDetails = ({ collection }) => {
+const CollectionDetails = ({ collection, owner }) => {
     const [selectedMTab, setSelectedMTab] = useState("Synthesize");
     const [selectedTab, setSelectedTab] = useState("Important");
     const [isRowLayout, setIsRowLayout] = useState(true);
@@ -72,6 +72,23 @@ const CollectionDetails = ({ collection }) => {
         } else {
             setShowMessage(false);
         }
+    };
+
+    const handleSaveSynthesis = () => {
+        const synthesisKey = `${leftColumn.map(q => q.id).join(',')}-${rightColumn.map(q => q.id).join(',')}`;
+        const existingIndex = collection.Synthesis.findIndex(s => s.key === synthesisKey);
+
+        if (existingIndex !== -1) {
+            collection.Synthesis[existingIndex].text = synthesis;
+        } else {
+            dispatch(saveSynthesis({ collectionid: collection.ID, key: synthesisKey, text: synthesis }));
+        }
+        setMessage(`Synthesis saved`);
+        setShowMessage(true);
+        setTimeout(() => {
+            setShowMessage(false);
+        }, 5000);
+        console.log('Synthesis saved:', synthesis);
     };
 
     const updateSynthesis = useCallback(() => {
@@ -170,14 +187,26 @@ const CollectionDetails = ({ collection }) => {
                                     </Typography>
                                 )}
                                 <TextField
-                                    disabled
+                                    disabled={!(owner == true)}
                                     multiline
                                     rows={3}
                                     variant="outlined"
                                     placeholder="Write your synthesis here..."
                                     value={synthesis}
                                     className={styles.synthesisTextArea}
+                                    onChange={(e) => owner == true && setSynthesis(e.target.value)}
                                 />
+                                {
+                                    owner == true &&
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={handleSaveSynthesis}
+                                        className={styles.saveButton}
+                                    >
+                                        Save Synthesis
+                                    </Button>
+                                }
                             </Box>
                         </Box>
                         <Box className={styles.quotesArea}>

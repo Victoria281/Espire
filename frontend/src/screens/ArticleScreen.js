@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate, useParams } from "react-router-dom";
 import { retrieveArticleById } from "../functions/articles";
+import { logout } from "../functions/auth";
 import { getAllTags } from "../store/actions/articles";
 import { BASIC_INFO, TAG_MANAGEMENT, QUOTE_MANAGEMENT, FLASHCARD_MANAGEMENT } from "../constants/names";
 import InformationHeading from "../components/ArticleComponents/InformationHeading";
@@ -15,7 +16,7 @@ const ArticleScreen = () => {
   const [articleView, setArticleView] = useState(true);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
+
   const token = useSelector(state => state.user.token);
   const workspace = useSelector(state => state.articles.workspace);
   const tags = useSelector(state => state.articles.tags);
@@ -29,6 +30,8 @@ const ArticleScreen = () => {
     if (token != undefined) {
       retrieveArticleById(articleid, dispatch);
       dispatch(getAllTags())
+    } else {
+      logout(dispatch, navigate);
     }
   }, [])
 
@@ -37,17 +40,25 @@ const ArticleScreen = () => {
   return (
     <div className="mainContainer restrictScroll">
 
-      <InformationHeading title={BASIC_INFO} />
-      <BasicInformation edit={false} editedInfo={workspace.article} />
+      {workspace.article.id == articleid &&
+        <>
+          <InformationHeading title={BASIC_INFO} />
+          <BasicInformation edit={false} editedInfo={workspace.article} />
 
-      <InformationHeading title={TAG_MANAGEMENT} />
-      {tags!=undefined && <TagManagement edit={false} tags={tags} tagInfo={workspace.article.Tags} />}
+          <InformationHeading title={TAG_MANAGEMENT} />
+          {tags != undefined && <TagManagement edit={false} tags={tags} tagInfo={workspace.article.Tags} />}
 
-      <InformationHeading title={QUOTE_MANAGEMENT} />
-      <QuoteManagement edit={false} quoteInfo={workspace.article.Quotes} />
+          <InformationHeading title={QUOTE_MANAGEMENT} />
+          <QuoteManagement edit={false} quoteInfo={workspace.article.Quotes} />
 
-      <InformationHeading title={FLASHCARD_MANAGEMENT} />
-      {flashcards!=undefined && <FlashcardManagement id={articleid} flashcards={flashcards} setFlashcards={setFlashcards}/>}
+          {
+            workspace.article.owner &&
+            <>
+              <InformationHeading title={FLASHCARD_MANAGEMENT} />
+              {flashcards != undefined && <FlashcardManagement id={articleid} flashcards={flashcards} setFlashcards={setFlashcards} />}
+            </>
+          }
+        </>}
     </div>
   );
 };

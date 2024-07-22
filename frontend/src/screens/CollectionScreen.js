@@ -13,7 +13,7 @@ const CollectionScreen = () => {
 
   return (
     <>
-      {collections.length != 0 && <CollectionSectioning collection={getCollections()} />}
+      {collections.length != 0 && <CollectionSectioning collection={getCollections()}  owner={true}/>}
     </>
   );
 };

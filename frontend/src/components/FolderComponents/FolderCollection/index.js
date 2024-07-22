@@ -5,11 +5,13 @@ import { Folder, FolderOpen } from '@mui/icons-material';
 import TabSelection from "../../ArticleComponents/TabSelection";
 import AdminModal from "./AdminModal";
 import ArticlesModal from "./ArticlesModal";
+import CreateCollectionModal from "./CreateCollectionModal ";
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import styles from './styles.module.css';
 import { useDispatch } from 'react-redux';
-import { handleBulkCreate, assignArticleToCollection, removeArticleFromCollection } from "../../../store/actions/articles"
+import { handleBulkCreate, assignArticleToCollection, removeArticleFromCollection, createCollection } from "../../../store/actions/articles"
 import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
+import AddBoxIcon from '@mui/icons-material/AddBox';
 
 const FolderCollection = ({ articles, collections }) => {
     const [rowView, setRowView] = useState(true);
@@ -17,6 +19,7 @@ const FolderCollection = ({ articles, collections }) => {
     const [loading, setLoading] = useState(false);
     const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isCreateCollectionModalOpen, setIsCreateCollectionModalOpen] = useState(false);
 
     const toggleFileIcon = () => {
         setIsOpen(!isOpen);
@@ -60,6 +63,19 @@ const FolderCollection = ({ articles, collections }) => {
         }
     };
 
+    const handleOpenCreateCollectionModal = () => {
+        setIsCreateCollectionModalOpen(true);
+    };
+
+    const handleCloseCreateCollectionModal = () => {
+        setIsCreateCollectionModalOpen(false);
+    };
+
+    const handleCreateCollection = async (name) => {
+        await dispatch(createCollection(name)); // Dispatch action to create collection
+        handleCloseCreateCollectionModal(); // Close modal after creation
+    };
+
     return (
         <>
             <ArticlesModal
@@ -75,6 +91,11 @@ const FolderCollection = ({ articles, collections }) => {
                 onSubmit={handlePasswordSubmit}
                 setIsOpen={setIsAdminModalOpen}
             />
+            <CreateCollectionModal
+                open={isCreateCollectionModalOpen}
+                onClose={handleCloseCreateCollectionModal}
+                onCreate={handleCreateCollection}
+            />
             <div className={styles.collectionMainContainer}>
                 <div className={styles.collectionHead}>
                     <div className={styles.collectionAdmin}>
@@ -84,6 +105,9 @@ const FolderCollection = ({ articles, collections }) => {
                         </div>
                         <div onClick={() => handleOpenModal()}>
                             <DriveFileMoveIcon />
+                        </div>
+                        <div onClick={() => handleOpenCreateCollectionModal()}>
+                            <AddBoxIcon />
                         </div>
                     </div>
                     <TabSelection rowView={rowView} setRowView={setRowView} />

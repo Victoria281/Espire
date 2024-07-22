@@ -1,20 +1,37 @@
 import { useState, useEffect } from "react";
 import SearchIcon from '@mui/icons-material/Search';
-import styles from './styles.module.css'
+import styles from './styles.module.css';
 
-const TagBar = ({ tags, tagSearchQuery, setTagSearchQuery, handleTagKeyPress, handleTagSearch }) => {
-
+const TagBar = ({ ogReccomendationList, reccomendationList, setReccomendationList, tags, tagSearchQuery, setTagSearchQuery, handleTagKeyPress, handleTagSearch, recommended }) => {
     const [selected, setSelected] = useState([]);
 
-    const isSelected = (id) => {
-        return selected.includes(id);
-    }
+    const isSelected = (id) => selected.includes(id);
 
     const handleSelectTags = (item) => {
-        let newSelected = [...selected];
-        newSelected.push(item.ID)
-        setSelected(newSelected)
-    }
+        let newSelected;
+        if (isSelected(item.ID)) {
+            newSelected = selected.filter(id => id !== item.ID);
+        } else {
+            newSelected = [...selected, item.ID];
+        }
+        setSelected(newSelected);
+
+        if (newSelected.length > 0) {
+            let updatedRecommendationList = ogReccomendationList;
+            newSelected.forEach(tagID => {
+                updatedRecommendationList = updatedRecommendationList.filter(rec =>
+                    rec.Tags && rec.Tags.some(tag => tag.ID === tagID)
+                );
+            });
+            setReccomendationList(updatedRecommendationList);
+        } else {
+            setReccomendationList(ogReccomendationList);
+        }
+    };
+
+    const filteredTags = tags.filter(tag =>
+        tag.name.toLowerCase().includes(tagSearchQuery.toLowerCase())
+    );
 
     return (
         <div className={styles.tagContainer}>
@@ -32,14 +49,18 @@ const TagBar = ({ tags, tagSearchQuery, setTagSearchQuery, handleTagKeyPress, ha
                 </button>
             </div>
             <div className={styles.tagItemContainer}>
-                {tags.map((item, index) =>
-                    <div onClick={() => handleSelectTags(item)} className={styles[`tagItem${isSelected(item.ID) ? '-selected' : ''}`]}>
+                {filteredTags.map((item, index) => (
+                    <div
+                        key={index}
+                        onClick={() => handleSelectTags(item)}
+                        className={`${styles.tagItem} ${isSelected(item.ID) ? styles.selected : ''}`}
+                    >
                         <p>{item.name}</p>
                     </div>
-                )}
+                ))}
             </div>
         </div>
     );
-}
+};
 
 export default TagBar;

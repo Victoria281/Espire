@@ -10,11 +10,13 @@ const axiosInstance = axios.create({
 });
 
 function redirectToLogin() {
-    //handle login
+    window.localStorage.removeItem("state");
+    window.location.href="/login"
 }
 
 function redirectToLogout() {
-    //handle logout
+    window.localStorage.removeItem("state");
+    window.location.href="/"
 }
 
 axiosInstance.interceptors.request.use(

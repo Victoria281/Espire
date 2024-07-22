@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from "react-router-dom";
-import { searchArticles, searchGoogleArticles, getAllTags } from "../store/actions/articles";
+import { getReccomendations, searchGoogleArticles, getAllTags } from "../store/actions/articles";
 import { navigateToLogin } from "../functions/authFunctions";
+import { saveUserHistoryAPI } from "../controller/userController";
 import SearchBar from "../components/DatabankComponents/SearchBar";
 import TagBar from "../components/DatabankComponents/TagBar";
 import DatabankSearchResults from "../components/DatabankComponents/DatabankSearchResults";
 import DatabankLoad from "../components/DatabankComponents/DatabankLoad";
+import ReccomendedList from "../components/DatabankComponents/ReccomendedList";
 import queryString from 'query-string';
 
 const DatabankScreen = () => {
-  const [searchedList, setSearchedList] = useState([]);
+  const [ogReccomendationList, setOgReccomendationList] = useState([]);
+  const [reccomendationList, setReccomendationList] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [tagSearchQuery, setTagSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
@@ -48,6 +51,24 @@ const DatabankScreen = () => {
     }
   };
 
+  const handleRetrieveReccomendations = async () => {
+    setLoading(true);
+    await dispatch(getReccomendations()).then((result) => {
+      if (result.success) {
+        console.log(result.data)
+        setReccomendationList(result.data.recommendations)
+        setOgReccomendationList(result.data.recommendations)
+        setLoading(false);
+      }
+    });
+  };
+
+  const handleClickArticle = (id) => {
+    //save user hsitory
+    saveUserHistoryAPI(id);
+    navigate(`/articles/${id}`)
+  };
+  
   useEffect(() => {
 
     const fetchData = async () => {
@@ -66,7 +87,7 @@ const DatabankScreen = () => {
           });
         } else {
           setSearching(false);
-          setLoading(false);
+          await handleRetrieveReccomendations();
         }
       } else {
         navigateToLogin(navigate);
@@ -81,7 +102,7 @@ const DatabankScreen = () => {
 
       <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} handleKeyPress={handleKeyPress} handleSearch={handleSearch} />
 
-      {tags!=undefined && <TagBar tags={tags} tagSearchQuery={tagSearchQuery} setTagSearchQuery={setTagSearchQuery} handleTagKeyPress={handleTagKeyPress} handleTagSearch={handleTagSearch} />}
+      {tags != undefined && <TagBar ogReccomendationList={ogReccomendationList} reccomendationList={reccomendationList} setReccomendationList={setReccomendationList} tags={tags} tagSearchQuery={tagSearchQuery} setTagSearchQuery={setTagSearchQuery} handleTagKeyPress={handleTagKeyPress} handleTagSearch={handleTagSearch} />}
 
       {searching && (!loading ?
         searchResults.web?.length != 0 &&
@@ -90,11 +111,12 @@ const DatabankScreen = () => {
         <DatabankLoad loadingMsg={searchloader} query={searchQuery} />
       )}
 
-      {!searching &&
-        <div>
-          show reccomendation
-        </div>
-      }
+      {!searching && (!loading ?
+        reccomendationList.length != 0 &&
+        <ReccomendedList reccomendationList={reccomendationList} handleRetrieveReccomendations={handleRetrieveReccomendations} handleClickArticle={handleClickArticle}/>
+        :
+        <DatabankLoad loadingMsg={"Retrieving articles..."} query={""} />
+      )}
 
 
     </div>

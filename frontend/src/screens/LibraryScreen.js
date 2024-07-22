@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from "react-router-dom";
 import { retrieveownArticles } from "../functions/articles";
+import { logout } from "../functions/auth";
 import ArticleCollection from "../components/ArticleComponents/ArticleCollection";
 import FolderCollection from "../components/FolderComponents/FolderCollection";
 import SharedCollection from "../components/FolderComponents/SharedCollection";
@@ -19,13 +20,15 @@ const LibraryScreen = () => {
   useEffect(() => {
     if (token != undefined) {
       retrieveownArticles(dispatch);
+    } else {
+      logout(dispatch, navigate);
     }
   }, [])
 
   return (
     <div className="mainContainer restrictScroll">
       <FolderCollection articles={articles} collections={collections} />
-      <SharedCollection articles={articles} collections={shared_collections} />
+      {shared_collections.length>0 && <SharedCollection articles={articles} collections={shared_collections} />}
       <ArticleCollection articles={articles} />
     </div>
   );

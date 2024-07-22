@@ -22,7 +22,10 @@ import {
     assignArticleToCollectionAPI,
     removeArticleFromCollectionAPI,
     saveSynthesisAPI,
-    getMySharedCollectionsAPI
+    getMySharedCollectionsAPI,
+    getReccomendationsAPI,
+    saveArticleAPI,
+    generateFlashcardsAPI
 } from '../../controller/articleController';
 import {
     ARTICLE_BASE_TEMPLATE,
@@ -151,16 +154,16 @@ function formatDateToCustomString(date) {
 
 export const handleCreateNewArticlePost = (new_info) => async (dispatch, getState) => {
     let articleid = -1;
-    
+
     const allTagIds = [];
     for (const tag of new_info.Tags) {
-        if (tag.id!= undefined) {
+        if (tag.id != undefined) {
             allTagIds.push(tag.id)
         } else {
-                const result = await createNewTagAPI({ name: tag.name });
-                if (result.success) {
-                    allTagIds.push(result.data.id);
-                }
+            const result = await createNewTagAPI({ name: tag.name });
+            if (result.success) {
+                allTagIds.push(result.data.id);
+            }
         }
 
     }
@@ -185,13 +188,13 @@ export const handleUpdateNewArticlePost = (new_info, removedQuoteIds) => async (
 
     const allTagIds = [];
     for (const tag of new_info.Tags) {
-        if (tag.id!= undefined) {
+        if (tag.id != undefined) {
             allTagIds.push(tag.id)
         } else {
-                const result = await createNewTagAPI({ name: tag.name });
-                if (result.success) {
-                    allTagIds.push(result.data.id);
-                }
+            const result = await createNewTagAPI({ name: tag.name });
+            if (result.success) {
+                allTagIds.push(result.data.id);
+            }
         }
 
     }
@@ -266,6 +269,11 @@ export const scrapeArticle = (link) => async (dispatch, getState) => {
 }
 
 
+export const generateFlashcards = (id) => async (dispatch, getState) => {
+    const result = await generateFlashcardsAPI(id);
+    return result;
+}
+
 export const updateFlashcards = (info, id) => async (dispatch, getState) => {
     const result = await updateFlashcardsAPI(info, id);
     await dispatch(getArticlesById(id));
@@ -276,6 +284,12 @@ export const updateFlashcards = (info, id) => async (dispatch, getState) => {
 export const deleteFlashcards = (id) => async (dispatch, getState) => {
     const result = await deleteFlashcardsAPI(id);
     dispatch(getArticlesById(id));
+    return result;
+}
+
+
+export const getReccomendations = (id) => async (dispatch, getState) => {
+    const result = await getReccomendationsAPI();
     return result;
 }
 
@@ -319,6 +333,14 @@ export const saveSynthesis = (info) => async (dispatch, getState) => {
     const result = await saveSynthesisAPI(info);
     dispatch(getMyCollections());
     return result;
+}
+
+
+export const saveArticle = (id) => async (dispatch, getState) => {
+    await saveArticleAPI(id).then((result) => {
+        if (result.success)
+            dispatch(getArticlesById(id));
+    })
 }
 
 
