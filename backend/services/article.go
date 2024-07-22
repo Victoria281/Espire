@@ -23,7 +23,7 @@ import (
 )
 
 type ArticleService interface {
-	GetAllArticles() ([]models.Articles, error)
+	GetOtherArticles(username string) ([]models.Articles, error)
 	FindById(id uint) (models.Articles, error)
 	FindByUsername(username string) ([]models.Articles, error)
 	FindByName(name string) ([]models.Articles, error)
@@ -35,6 +35,7 @@ type ArticleService interface {
 	FetchArticlesFromGoogleSearch(query string) ([]ArticleSearch, error)
 	GetArticleInfoAndSuggestTags(url string) (*models.Articles, error)
 	GetArticlesDetails(articleIDs []uint) (map[uint]repo.ArticleDetails, error)
+	IsArticleSavedByUser(username string, articleID uint) (bool, error)
 }
 
 type ArticleSearch struct {
@@ -46,12 +47,14 @@ type ArticleSearch struct {
 }
 
 type articleService struct {
-	repo repo.ArticleRepository
+	repo     repo.ArticleRepository
+	userRepo repo.UserRepository
 }
 
-func NewArticleService(repo repo.ArticleRepository) ArticleService {
+func NewArticleService(repo repo.ArticleRepository, userRepo repo.UserRepository) ArticleService {
 	return &articleService{
-		repo: repo,
+		repo:     repo,
+		userRepo: userRepo,
 	}
 }
 
@@ -59,8 +62,8 @@ func (s *articleService) GetArticlesDetails(articleIDs []uint) (map[uint]repo.Ar
 	return s.repo.GetArticlesDetails(articleIDs)
 }
 
-func (s *articleService) GetAllArticles() ([]models.Articles, error) {
-	return s.repo.GetAllArticles()
+func (s *articleService) GetOtherArticles(username string) ([]models.Articles, error) {
+	return s.repo.GetOtherArticles(username)
 }
 
 func (s *articleService) FindById(id uint) (models.Articles, error) {
@@ -384,4 +387,18 @@ func extractTagsFromContent(content string) []models.Tag {
 		}
 	}
 	return tags
+}
+
+func (s *articleService) IsArticleSavedByUser(username string, articleID uint) (bool, error) {
+	savedArticles, err := s.userRepo.GetSavedArticles(username)
+	if err != nil {
+		return false, err
+	}
+
+	for _, article := range savedArticles {
+		if article.ID == articleID {
+			return true, nil
+		}
+	}
+	return false, nil
 }

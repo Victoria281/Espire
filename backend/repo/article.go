@@ -19,7 +19,7 @@ type ArticleDetails struct {
 }
 
 type ArticleRepository interface {
-	GetAllArticles() ([]models.Articles, error)
+	GetOtherArticles(username string) ([]models.Articles, error)
 	SelectByField(field string, value interface{}) ([]models.Articles, error)
 	Create(article models.Articles) (uint, error)
 	Update(articleID uint, updatedArticle interface{}) error
@@ -67,15 +67,30 @@ func (m *articleSqlRepository) GetArticlesDetails(articleIDs []uint) (map[uint]A
 	return articleDetails, nil
 }
 
-func (m *articleSqlRepository) GetAllArticles() ([]models.Articles, error) {
+func (m *articleSqlRepository) GetOtherArticles(username string) ([]models.Articles, error) {
 	var articles []models.Articles
-	err := m.DB.Preload("Tags").Find(&articles).Error
+
+	err := m.DB.Preload("Tags").
+		Where("username != ?", username).
+		Find(&articles).Error
+
 	return articles, err
 }
 
 func (m *articleSqlRepository) SelectByField(field string, value interface{}) ([]models.Articles, error) {
 	var articles []models.Articles
-	if err := m.DB.Preload("Links").Preload("Quotes").Preload("Flashcards").Preload("Collections").Preload("Tags").Where(field+" = ?", value).Where(defaultCheck).Find(&articles).Error; err != nil {
+	if err := m.DB.Table("articles").
+		Select("articles.*, COUNT(saved_articles.article_id) as saved_count").
+		Preload("Links").
+		Preload("Quotes").
+		Preload("Flashcards").
+		Preload("Collections").
+		Preload("Tags").
+		Joins("LEFT JOIN saved_articles ON saved_articles.article_id = articles.id").
+		Where("articles."+field+" = ?", value).
+		Group("articles.id").
+		Where(defaultCheck).
+		Find(&articles).Error; err != nil {
 		return nil, err
 	}
 	return articles, nil

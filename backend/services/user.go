@@ -24,6 +24,9 @@ type UserService interface {
 		Name string `json:"name"`
 	}, error)
 	FetchUserVisitScores(username string, articleIDs []uint) (map[uint]int, error)
+	AddSavedArticle(username string, articleID uint) error
+	DeleteSavedArticle(username string, articleID uint) error
+	GetSavedArticles(username string) ([]models.Articles, error)
 }
 
 type userService struct {
@@ -98,4 +101,16 @@ func (s *userService) GetUserTags(username string) ([]struct {
 	Name string `json:"name"`
 }, error) {
 	return s.repo.GetUserTags(username)
+}
+
+func (s *userService) AddSavedArticle(username string, articleID uint) error {
+	return s.repo.AddSavedArticle(username, articleID)
+}
+
+func (s *userService) DeleteSavedArticle(username string, articleID uint) error {
+	return s.repo.DeleteSavedArticle(username, articleID)
+}
+
+func (s *userService) GetSavedArticles(username string) ([]models.Articles, error) {
+	return s.repo.GetSavedArticles(username)
 }

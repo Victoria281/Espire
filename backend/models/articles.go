@@ -23,6 +23,8 @@ type Articles struct {
 	Flashcards     []ArticleFlashcards `gorm:"foreignKey:ArticleID"`
 	Collections    []Collection        `gorm:"many2many:collection_articles;"`
 	Tags           []Tag               `gorm:"many2many:tag_articles;"`
+	SavedArticle   []SavedArticle      `gorm:"many2many:saved_articles;"`
+	SavedCount     int                 `gorm:"-" json:"saved_count"`
 }
 
 type ArticleLinks struct {

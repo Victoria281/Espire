@@ -20,6 +20,7 @@ func NewArticleController(service services.ArticleService) *ArticleController {
 
 func (c *ArticleController) GetArticleByID(ctx *fiber.Ctx) error {
 	fmt.Println("GetArticleByID")
+	username := auth.ParseUsername(ctx) // Or however you get the username
 
 	id := ctx.Params("id")
 	articleID, err := strconv.ParseUint(id, 10, 64)
@@ -32,7 +33,18 @@ func (c *ArticleController) GetArticleByID(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Article not found"})
 	}
 
-	return ctx.Status(fiber.StatusOK).JSON(article)
+	isOwner := username == article.Username
+	isSaved, err := c.Service.IsArticleSavedByUser(username, uint(articleID))
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Internal server error"})
+	}
+
+	response := fiber.Map{
+		"article": article,
+		"isOwner": isOwner,
+		"isSaved": isSaved,
+	}
+	return ctx.Status(fiber.StatusOK).JSON(response)
 }
 
 func (c *ArticleController) GetArticle(ctx *fiber.Ctx) error {

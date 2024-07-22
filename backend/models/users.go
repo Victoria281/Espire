@@ -31,6 +31,12 @@ type UserTag struct {
 	TagID    uint   `gorm:"not null" json:"tag_id"`
 }
 
+type SavedArticle struct {
+	Username  string    `gorm:"primaryKey"`
+	ArticleID uint      `gorm:"primaryKey"`
+	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"createdat"`
+}
+
 func MigrateUser(db *gorm.DB) error {
 	if err := db.AutoMigrate(&Users{}); err != nil {
 		return err
@@ -39,6 +45,9 @@ func MigrateUser(db *gorm.DB) error {
 		return err
 	}
 	if err := db.AutoMigrate(&UserTag{}); err != nil {
+		return err
+	}
+	if err := db.AutoMigrate(&SavedArticle{}); err != nil {
 		return err
 	}
 	return nil

@@ -10,7 +10,7 @@ import {
     CREATE_NEW_ARTICLE_LINK,
     CREATE_NEW_ARTICLE_QUOTE,
     // UPDATE_ARTICLE,
-    // DELETE_ARTICLE,
+    GET_RECCS,
     UPDATE_ARTICLE,
     UPDATE_ARTICLE_LINK,
     UPDATE_ARTICLE_QUOTE,
@@ -31,7 +31,10 @@ import {
     SEARCH_USER,
     GET_INVITED,
     INVITE,
-    GET_SHARED_COLLECTIONS
+    GET_SHARED_COLLECTIONS,
+    SAVE_ARTICLE,
+    GET_SAVE,
+    GENERATE_FLASHCARDS
 } from '../constants/apiUrls'
 
 export const getMyArticlesAPI = async () => {
@@ -68,7 +71,12 @@ export const getMySharedCollectionsAPI = async () => {
 export const getArticlesByIdAPI = async (id) => {
     try {
         const { data, status } = await axiosInstance.get(GET_ARTICLES_BY_ID(id));
-        if (status == 200) return { data: data, success: true }
+        if (status == 200) {
+            const article = data.article;
+            article.owner = data.isOwner;
+            article.save = data.isSaved;
+            return { data: article, success: true }
+        }
     } catch (e) {
         displayErrorHandler(e, GET_OWN_ARTICLES);
         return { success: false }
@@ -203,7 +211,7 @@ export const createNewTagAPI = async (name) => {
 
 export const createNewArticleTagsAPI = async (new_info) => {
     try {
-        const { data, status } = await axiosInstance.put(ATTACH_TAGS(new_info.article_id), {tagids: new_info.Tags});
+        const { data, status } = await axiosInstance.put(ATTACH_TAGS(new_info.article_id), { tagids: new_info.Tags });
         if (status == 201) return { data: data, success: true }
     } catch (e) {
         displayErrorHandler(e, ATTACH_TAGS(new_info.article_id));
@@ -211,9 +219,20 @@ export const createNewArticleTagsAPI = async (new_info) => {
     }
 }
 
+export const generateFlashcardsAPI = async (id) => {
+    try {
+        const { data, status } = await axiosInstance.post(GENERATE_FLASHCARDS(id));
+        if (status == 200) return { data: data, success: true }
+    } catch (e) {
+        displayErrorHandler(e, GENERATE_FLASHCARDS(id));
+        console.log(e.response)
+        return { success: false, error: e.response.data }
+    }
+}
+
 export const updateFlashcardsAPI = async (new_info, id) => {
     try {
-        const { status } = await axiosInstance.put(UPDATE_FLASHCARDS(id), {data: new_info});
+        const { status } = await axiosInstance.put(UPDATE_FLASHCARDS(id), { data: new_info });
         if (status == 200) return { success: true }
     } catch (e) {
         displayErrorHandler(e, UPDATE_FLASHCARDS(id));
@@ -235,7 +254,7 @@ export const deleteFlashcardsAPI = async (id) => {
 
 export const createCollectionAPI = async (name) => {
     try {
-        const { data, status } = await axiosInstance.post(CREATE_COLLECTION, {name: name});
+        const { data, status } = await axiosInstance.post(CREATE_COLLECTION, { name: name });
         if (status == 201) return { data: data, success: true }
     } catch (e) {
         displayErrorHandler(e, CREATE_COLLECTION);
@@ -332,4 +351,37 @@ export const getInvitedUsersAPI = async (collectionID) => {
     }
 }
 
+export const getReccomendationsAPI = async (collectionID) => {
+    try {
+        const { data, status } = await axiosInstance.get(GET_RECCS);
+        if (status === 200) return { success: true, data: data };
+    } catch (e) {
+        displayErrorHandler(e, GET_RECCS);
+        console.log(e.response);
+        return { success: false, error: e.response.data };
+    }
+}
 
+
+export const saveArticleAPI = async (id) => {
+    try {
+        const { data, status } = await axiosInstance.post(SAVE_ARTICLE(id));
+        if (status === 200) return { success: true, data: data };
+    } catch (e) {
+        displayErrorHandler(e, SAVE_ARTICLE(id));
+        console.log(e.response);
+        return { success: false, error: e.response.data };
+    }
+}
+
+
+export const getSavedArticleAPI = async () => {
+    try {
+        const { data, status } = await axiosInstance.get(GET_SAVE);
+        if (status === 200) return { success: true, data: data };
+    } catch (e) {
+        displayErrorHandler(e, GET_SAVE);
+        console.log(e.response);
+        return { success: false, error: e.response.data };
+    }
+}

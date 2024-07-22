@@ -1,6 +1,8 @@
 package repo
 
 import (
+	"errors"
+
 	"github.com/Victoria281/Espire/backend/models"
 	"github.com/Victoria281/Espire/backend/storage"
 
@@ -22,6 +24,10 @@ type UserRepository interface {
 		Name string `json:"name"`
 	}, error)
 	FetchUserVisitScores(username string, articleIDs []uint) (map[uint]int, error)
+	AddSavedArticle(username string, articleID uint) error
+	DeleteSavedArticle(username string, articleID uint) error
+	GetSavedArticles(username string) ([]models.Articles, error)
+	IsArticleSavedByUser(username string, articleID uint) (bool, error)
 }
 
 type userSqlRepository struct {
@@ -71,7 +77,7 @@ func (m *userSqlRepository) AddUserTag(username string, tagID uint) error {
 }
 
 func (m *userSqlRepository) RemoveUserTag(username string, tagID uint) error {
-	if err := m.DB.Where("username = ? AND tag_id = ?", username, tagID).Delete(&models.UserTag{}).Error; err != nil {
+	if err := m.DB.Debug().Where("username = ? AND tag_id = ?", username, tagID).Delete(&models.UserTag{}).Error; err != nil {
 		return err
 	}
 	return nil
@@ -80,20 +86,16 @@ func (m *userSqlRepository) RemoveUserTag(username string, tagID uint) error {
 func (m *userSqlRepository) AddUserArticleVisit(username string, articleID uint) error {
 	var visit models.UserArticleVisit
 
-	// Check if a visit record already exists for this user and article
 	result := m.DB.Where("username = ? AND article_id = ?", username, articleID).First(&visit)
 	if result.Error != nil && result.Error != gorm.ErrRecordNotFound {
 		return result.Error
 	}
 
 	if result.RowsAffected > 0 {
-		// Record exists, update the visit count
-		visit.Visit++
-		if err := m.DB.Save(&visit).Error; err != nil {
+		if err := m.DB.Model(&visit).Where("username = ? AND article_id = ?", username, articleID).Update("visit", visit.Visit+1).Error; err != nil {
 			return err
 		}
 	} else {
-		// Record does not exist, create a new one with visit count set to 1
 		visit = models.UserArticleVisit{
 			Username:  username,
 			ArticleID: articleID,
@@ -151,4 +153,44 @@ func (m *userSqlRepository) GetUserTags(username string) ([]struct {
 	}
 
 	return tags, nil
+}
+
+func (m *userSqlRepository) AddSavedArticle(username string, articleID uint) error {
+	savedArticle := models.SavedArticle{
+		Username:  username,
+		ArticleID: articleID,
+	}
+	return m.DB.Create(&savedArticle).Error
+}
+
+func (m *userSqlRepository) DeleteSavedArticle(username string, articleID uint) error {
+	return m.DB.Where("username = ? AND article_id = ?", username, articleID).Delete(&models.SavedArticle{}).Error
+}
+
+func (m *userSqlRepository) GetSavedArticles(username string) ([]models.Articles, error) {
+	var savedArticles []models.SavedArticle
+	if err := m.DB.Where("username = ?", username).Find(&savedArticles).Error; err != nil {
+		return nil, err
+	}
+
+	var articles []models.Articles
+	for _, savedArticle := range savedArticles {
+		var article models.Articles
+		if err := m.DB.First(&article, savedArticle.ArticleID).Error; err != nil {
+			return nil, err
+		}
+		articles = append(articles, article)
+	}
+	return articles, nil
+}
+
+func (m *userSqlRepository) IsArticleSavedByUser(username string, articleID uint) (bool, error) {
+	var savedArticle models.SavedArticle
+	if err := m.DB.Where("username = ? AND article_id = ?", username, articleID).First(&savedArticle).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return false, nil
+		}
+		return false, err
+	}
+	return true, nil
 }
