@@ -194,7 +194,7 @@ export const scrapeArticleAPI = async (url) => {
 export const createNewTagAPI = async (name) => {
     try {
         const { data, status } = await axiosInstance.post(CREATE_NEW_TAG, name);
-        if (status == 201) return { data: data, success: true }
+        if (status == 201 || status == 200) return { data: data, success: true }
     } catch (e) {
         displayErrorHandler(e, CREATE_NEW_TAG);
         return { success: false, error: e.response.data }
