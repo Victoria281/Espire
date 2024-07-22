@@ -22,7 +22,7 @@ type Users struct {
 type UserArticleVisit struct {
 	Username  string    `gorm:"not null" json:"username"`
 	ArticleID uint      `gorm:"not null" json:"article_id"`
-	VisitedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"visited_at"`
+	Visit     int       `gorm:"default:0" json:"visit"`
 	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"createdat"`
 }
 

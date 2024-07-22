@@ -34,6 +34,7 @@ type ArticleService interface {
 	FindArticlesWithSimilarTitles(query string) ([]models.Articles, error)
 	FetchArticlesFromGoogleSearch(query string) ([]ArticleSearch, error)
 	GetArticleInfoAndSuggestTags(url string) (*models.Articles, error)
+	GetArticlesDetails(articleIDs []uint) (map[uint]repo.ArticleDetails, error)
 }
 
 type ArticleSearch struct {
@@ -52,6 +53,10 @@ func NewArticleService(repo repo.ArticleRepository) ArticleService {
 	return &articleService{
 		repo: repo,
 	}
+}
+
+func (s *articleService) GetArticlesDetails(articleIDs []uint) (map[uint]repo.ArticleDetails, error) {
+	return s.repo.GetArticlesDetails(articleIDs)
 }
 
 func (s *articleService) GetAllArticles() ([]models.Articles, error) {
@@ -300,7 +305,6 @@ func (s *articleService) GetArticleInfoAndSuggestTags(url string) (*models.Artic
 			return nil, fmt.Errorf("failed to parse published date: %v", parseErr)
 		}
 	} else {
-		// Fallback to the current time if the date is not available
 		publishedDate = time.Now()
 	}
 

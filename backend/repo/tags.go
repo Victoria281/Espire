@@ -15,6 +15,7 @@ type TagRepository interface {
 	DeleteArticleTags(articleID uint) error
 	CreateArticleTag(articleID uint, tagID uint) error
 	Delete(tagID uint) error
+	GetByName(name string) (models.Tag, error)
 }
 
 type tagSqlRepository struct {
@@ -32,6 +33,17 @@ func (r *tagSqlRepository) Create(tag models.Tag) (uint, error) {
 	return tag.ID, nil
 }
 
+func (r *tagSqlRepository) GetByName(name string) (models.Tag, error) {
+	var tag models.Tag
+	err := r.DB.Where("name = ? AND deleted_at IS NULL", name).First(&tag).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return models.Tag{}, nil
+		}
+		return models.Tag{}, err
+	}
+	return tag, nil
+}
 func (r *tagSqlRepository) GetByID(tagID uint) (models.Tag, error) {
 	var tag models.Tag
 	err := r.DB.Where("id = ?", tagID).First(&tag).Error

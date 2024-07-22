@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/Victoria281/Espire/backend/auth"
@@ -47,50 +48,50 @@ func (c *UserController) Delete(ctx *fiber.Ctx) error {
 }
 
 func (c *UserController) AddUserTag(ctx *fiber.Ctx) error {
+	username := auth.ParseUsername(ctx)
 	var request struct {
-		Username string `json:"username"`
-		TagID    uint   `json:"tag_id"`
+		TagID uint `json:"tag_id"`
 	}
 	if err := ctx.BodyParser(&request); err != nil {
 		return err
 	}
-	if err := c.Service.AddUserTag(request.Username, request.TagID); err != nil {
+	if err := c.Service.AddUserTag(username, request.TagID); err != nil {
 		return err
 	}
 	return ctx.JSON(fiber.Map{"message": "Tag added successfully"})
 }
 
 func (c *UserController) RemoveUserTag(ctx *fiber.Ctx) error {
+	username := auth.ParseUsername(ctx)
 	var request struct {
-		Username string `json:"username"`
-		TagID    uint   `json:"tag_id"`
+		TagID uint `json:"tag_id"`
 	}
 	if err := ctx.BodyParser(&request); err != nil {
 		return err
 	}
-	if err := c.Service.RemoveUserTag(request.Username, request.TagID); err != nil {
+	if err := c.Service.RemoveUserTag(username, request.TagID); err != nil {
 		return err
 	}
 	return ctx.JSON(fiber.Map{"message": "Tag removed successfully"})
 }
 
 func (c *UserController) AddUserArticleVisit(ctx *fiber.Ctx) error {
+	username := auth.ParseUsername(ctx)
 	var request struct {
-		Username  string `json:"username"`
-		ArticleID uint   `json:"article_id"`
+		ArticleID uint `json:"article_id"`
 	}
 	if err := ctx.BodyParser(&request); err != nil {
 		return err
 	}
-	if err := c.Service.AddUserArticleVisit(request.Username, request.ArticleID); err != nil {
+	if err := c.Service.AddUserArticleVisit(username, request.ArticleID); err != nil {
 		return err
 	}
 	return ctx.JSON(fiber.Map{"message": "Article visit recorded successfully"})
 }
 
 func (c *UserController) GetUserArticleVisits(ctx *fiber.Ctx) error {
-	username := ctx.Query("username")
-	limitStr := ctx.Query("limit", "20") // Default limit to 20
+	username := auth.ParseUsername(ctx)
+	limitStr := ctx.Query("limit", "20")
 	limit, err := strconv.Atoi(limitStr)
 	if err != nil {
 		return err
@@ -103,7 +104,7 @@ func (c *UserController) GetUserArticleVisits(ctx *fiber.Ctx) error {
 }
 
 func (c *UserController) GetUserTags(ctx *fiber.Ctx) error {
-	username := ctx.Query("username")
+	username := auth.ParseUsername(ctx)
 	tags, err := c.Service.GetUserTags(username)
 	if err != nil {
 		return err
@@ -123,29 +124,62 @@ func (c *UserController) GetUserIndex(ctx *fiber.Ctx) error {
 func (c *UserController) GetRecommendations(ctx *fiber.Ctx) error {
 	username := auth.ParseUsername(ctx)
 
-	uid, err := c.Service.GetUserIndex(username)
-	if err != nil {
-		return err
-	}
-
+	// Retrieve user tags
 	userTags, err := c.Service.GetUserTags(username)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to get user tags"})
 	}
 
+	// Retrieve user article interactions
 	interactions, err := c.Service.GetUserArticleVisits(username, 20)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to get user visits"})
 	}
 
-	// Fetch all articles from the repository
+	// Retrieve all articles
 	articles, err := c.ArticleService.GetAllArticles()
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to get articles"})
 	}
 
+	// Fetch visit scores for articles
+	articleIDs := make([]uint, len(articles))
+	for i, article := range articles {
+		articleIDs[i] = article.ID
+	}
+	visitScores, err := c.Service.FetchUserVisitScores(username, articleIDs)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to fetch user visit scores"})
+	}
+
+	articleDetails, err := c.ArticleService.GetArticlesDetails(articleIDs)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to fetch article details"})
+	}
+
+	X, y := recommender.GenerateFeatureMatrix(articleDetails, articles)
+
+	coefficients := recommender.TrainLinearRegression(X, y)
+
+	predictions := recommender.PredictRelevance(X, coefficients)
+
+	fmt.Println("predictions")
+	fmt.Println(predictions)
+	maxIndex := 0
+	maxValue := predictions[0]
+
+	for i, pred := range predictions {
+		if pred > maxValue {
+			maxValue = pred
+			maxIndex = i
+		}
+	}
+
+	// Print the article with the highest prediction value
+	fmt.Printf("The most relevant article is: %s\n", articles[maxIndex])
+
 	// Get recommendations
-	recommendations := recommender.GetHybridRecommendations(uid, userTags, interactions, articles)
+	recommendations := recommender.GetContentBasedRecommendations(username, userTags, interactions, articles, visitScores)
 
 	return ctx.JSON(fiber.Map{"recommendations": recommendations})
 }

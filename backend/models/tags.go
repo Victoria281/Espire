@@ -8,7 +8,7 @@ import (
 
 type Tag struct {
 	ID        uint       `gorm:"primaryKey"`
-	Name      string     `json:"name"`
+	Name      string     `gorm:"unique;not null" json:"name"`
 	Articles  []Articles `gorm:"many2many:tag_articles;"`
 	CreatedAt time.Time  `gorm:"default:CURRENT_TIMESTAMP" json:"createdat"`
 	DeletedAt *time.Time `json:"deletedat"`

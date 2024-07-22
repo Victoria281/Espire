@@ -10,6 +10,7 @@ type ArticleQuoteRepository interface {
 	CreateQuote(quote models.ArticleQuotes) error
 	UpdateQuote(quoteID uint, updatedQuote models.ArticleQuotes) error
 	DeleteQuote(quoteID uint) error
+	GetQuotesByArticleID(articleID uint, quotes *[]models.ArticleQuotes) error
 }
 
 type articleQuoteRepository struct {
@@ -18,6 +19,10 @@ type articleQuoteRepository struct {
 
 func NewArticleQuoteRepository(db *gorm.DB) ArticleQuoteRepository {
 	return &articleQuoteRepository{DB: db}
+}
+
+func (r *articleQuoteRepository) GetQuotesByArticleID(articleID uint, quotes *[]models.ArticleQuotes) error {
+	return r.DB.Where("article_id = ?", articleID).Find(quotes).Error
 }
 
 func (r *articleQuoteRepository) CreateQuote(quote models.ArticleQuotes) error {

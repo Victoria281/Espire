@@ -19,7 +19,11 @@ type UserService interface {
 	RemoveUserTag(username string, tagID uint) error
 	AddUserArticleVisit(username string, articleID uint) error
 	GetUserArticleVisits(username string, limit int) ([]models.UserArticleVisit, error)
-	GetUserTags(username string) ([]string, error)
+	GetUserTags(username string) ([]struct {
+		ID   uint   `json:"id"`
+		Name string `json:"name"`
+	}, error)
+	FetchUserVisitScores(username string, articleIDs []uint) (map[uint]int, error)
 }
 
 type userService struct {
@@ -81,10 +85,17 @@ func (s *userService) AddUserArticleVisit(username string, articleID uint) error
 	return s.repo.AddUserArticleVisit(username, articleID)
 }
 
+func (s *userService) FetchUserVisitScores(username string, articleIDs []uint) (map[uint]int, error) {
+	return s.repo.FetchUserVisitScores(username, articleIDs)
+}
+
 func (s *userService) GetUserArticleVisits(username string, limit int) ([]models.UserArticleVisit, error) {
 	return s.repo.GetUserArticleVisits(username, limit)
 }
 
-func (s *userService) GetUserTags(username string) ([]string, error) {
+func (s *userService) GetUserTags(username string) ([]struct {
+	ID   uint   `json:"id"`
+	Name string `json:"name"`
+}, error) {
 	return s.repo.GetUserTags(username)
 }

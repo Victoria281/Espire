@@ -12,6 +12,12 @@ import (
 
 const defaultCheck = "deleted_at IS NULL"
 
+type ArticleDetails struct {
+	ArticleID       uint      `json:"article_id"`
+	TotalVisitCount int       `json:"total_visit_count"`
+	CreatedAt       time.Time `json:"created_at"`
+}
+
 type ArticleRepository interface {
 	GetAllArticles() ([]models.Articles, error)
 	SelectByField(field string, value interface{}) ([]models.Articles, error)
@@ -20,6 +26,7 @@ type ArticleRepository interface {
 	Delete(articleID uint) error
 	FindArticlesWithSimilarTitles(string) ([]models.Articles, error)
 	FindArticlesByTagIDs(tagIDs []uint) ([]models.Articles, error)
+	GetArticlesDetails(articleIDs []uint) (map[uint]ArticleDetails, error)
 }
 
 type articleSqlRepository struct {
@@ -30,9 +37,39 @@ func NewArticleRepository(db *gorm.DB) ArticleRepository {
 	return &articleSqlRepository{DB: storage.GetDB()}
 }
 
+func (m *articleSqlRepository) GetArticlesDetails(articleIDs []uint) (map[uint]ArticleDetails, error) {
+	var articles []models.Articles
+	err := m.DB.Where("id IN ?", articleIDs).Find(&articles).Error
+	if err != nil {
+		return nil, err
+	}
+
+	var visits []models.UserArticleVisit
+	err = m.DB.Where("article_id IN ?", articleIDs).Find(&visits).Error
+	if err != nil {
+		return nil, err
+	}
+
+	visitCounts := make(map[uint]int)
+	for _, visit := range visits {
+		visitCounts[visit.ArticleID] += visit.Visit
+	}
+
+	articleDetails := make(map[uint]ArticleDetails)
+	for _, article := range articles {
+		articleDetails[article.ID] = ArticleDetails{
+			ArticleID:       article.ID,
+			TotalVisitCount: visitCounts[article.ID],
+			CreatedAt:       article.CreatedAt,
+		}
+	}
+
+	return articleDetails, nil
+}
+
 func (m *articleSqlRepository) GetAllArticles() ([]models.Articles, error) {
 	var articles []models.Articles
-	err := m.DB.Find(&articles).Error
+	err := m.DB.Preload("Tags").Find(&articles).Error
 	return articles, err
 }
 
