@@ -19,6 +19,10 @@ type UserArticleVisit struct {
 	Visit     int
 	CreatedAt time.Time
 }
+type ArticleWithScore struct {
+	Article models.Articles
+	Score   float64
+}
 
 // Calculate cosine similarity
 func CosineSimilarity(v1, v2 []float64) float64 {
@@ -114,20 +118,24 @@ func TrainLinearRegression(X *mat.Dense, y []float64) *mat.VecDense {
 }
 
 // Using the trained model to predict relevance scores for articles
-func PredictRelevance(X *mat.Dense, coefficients *mat.VecDense) []float64 {
+func PredictRelevance(X *mat.Dense, coefficients *mat.VecDense, articles []models.Articles) []ArticleWithScore {
 	numArticles, _ := X.Dims()
-	predictions := make([]float64, numArticles)
+	predictions := make([]ArticleWithScore, numArticles)
 
 	for i := 0; i < numArticles; i++ {
 		row := X.RawRowView(i)
 		rowVec := mat.NewVecDense(len(row), row)
 		var score float64
 		score = mat.Dot(rowVec, coefficients)
-		predictions[i] = score
+		predictions[i] = ArticleWithScore{
+			Article: articles[i],
+			Score:   score,
+		}
 	}
 
-	fmt.Println("Predictions:")
-	fmt.Println(predictions)
+	sort.Slice(predictions, func(i, j int) bool {
+		return predictions[i].Score > predictions[j].Score
+	})
 
 	return predictions
 }

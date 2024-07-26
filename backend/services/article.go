@@ -31,7 +31,7 @@ type ArticleService interface {
 	UpdateArticle(username string, id uint, article *models.Articles) error
 	DeleteArticle(id uint) error
 	FetchArticlesFromGoogleScholar(query string) ([]ArticleSearch, error)
-	FindArticlesWithSimilarTitles(query string) ([]models.Articles, error)
+	FindArticlesWithSimilarTitles(username string, query string) ([]models.Articles, error)
 	FetchArticlesFromGoogleSearch(query string) ([]ArticleSearch, error)
 	GetArticleInfoAndSuggestTags(url string) (*models.Articles, error)
 	GetArticlesDetails(articleIDs []uint) (map[uint]repo.ArticleDetails, error)
@@ -134,17 +134,19 @@ func (s *articleService) DeleteArticle(id uint) error {
 	return err
 }
 
-func (s *articleService) FindArticlesWithSimilarTitles(query string) ([]models.Articles, error) {
-	return s.repo.FindArticlesWithSimilarTitles(query)
+func (s *articleService) FindArticlesWithSimilarTitles(username string, query string) ([]models.Articles, error) {
+	return s.repo.FindArticlesWithSimilarTitles(username, query)
 }
 
 func (s *articleService) FetchArticlesFromGoogleScholar(query string) ([]ArticleSearch, error) {
 	var articleSearch []ArticleSearch
 
+	fmt.Println("herer calling gogogle")
 	resp, err := http.Get("https://scholar.google.com/scholar?q=" + url.QueryEscape(query))
 	if err != nil {
 		return articleSearch, err
 	}
+	fmt.Println("csalled")
 	defer resp.Body.Close()
 
 	doc, err := goquery.NewDocumentFromReader(resp.Body)

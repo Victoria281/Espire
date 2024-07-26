@@ -53,7 +53,7 @@ func UserRouter(router fiber.Router) {
 	}
 
 	router.Put("/update", userController.UpdatePassword)
-	router.Put("/delete", userController.Delete)
+	router.Delete("/delete", userController.Delete)
 
 	router.Post("/add-tag", userController.AddUserTag)
 	router.Delete("/remove-tag/:id", userController.RemoveUserTag)
@@ -114,7 +114,6 @@ func ArticleRouter(router fiber.Router) {
 	router.Delete("/flashcards/:id", articleFlashcardController.DeleteFlashcard)
 	router.Post("/flashcards/generate/:article_id", articleFlashcardController.GenerateFlashcardsFromQuotes)
 
-	router.Get("/search", articleController.GetSimilarArticles)
 	router.Get("/googlesearch", articleController.GetArticlesFromGoogle)
 	router.Get("/webscrap", articleController.GetArticleInfoAndSuggestTags)
 
