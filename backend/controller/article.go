@@ -138,31 +138,14 @@ func (c *ArticleController) DeleteArticle(ctx *fiber.Ctx) error {
 	return ctx.JSON(fiber.Map{"message": "Article deleted successfully"})
 }
 
-func (c *ArticleController) GetSimilarArticles(ctx *fiber.Ctx) error {
-	query := ctx.Query("query")
-
-	googleArticles, err := c.Service.FetchArticlesFromGoogleScholar(query)
-	if err != nil {
-		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
-	}
-
-	// Check database for similar titles
-	dbArticles, err := c.Service.FindArticlesWithSimilarTitles(query)
-	if err != nil {
-		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
-	}
-
-	// Format response
-	response := map[string]interface{}{
-		"database": dbArticles,
-		"web":      googleArticles,
-	}
-
-	return ctx.Status(fiber.StatusOK).JSON(response)
-}
-
 func (c *ArticleController) GetArticlesFromGoogle(ctx *fiber.Ctx) error {
 	query := ctx.Query("query")
+	username := auth.ParseUsername(ctx)
+
+	dbArticles, err := c.Service.FindArticlesWithSimilarTitles(username, query)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
 
 	googleArticles, err := c.Service.FetchArticlesFromGoogleSearch(query)
 	if err != nil {
@@ -170,7 +153,8 @@ func (c *ArticleController) GetArticlesFromGoogle(ctx *fiber.Ctx) error {
 	}
 
 	response := map[string]interface{}{
-		"web": googleArticles,
+		"database": dbArticles,
+		"web":      googleArticles,
 	}
 
 	return ctx.Status(fiber.StatusOK).JSON(response)

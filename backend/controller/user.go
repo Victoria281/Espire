@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"math/rand"
 	"strconv"
 	"time"
@@ -18,34 +17,27 @@ type UserController struct {
 	ArticleService services.ArticleService
 }
 
-// http://localhost:8080/espire/users/update
 func (c *UserController) UpdatePassword(ctx *fiber.Ctx) error {
 	var updateRequest struct {
-		Username    string `json:"username"`
 		OldPassword string `json:"old_password"`
 		NewPassword string `json:"new_password"`
 	}
+	username := auth.ParseUsername(ctx)
 	if err := ctx.BodyParser(&updateRequest); err != nil {
-		return err // Fiber will handle parsing errors automatically
+		return err
 	}
-	err := c.Service.UpdatePassword(updateRequest.Username, updateRequest.OldPassword, updateRequest.NewPassword)
+	err := c.Service.UpdatePassword(username, updateRequest.OldPassword, updateRequest.NewPassword)
 	if err != nil {
-		return err // Service method errors will be handled by Fiber
+		return err
 	}
 	return ctx.JSON(fiber.Map{"message": "Password updated successfully"})
 }
 
-// http://localhost:8080/espire/users/delete
 func (c *UserController) Delete(ctx *fiber.Ctx) error {
-	var deleteRequest struct {
-		Username string `json:"username"`
-	}
-	if err := ctx.BodyParser(&deleteRequest); err != nil {
-		return err // Fiber will handle parsing errors automatically
-	}
-	err := c.Service.DeleteUser(deleteRequest.Username)
+	username := auth.ParseUsername(ctx)
+	err := c.Service.DeleteUser(username)
 	if err != nil {
-		return err // Service method errors will be handled by Fiber
+		return err
 	}
 	return ctx.JSON(fiber.Map{"message": "User deleted successfully"})
 }
@@ -169,26 +161,14 @@ func (c *UserController) GetRecommendations(ctx *fiber.Ctx) error {
 
 	coefficients := recommender.TrainLinearRegression(X, y)
 
-	predictions := recommender.PredictRelevance(X, coefficients)
-
-	fmt.Println("predictions")
-	fmt.Println(predictions)
-	maxIndex := 0
-	maxValue := predictions[0]
-
-	for i, pred := range predictions {
-		if pred > maxValue {
-			maxValue = pred
-			maxIndex = i
-		}
-	}
-
-	// Print the article with the highest prediction value
-	fmt.Printf("The most relevant article is: %s\n", articles[maxIndex])
+	sortedArticles := recommender.PredictRelevance(X, coefficients, articles)
 
 	recommendations := recommender.GetContentBasedRecommendations(username, userTags, interactions, articles, visitScores)
 
-	return ctx.JSON(fiber.Map{"recommendations": recommendations})
+	return ctx.JSON(fiber.Map{
+		"recommendations": recommendations,
+		"popular":         sortedArticles,
+	})
 }
 
 func (c *UserController) getRandomRecommendations(articles []models.Articles) []models.Articles {

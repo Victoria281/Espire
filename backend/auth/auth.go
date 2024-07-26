@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"fmt"
 	"os"
 	"strings"
 	"time"
@@ -21,7 +20,6 @@ func GenerateJWT(username, role string) (string, error) {
 		return "", err
 	}
 
-	fmt.Println(tokenString)
 	return tokenString, nil
 }
 

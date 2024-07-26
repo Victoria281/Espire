@@ -1,5 +1,11 @@
 package middleware
 
-// func ErrorHandler(ctx *fiber.Ctx, err error) error {
+import "errors"
 
-// }
+// Define custom error types
+var (
+	ErrInvalidRequest      = errors.New("invalid request")
+	ErrUnauthorized        = errors.New("unauthorized")
+	ErrIncorrectPassword   = errors.New("incorrect password")
+	ErrInternalServerError = errors.New("internal server error")
+)

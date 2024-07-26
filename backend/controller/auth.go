@@ -15,12 +15,17 @@ func (c *AuthController) Login(ctx *fiber.Ctx) error {
 		Password string `json:"password"`
 	}
 	if err := ctx.BodyParser(&loginRequest); err != nil {
-		return err
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request payload"})
 	}
+
 	token, err := c.Service.Login(loginRequest.Username, loginRequest.Password)
 	if err != nil {
-		return err
+		if err.Error() == "incorrect password" {
+			return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Unauthorized"})
+		}
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Internal server error"})
 	}
+
 	return ctx.JSON(fiber.Map{"token": token})
 }
 
