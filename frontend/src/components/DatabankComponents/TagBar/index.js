@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import SearchIcon from '@mui/icons-material/Search';
 import styles from './styles.module.css';
 
-const TagBar = ({ ogReccomendationList, reccomendationList, setReccomendationList, tags, tagSearchQuery, setTagSearchQuery, handleTagKeyPress, handleTagSearch, recommended }) => {
+const TagBar = ({ ogReccomendationList, setReccomendationList, ogPopularList, setPopularList, tags, tagSearchQuery, setTagSearchQuery, handleTagKeyPress, handleTagSearch, activeTab }) => {
     const [selected, setSelected] = useState([]);
 
     const isSelected = (id) => selected.includes(id);
@@ -16,17 +16,33 @@ const TagBar = ({ ogReccomendationList, reccomendationList, setReccomendationLis
         }
         setSelected(newSelected);
 
+        
+        if (activeTab=== 'recommendations') {
+            if (newSelected.length > 0) {
+                let updatedRecommendationList = ogReccomendationList;
+                newSelected.forEach(tagID => {
+                    updatedRecommendationList = updatedRecommendationList.filter(rec =>
+                        rec.Tags && rec.Tags.some(tag => tag.ID === tagID)
+                    );
+                });
+                setReccomendationList(updatedRecommendationList);
+            } else {
+                setReccomendationList(ogReccomendationList);
+            }
+        } else {
         if (newSelected.length > 0) {
-            let updatedRecommendationList = ogReccomendationList;
+            let updatedPopList = ogPopularList;
             newSelected.forEach(tagID => {
-                updatedRecommendationList = updatedRecommendationList.filter(rec =>
-                    rec.Tags && rec.Tags.some(tag => tag.ID === tagID)
+                updatedPopList = updatedPopList.filter(rec =>
+                    rec.Article.Tags && rec.Article.Tags.some(tag => tag.ID === tagID)
                 );
             });
-            setReccomendationList(updatedRecommendationList);
+            setPopularList(updatedPopList);
         } else {
-            setReccomendationList(ogReccomendationList);
+            setPopularList(ogPopularList);
         }
+        }
+        
     };
 
     const filteredTags = tags.filter(tag =>

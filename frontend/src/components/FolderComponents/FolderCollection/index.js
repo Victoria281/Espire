@@ -6,12 +6,15 @@ import TabSelection from "../../ArticleComponents/TabSelection";
 import AdminModal from "./AdminModal";
 import ArticlesModal from "./ArticlesModal";
 import CreateCollectionModal from "./CreateCollectionModal ";
+import DeleteCollectionModal from "./DeleteCollectionModal";
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import styles from './styles.module.css';
 import { useDispatch } from 'react-redux';
 import { handleBulkCreate, assignArticleToCollection, removeArticleFromCollection, createCollection } from "../../../store/actions/articles"
+import { deleteCollectionAPI } from "../../../controller/articleController"
 import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
 import AddBoxIcon from '@mui/icons-material/AddBox';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const FolderCollection = ({ articles, collections }) => {
     const [rowView, setRowView] = useState(true);
@@ -20,6 +23,8 @@ const FolderCollection = ({ articles, collections }) => {
     const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isCreateCollectionModalOpen, setIsCreateCollectionModalOpen] = useState(false);
+    const [isDeleteCollectionModalOpen, setIsDeleteCollectionModalOpen] = useState(false);
+    const [errMsg, setErrMsg] = useState('');
 
     const toggleFileIcon = () => {
         setIsOpen(!isOpen);
@@ -72,8 +77,31 @@ const FolderCollection = ({ articles, collections }) => {
     };
 
     const handleCreateCollection = async (name) => {
-        await dispatch(createCollection(name)); // Dispatch action to create collection
-        handleCloseCreateCollectionModal(); // Close modal after creation
+        await dispatch(createCollection(name));
+        handleCloseCreateCollectionModal();
+    };
+
+    const handleOpenDeleteCollectionModal = () => {
+        setIsDeleteCollectionModalOpen(true);
+    };
+
+    const handleCloseDeleteCollectionModal = () => {
+        setIsDeleteCollectionModalOpen(false);
+        setErrMsg('');
+    };
+
+    const handleDeleteCollection = async (cid) => {
+        if (cid) {
+            setLoading(true);
+            const { success, error } = await deleteCollectionAPI(cid);
+            setLoading(false);
+            if (success) {
+                handleCloseDeleteCollectionModal();
+                window.location.reload();
+            } else {
+                setErrMsg(error);
+            }
+        }
     };
 
     return (
@@ -96,6 +124,14 @@ const FolderCollection = ({ articles, collections }) => {
                 onClose={handleCloseCreateCollectionModal}
                 onCreate={handleCreateCollection}
             />
+            <DeleteCollectionModal
+                errmsg={errMsg}
+                setErrMsg={setErrMsg}
+                isOpen={isDeleteCollectionModalOpen}
+                onClose={handleCloseDeleteCollectionModal}
+                onConfirm={handleDeleteCollection}
+                collections={collections}
+            />
             <div className={styles.collectionMainContainer}>
                 <div className={styles.collectionHead}>
                     <div className={styles.collectionAdmin}>
@@ -108,6 +144,9 @@ const FolderCollection = ({ articles, collections }) => {
                         </div>
                         <div onClick={() => handleOpenCreateCollectionModal()}>
                             <AddBoxIcon />
+                        </div>
+                        <div onClick={() => handleOpenDeleteCollectionModal()}>
+                            <DeleteIcon />
                         </div>
                     </div>
                     <TabSelection rowView={rowView} setRowView={setRowView} />

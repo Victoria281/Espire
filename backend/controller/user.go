@@ -134,15 +134,6 @@ func (c *UserController) GetRecommendations(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to get articles"})
 	}
 
-	if len(articles) == 0 {
-		return ctx.JSON(fiber.Map{"recommendations": []interface{}{}})
-	}
-
-	if len(userTags) == 0 || len(interactions) == 0 {
-		randomRecommendations := c.getRandomRecommendations(articles)
-		return ctx.JSON(fiber.Map{"recommendations": randomRecommendations})
-	}
-
 	articleIDs := make([]uint, len(articles))
 	for i, article := range articles {
 		articleIDs[i] = article.ID
@@ -163,12 +154,28 @@ func (c *UserController) GetRecommendations(ctx *fiber.Ctx) error {
 
 	sortedArticles := recommender.PredictRelevance(X, coefficients, articles)
 
-	recommendations := recommender.GetContentBasedRecommendations(username, userTags, interactions, articles, visitScores)
+	if len(articles) == 0 {
+		return ctx.JSON(fiber.Map{
+			"popular":         sortedArticles,
+			"recommendations": []interface{}{},
+		})
+	}
 
-	return ctx.JSON(fiber.Map{
-		"recommendations": recommendations,
-		"popular":         sortedArticles,
-	})
+	if len(userTags) == 0 || len(interactions) == 0 {
+		recommendations := c.getRandomRecommendations(articles)
+		return ctx.JSON(fiber.Map{
+			"recommendations": recommendations,
+			"popular":         sortedArticles,
+		})
+	} else {
+		recommendations := recommender.GetContentBasedRecommendations(username, userTags, interactions, articles, visitScores)
+
+		return ctx.JSON(fiber.Map{
+			"recommendations": recommendations,
+			"popular":         sortedArticles,
+		})
+	}
+
 }
 
 func (c *UserController) getRandomRecommendations(articles []models.Articles) []models.Articles {

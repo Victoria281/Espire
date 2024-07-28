@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from './styles.module.css'
 import { useDispatch } from 'react-redux';
-import {  useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import Button from "../../common/Button";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -17,8 +17,10 @@ const WebScrapingTool = ({ handleGoBack, tags }) => {
     const [scrapped, setScrapped] = useState(false);
     const [scrappedSuccess, setScrappedSuccess] = useState(true);
     const [info, setInfo] = useState({});
+    const [inputLink, setInputLink] = useState('');
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleWebScrap = async (urlItem) => {
         setLoading(true);
@@ -27,6 +29,9 @@ const WebScrapingTool = ({ handleGoBack, tags }) => {
 
         if (link == "") {
             manageLink = urlItem
+        }
+        if (urlItem == "again") {
+            manageLink = inputLink
         }
 
 
@@ -41,6 +46,13 @@ const WebScrapingTool = ({ handleGoBack, tags }) => {
 
         setLoading(false);
     }
+
+    const handleSubmit = () => {
+        console.log("handleSubmit")
+        setScrapped(false)
+        setScrappedSuccess(true)
+        handleWebScrap("again")
+    };
 
     useEffect(() => {
         if (url != undefined) {
@@ -96,13 +108,39 @@ const WebScrapingTool = ({ handleGoBack, tags }) => {
                     </>
                     :
                     <div className={styles.linkContainer}>
-                        <div className={styles.backBtn} onClick={() => handleGoBack()} >
+                        <div className={styles.backBtn} onClick={handleGoBack}>
                             <ArrowBackIcon />
                         </div>
                         <h1 className={styles.failTitle}>Article not found!</h1>
+                        <p className={styles.failSubTitle}>
+                            This is the link you provided:
+                        </p>
+                        <a
+                            href={link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={styles.failLink}
+                        >
+                            {link}
+                        </a>
+                        <p className={styles.failMessage}>
+                            Please try again as our system is unable to support redirects at the moment.
+                        </p>
+                        <input
+                            type="text"
+                            value={inputLink}
+                            onChange={(e) => setInputLink(e.target.value)}
+                            placeholder="Enter Link..."
+                            className={styles.searchInput}
+                        />
+                        <div className={styles.searchBtn}>
+                            <Button type="main" onClick={handleSubmit}>
+                                Start
+                            </Button>
+                        </div>
                     </div>
             }
-        </div>
+        </div >
     );
 }
 

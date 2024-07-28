@@ -27,7 +27,7 @@ const FlashcardManagement = ({ id, flashcards, setFlashcards }) => {
     }
 
     useEffect(() => {
-        if (submitted==false){
+        if (submitted == false) {
             setUserAnswer(flashcards.map(() => ""));
             setUserAnswerResults(flashcards.map(() => false));
         }
@@ -53,7 +53,7 @@ const FlashcardManagement = ({ id, flashcards, setFlashcards }) => {
     const handleReTry = () => {
         setSubmitted(false)
     };
-    
+
     const handleDeleteFlashcard = (index) => {
         setFlashcards(flashcards.filter((_, i) => i !== index));
         if (flashcards[index].id != undefined) {
@@ -71,22 +71,22 @@ const FlashcardManagement = ({ id, flashcards, setFlashcards }) => {
         const newFlashcards = flashcards.map((flashcard, index) => {
             const userAnswerInput = userAnswer[index].trim().toLowerCase().replace(/\s+/g, '');
             const flashcardAnswer = flashcard.answer.trim().toLowerCase().replace(/\s+/g, '');
-            
+
             const isCorrect = userAnswerInput === flashcardAnswer;
             const updatedFlashcard = {
                 ...flashcard,
                 tries: flashcard.tries + 1,
                 wrong: isCorrect ? flashcard.wrong : flashcard.wrong + 1,
             };
-    
+
             updatedResults[index] = isCorrect;
             if (isCorrect) {
                 nScore += 1;
             }
-    
+
             return updatedFlashcard;
         });
-    
+
         setFlashcards(newFlashcards);
         handleSaveFlashcard();
         setSubmitted(true);
@@ -177,7 +177,7 @@ const FlashcardManagement = ({ id, flashcards, setFlashcards }) => {
                 <Box className={styles.viewModeContainer}>
                     {
                         submitted &&
-                        <>
+                        <div className={styles.submitArea}>
                             <p>Score: {score}/{flashcards.length}</p>
                             {score / flashcards.length < 0.5 ?
                                 <p>Try harder next time!</p>
@@ -192,7 +192,7 @@ const FlashcardManagement = ({ id, flashcards, setFlashcards }) => {
                             >
                                 Try again
                             </Button>
-                        </>
+                        </div>
                     }
                     {flashcards.map((flashcard, index) => (
                         <Box key={"flashcard" + index}
@@ -216,14 +216,16 @@ const FlashcardManagement = ({ id, flashcards, setFlashcards }) => {
                             />
                         </Box>
                     ))}
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={handleSubmitAnswer}
-                        sx={{ mt: 2 }}
-                    >
-                        Submit
-                    </Button>
+                    {flashcards != undefined && flashcards.length > 0 && !submitted &&
+                        <Button
+                            className={styles.submitBtn}
+                            variant="contained"
+                            color="primary"
+                            onClick={handleSubmitAnswer}
+                            sx={{ mt: 2 }}
+                        >
+                            Submit
+                        </Button>}
                 </Box>
             )}
         </Box>

@@ -36,7 +36,7 @@
 }
 
 .editOptions button {
-    width: 45%;
+    width: 25%;
 }
 
 .flashcardInput {
@@ -98,4 +98,17 @@
 
 .flashcardItemCorrect {
     border: 2px solid #4ec743;
+}
+
+.submitBtn {
+    width: 20%;
+}
+
+.submitArea {
+    background-color: #DBEDFF;
+    text-align: left;
+    margin: 0 4vw 1vh 4vw;
+    box-shadow: inset 10px 10px 10px -10px rgba(0, 0, 0, 0.3);
+    padding: 3vh 2vw;
+    border-radius: 5px;
 }

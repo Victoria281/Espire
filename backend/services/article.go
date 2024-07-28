@@ -2,12 +2,14 @@ package services
 
 import (
 	"context"
+	"encoding/base64"
 	"errors"
 	"fmt"
 	"log"
 	"net/http"
 	"net/url"
 	"os"
+	"regexp"
 	"sort"
 	"strings"
 	"time"
@@ -204,6 +206,11 @@ func (s *articleService) FetchArticlesFromGoogleSearch(query string) ([]ArticleS
 		return articleSearch, err
 	}
 
+	if call.Items == nil {
+		log.Println("No items returned from the API")
+		return articleSearch, nil
+	}
+
 	for _, item := range call.Items {
 		title := item.Title
 		link := item.Link
@@ -267,6 +274,16 @@ func fetchAdditionalInfo(link string) (string, string, error) {
 }
 
 func (s *articleService) GetArticleInfoAndSuggestTags(url string) (*models.Articles, error) {
+	if strings.Contains(url, "news.google.com/__i/rss/rd/articles/") {
+		originalURL, err := getOriginalURL(url)
+		if err != nil {
+			return nil, err
+		}
+		fmt.Println("originalURL")
+		fmt.Println(originalURL)
+		url = originalURL
+	}
+
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err
@@ -329,6 +346,40 @@ func (s *articleService) GetArticleInfoAndSuggestTags(url string) (*models.Artic
 
 	return article, nil
 }
+
+func getOriginalURL(redirectURL string) (string, error) {
+	if !strings.HasPrefix(redirectURL, "https://news.google.com/__i/rss/rd/articles/") {
+		return "", fmt.Errorf("not a valid Google News redirect URL")
+	}
+	parts := strings.Split(redirectURL, "/")
+	if len(parts) < 7 {
+		return "", fmt.Errorf("invalid redirect URL format")
+	}
+	encodedPart := parts[7]
+
+	encodedPart = strings.Split(encodedPart, "?")[0]
+	fmt.Println("encodedPart")
+	fmt.Println(encodedPart)
+	decodedBytes, err := base64.StdEncoding.DecodeString(encodedPart)
+	if err != nil {
+		return "", fmt.Errorf("failed to decode base64: %v", err)
+	}
+
+	decodedURL := string(decodedBytes)
+
+	// Find the first http
+	startIndex := strings.Index(decodedURL, "http")
+	if startIndex == -1 {
+		return "", fmt.Errorf("no valid URL found in decoded string")
+	}
+
+	// Trim any trailing slashes
+	trimmedURL := strings.TrimSuffix(decodedURL[startIndex:], "/")
+	trimmedURL = regexp.MustCompile(`[^\x20-\x7E]+$`).ReplaceAllString(trimmedURL, "")
+
+	return trimmedURL, nil
+}
+
 func extractTagsUsingProse(content string) ([]models.Tag, error) {
 	doc, err := prose.NewDocument(content)
 	if err != nil {

@@ -225,4 +225,83 @@
 
 
 
+.deleteModalOverlay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
 
+.deleteModal {
+    background-color: #fff; 
+    border-radius: 10px; 
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    width: 400px; 
+    text-align: center; 
+}
+
+.deleteModalTitle {
+    font-size: 24px;
+    color: #437FC7;
+}
+
+.deleteModalText {
+    margin: 10px 0;
+    color: #555;
+}
+
+.deleteError {
+    color: red;
+}
+
+.deleteConfirmationInput {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 8px;
+    margin-top: 10px;
+    width: 90%;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.button {
+    padding: 10px 15px;
+    border-radius: 5px; 
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.deleteButton {
+    background-color: #ff4d4d;
+    color: white;
+}
+
+.deleteButton:hover {
+    background-color: #ff1a1a;
+}
+
+.button:not(.deleteButton) {
+    background-color: #437FC7;
+    color: white;
+}
+
+.button:hover:not(.deleteButton) {
+    background-color: #356ab2;
+}
+
+.collectionSelect {
+    border: 1px solid #ccc;
+    border-radius: 5px; 
+    padding: 8px; 
+    margin-top: 10px; 
+    width: 90%; 
+}
