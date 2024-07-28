@@ -39,7 +39,7 @@ func NewArticleRepository(db *gorm.DB) ArticleRepository {
 
 func (m *articleSqlRepository) GetArticlesDetails(articleIDs []uint) (map[uint]ArticleDetails, error) {
 	var articles []models.Articles
-	err := m.DB.Where("id IN ?", articleIDs).Find(&articles).Error
+	err := m.DB.Where("id IN ?", articleIDs).Where("deleted_at IS NULL").Find(&articles).Error
 	if err != nil {
 		return nil, err
 	}
@@ -74,6 +74,7 @@ func (m *articleSqlRepository) GetOtherArticles(username string) ([]models.Artic
 		Where("username != ?", username).
 		Order("RANDOM()").
 		Limit(100).
+		Where("deleted_at IS NULL").
 		Find(&articles).Error
 
 	return articles, err
