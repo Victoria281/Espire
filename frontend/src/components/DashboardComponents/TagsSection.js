@@ -1,39 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Modal, Button, List, ListItem, ListItemText, Typography, Checkbox, FormControlLabel } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux'; // Import useSelector and useDispatch
-import { addUserTag, removeUserTag, fetchUserTags } from '../../functions/dashboard'; // Adjust import path
-import styles from './styles.module.css'; // Import CSS module
+import { useSelector } from 'react-redux'; 
+import { addUserTag, removeUserTag } from '../../functions/dashboard';
+import styles from './styles.module.css'; 
 
-const TagsSection = () => {
+const TagsSection = ({ utags, setUTags }) => {
     const [showModal, setShowModal] = useState(false);
     const [error, setError] = useState(null);
-    const [userTags, setUserTags] = useState([]); // Local state for user tags
-    const [availableTags, setAvailableTags] = useState([]); // State for available tags
-    const [filteredTags, setFilteredTags] = useState([]); // State for filtered tags
-    const [searchTerm, setSearchTerm] = useState(''); // State for search term
+    const [availableTags, setAvailableTags] = useState([]);
+    const [filteredTags, setFilteredTags] = useState([]); 
+    const [searchTerm, setSearchTerm] = useState('');
   
-    const dispatch = useDispatch();
-    const allTags = useSelector((state) => state.articles.tags); // Adjust according to your Redux state
+    const allTags = useSelector((state) => state.articles.tags); 
   
     useEffect(() => {
-      const fetchTags = async () => {
-        // Fetch user tags
-        const userTagsResponse = await fetchUserTags();
-        if (userTagsResponse.success) {
-          setUserTags(userTagsResponse.data);
-        } else {
-          setError(userTagsResponse.error);
-        }
-      };
-  
-      // Fetch available tags
       setAvailableTags(allTags);
-  
-      fetchTags();
     }, [allTags]);
   
     useEffect(() => {
-      // Filter tags based on the search term
       const results = availableTags.filter(tag =>
         tag.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
@@ -41,22 +25,22 @@ const TagsSection = () => {
     }, [searchTerm, availableTags]);
   
     const handleTagSelection = async (tag) => {
-      if (userTags.find((userTag) => userTag.id === tag.ID)) {
+      if (utags.find((userTag) => userTag.id === tag.ID)) {
         const result = await removeUserTag(tag.ID);
         if (result.success) {
-          setUserTags((prevTags) => prevTags.filter((userTag) => userTag.id !== tag.ID));
+          setUTags((prevTags) => prevTags.filter((userTag) => userTag.id !== tag.ID));
         } else {
           setError(result.error);
         }
       } else {
-        if (userTags.length >= 5) {
+        if (utags.length >= 5) {
           setError('You can only select up to 5 tags.');
           return;
         }
   
         const result = await addUserTag(tag.ID);
         if (result.success) {
-          setUserTags((prevTags) => [...prevTags, tag]);
+          setUTags((prevTags) => [...prevTags, { ...tag, id: tag.ID }]);
           setError(null);
         } else {
           setError(result.error);
@@ -69,15 +53,13 @@ const TagsSection = () => {
         <Typography variant="h6">Preferred Tags</Typography>
   
         <div className={styles.selectedTagsSection}>
-          <Typography variant="subtitle1" className={styles.tagSelectionHeader}>
-            Selected Tags
-          </Typography>
           <div className={styles.selectedTags}>
-            {userTags.map((tag) => (
+            {utags.map((tag) => (
               <div key={tag.ID} className={styles.selectedTag}>
                 {tag.name}
               </div>
             ))}
+            {utags.length ==0 && <p>No tags selected.</p>}
           </div>
         </div>
   
@@ -104,7 +86,7 @@ const TagsSection = () => {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={userTags.some((userTag) => userTag.id === tag.ID)}
+                        checked={utags.some((userTag) => userTag.id === tag.ID)}
                         onChange={() => handleTagSelection(tag)}
                       />
                     }

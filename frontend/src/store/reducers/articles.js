@@ -16,7 +16,32 @@ const initialState = {
   tags: [],
   articles: [],
   workspace: {
-    article: {},
+    article: {
+      "name": "",
+      "authors": "",
+      "date": new Date(),
+      "use": "",
+      "description": "",
+      "Links": [
+          {
+              "is_main": false,
+              "link": "",
+          },
+          {
+              "is_main": true,
+              "link": "",
+          }
+      ],
+      "Quotes": [
+          {
+              "grp_num": 1,
+              "priority": 1,
+              "fact": "",
+          }
+      ],
+      "Tags": [
+      ]
+  },
     collectionId: null
   },
   search: {

@@ -34,6 +34,10 @@ const Navbar = (show) => {
         return location.pathname.split('/').slice(0, 2).join('/') == "/post"
     }
 
+    const isAtManPost = () => {
+        return location.pathname.split('/').slice(0, 2).join('/') == "/manpost"
+    }
+
     const isOwner = () => {
         return workspace.article.owner !== undefined && workspace.article.owner;
     }
@@ -76,10 +80,10 @@ const Navbar = (show) => {
                     }
                     {isAtArticles() && !isAtPost() && !isOwner() &&
                         <Button type="main" onClick={() => handleSaveClick()}>
-                            {isSaved() ? "Save" : "UnSave"}
+                            {isSaved() ? "Unsave" : "Save"}
                         </Button>
                     }
-                    {!isAtArticles() && !isAtPost() && 
+                    {!isAtArticles() && !isAtPost() && !isAtManPost() &&
                         NAVBAR_BTNS(token == undefined).map((item, index) =>
                             <Button key={index} type="main" onClick={() => handleClick(item.link)}>
                                 {item.name}

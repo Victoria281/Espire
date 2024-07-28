@@ -24,7 +24,7 @@ const PostScreen = () => {
   const [removedQuoteIds, setRemovedQuoteIds] = useState([]);
   const [tagInfo, setTagInfo] = useState(workspace_article.Tags);
   const [errMsg, setErrMsg] = useState("");
-  
+
   useEffect(() => {
     if (articleid != undefined) {
       retrieveArticleById(articleid, dispatch);
@@ -57,6 +57,17 @@ const PostScreen = () => {
     }
   }
 
+
+  const formatTimestamp = (timestamp) => {
+    const date = new Date(timestamp);
+    return date.toLocaleString('en-US', {
+      timeZone: 'Asia/Singapore',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    });
+  };
+
   const checkWorkspaceInfo = () => {
     let err_msg = "";
     let info = { ...editedInfo, Quotes: quoteInfo, Tags: tagInfo }
@@ -68,10 +79,6 @@ const PostScreen = () => {
     }
     if (!info.authors) {
       err_msg += "Authors cannot be empty. ";
-      hasError = true;
-    }
-    if (!info.use) {
-      err_msg += "Use column (i.e. Research, School) cannot be empty. ";
       hasError = true;
     }
     if (!info.description) {
@@ -99,12 +106,10 @@ const PostScreen = () => {
     if (!info.date) {
       err_msg += "Start date cannot be empty. ";
       hasError = true;
+    } else if (!isValidDate(info.date)) {
+      err_msg += "Start date is not valid. Please try again ";
+      hasError = true;
     }
-    // else if (!isValidDate(info.date)) {
-    //   err_msg += "Start date is not in the correct format (YYYY-MM-DD). ";
-    //   hasError = true;
-    // }
-
     if (err_msg == "") {
       err_msg = "Ready to create!";
     }
@@ -114,21 +119,16 @@ const PostScreen = () => {
   }
 
   const isValidDate = (dateString) => {
-    const regex = /^\d{4}-\d{2}-\d{2}$/;
-    if (!regex.test(dateString)) {
-      return false;
+    try {
+      console.log(dateString)
+      const date = new Date(dateString);
+
+      return true;
+    } catch (e) {
+      console.log(e);
+      return false
     }
-
-    const date = new Date(dateString);
-    const [year, month, day] = dateString.split('-').map(Number);
-
-    return (
-      date.getFullYear() === year &&
-      date.getMonth() + 1 === month &&
-      date.getDate() === day
-    );
   };
-
 
   useEffect(() => {
     if (token != undefined) {
@@ -151,7 +151,7 @@ const PostScreen = () => {
             <InformationHeading title={QUOTE_MANAGEMENT} />
             <QuoteManagement setRemovedQuoteIds={setRemovedQuoteIds} edit={true} quoteInfo={quoteInfo} setQuoteInfo={setQuoteInfo} />
 
-            <PostButton msg={errMsg} editedInfo={editedInfo} onClick={(item) => handlePostClick(item)} />
+            <PostButton msg={errMsg} editedInfo={editedInfo} onClick={(item) => handlePostClick(item)} checkInput={checkWorkspaceInfo} />
           </>
 
           :

@@ -20,10 +20,11 @@ type Users struct {
 }
 
 type UserArticleVisit struct {
-	Username  string    `gorm:"not null" json:"username"`
-	ArticleID uint      `gorm:"not null" json:"article_id"`
-	Visit     int       `gorm:"default:0" json:"visit"`
-	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"createdat"`
+	Username    string    `gorm:"not null" json:"username"`
+	ArticleID   uint      `gorm:"not null" json:"article_id"`
+	Visit       int       `gorm:"default:0" json:"visit"`
+	CreatedAt   time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"createdat"`
+	ArticleName string    `json:"article_name"`
 }
 
 type UserTag struct {

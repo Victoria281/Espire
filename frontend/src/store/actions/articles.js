@@ -202,6 +202,7 @@ export const handleUpdateNewArticlePost = (new_info, removedQuoteIds) => async (
     console.log(new_info);
     await updateArticleAPI(new_info.id, {
         name: new_info.name,
+        date: formatDateToCustomString(new_info.date),
         authors: new_info.authors,
         use: new_info.use,
         description: new_info.description
@@ -216,37 +217,14 @@ export const handleUpdateNewArticlePost = (new_info, removedQuoteIds) => async (
     return true;
 }
 
-export const searchArticles = (query) => async (dispatch, getState) => {
-    console.log(query)
-    const result = await searchArticleAPI(query);
-
-    let msg = ''
-
-    if (result.data.web == null) {
-        msg = "Blocked by Google Scholar. Fallback to Google API..."
-
-        console.log(msg)
-        dispatch({
-            type: SET_SEARCH_RESULTS,
-            search: result.data,
-            searchloader: msg
-        });
-        return dispatch(searchGoogleArticles(query))
-    }
-    return result;
-}
 
 export const searchGoogleArticles = (query) => async (dispatch, getState) => {
     console.log("searchGoogleArticles")
     const result = await searchGoogleArticleAPI(query);
     const state = getState().articles;
-    console.log(result)
     dispatch({
         type: SET_SEARCH_RESULTS,
-        search: {
-            ...state.search,
-            web: result.data.web
-        },
+        search: result.data,
         searchloader: ''
     });
     return result;

@@ -55,10 +55,6 @@ const WebScrapingEditor = ({ info, tags }) => {
             err_msg += "Authors cannot be empty. ";
             hasError = true;
         }
-        if (!info.use) {
-            err_msg += "Use cannot be empty. ";
-            hasError = true;
-        }
         if (!info.description) {
             err_msg += "Description cannot be empty. ";
             hasError = true;
@@ -85,7 +81,7 @@ const WebScrapingEditor = ({ info, tags }) => {
             err_msg += "Start date cannot be empty. ";
             hasError = true;
         } else if (!isValidDate(info.date)) {
-            err_msg += "Start date is not in the correct format (YYYY-MM-DD). ";
+            err_msg += "Start date is not valid. ";
             hasError = true;
         }
 
@@ -98,21 +94,17 @@ const WebScrapingEditor = ({ info, tags }) => {
     }
 
     const isValidDate = (dateString) => {
-        const regex = /^\d{4}-\d{2}-\d{2}$/;
-        if (!regex.test(dateString)) {
-            return false;
-        }
-
+      try {
+        console.log(dateString)
         const date = new Date(dateString);
-        const [year, month, day] = dateString.split('-').map(Number);
-
-        return (
-            date.getFullYear() === year &&
-            date.getMonth() + 1 === month &&
-            date.getDate() === day
-        );
+  
+        return true;
+      } catch (e) {
+        console.log(e);
+        return false
+      }
     };
-
+  
     const handleCreateArticle = () => {
         let info = { ...articleData, Quotes: quotes, Tags: ntags };
         console.log(info);

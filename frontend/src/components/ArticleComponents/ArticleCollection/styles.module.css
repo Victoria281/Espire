@@ -1,4 +1,4 @@
-.articleListContainter p {
+.articleListContainter > p {
     font-weight: bold;
     font-size: 20px;
     margin: 5vh 2vw 0 2vw;
@@ -13,7 +13,7 @@
 }
 
 .articleListTitle p {
-    font-weight: 800;
+    font-weight: bold;
     font-size: 80%;
     padding: 0;
     margin: 1vh 0;
@@ -33,7 +33,6 @@
     text-align: left;
     padding: 0 10px;
     font-size: 100%;
-    font-weight: 500;
 }
 
 .articleListItemTitle p:nth-of-type(1), .articleListTitle p:nth-of-type(1) {

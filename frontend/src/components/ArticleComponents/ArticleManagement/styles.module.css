@@ -1,0 +1,93 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 90%;
+    padding: 20px;
+    text-align: center;
+}
+
+.modalTitle {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #437FC7;
+}
+
+.modalText {
+    margin-bottom: 20px;
+    color: #555;
+}
+
+.error {
+    color: red;
+    font-size: 0.9em;
+    margin-bottom: 10px;
+}
+
+.confirmationInput {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-size: 1em;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.deleteButton {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.cancelButton {
+    background-color: #ccc;
+    color: black;
+}
+
+.iconButton {
+    background-color: #437FC7;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 0 0 20px 20px;
+}
+
+.iconButton:hover {
+    background-color: #365f99;
+}
+
+.loading,
+.error {
+    text-align: center;
+    font-size: 1.25rem;
+    color: #ff4d4d;
+}

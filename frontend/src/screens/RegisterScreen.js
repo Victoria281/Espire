@@ -8,7 +8,6 @@ import InputComponent from "../components/AuthComponents/InputComponent"
 import { useNavigate } from "react-router-dom";
 import { SIGNIN, REGISTER, LOGIN_PATHNAME, REGISTER_SIDEBAR_TITLE, SIGNUP } from "../constants/names";
 import { handleRegisterUser } from "../store/actions/user";
-import { CircularProgress, Typography } from '@mui/material';
 
 const RegisterScreen = () => {
   const navigate = useNavigate();
@@ -22,14 +21,17 @@ const RegisterScreen = () => {
   const handleSignIn = () => {
     navigate(LOGIN_PATHNAME)
   }
+
   const handleRegisterCheck = () => {
-    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+    const usernameRegex = /^[^\s]+$/;
     // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (username.length < 8) {
       setErrMsg("Username must be longer than 8 characters");
-    }
-    else if (!passwordRegex.test(password)) {
+    } else if (!usernameRegex.test(username)) {
+      setErrMsg("Username must not contain spaces");
+    } else if (!passwordRegex.test(password)) {
       setErrMsg("Password must contain at least 8 characters, including at least one uppercase letter, one lowercase letter, and one number");
     }
     // else if (!emailRegex.test(email)) {
@@ -48,7 +50,11 @@ const RegisterScreen = () => {
         navigate('/library')
       } else {
         setLoading(false)
-        setErrMsg(error);
+        if (error === "refused") {
+          setErrMsg("Due to the limitations of our current database, our backend is still inactive, please wait for 50 seconds before trying again! OR test the backend at this link https://espire-backend.onrender.com/espire");
+        } else {
+          setErrMsg(error);
+        }
       }
     })
   }
@@ -59,35 +65,26 @@ const RegisterScreen = () => {
         onClick={() => { handleSignIn() }}
         title={REGISTER_SIDEBAR_TITLE}
         btn={SIGNIN} />
-      {loading ?
-        <>
-
-          <CircularProgress
-            size={60} />
-          <Typography variant="h6" color="textSecondary">
-            Registering user...
-          </Typography>
-        </>
-        :
-        <AuthMainBar
-          btn={SIGNUP} title={REGISTER} onClick={handleRegisterCheck}>
-          <InputComponent
-            title="Username"
-            col={username}
-            setCol={setUsername}
-          />
-          {/* <InputComponent
+      <AuthMainBar
+        loading={loading}
+        btn={SIGNUP} title={REGISTER} onClick={handleRegisterCheck}>
+        <InputComponent
+          title="Username"
+          col={username}
+          setCol={setUsername}
+        />
+        {/* <InputComponent
           title="Email"
           col={email}
           setCol={setEmail}
         /> */}
-          <InputComponent
-            title="Password"
-            col={password}
-            setCol={setPassword}
-          />
-          <ErrorMessage msg={errMsg} />
-        </AuthMainBar>}
+        <InputComponent
+          title="Password"
+          col={password}
+          setCol={setPassword}
+        />
+        <ErrorMessage msg={errMsg} />
+      </AuthMainBar>
     </AuthBackground >
   );
 };

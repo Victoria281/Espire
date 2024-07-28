@@ -110,7 +110,13 @@ func (m *userSqlRepository) AddUserArticleVisit(username string, articleID uint)
 
 func (m *userSqlRepository) GetUserArticleVisits(username string, limit int) ([]models.UserArticleVisit, error) {
 	var visits []models.UserArticleVisit
-	if err := m.DB.Where("username = ?", username).Order("visit DESC").Limit(limit).Find(&visits).Error; err != nil {
+	if err := m.DB.Table("user_article_visits").
+		Select("user_article_visits.username, user_article_visits.article_id, user_article_visits.visit, user_article_visits.created_at, articles.name as article_name").
+		Joins("JOIN articles ON user_article_visits.article_id = articles.id").
+		Where("user_article_visits.username = ?", username).
+		Order("user_article_visits.visit DESC").
+		Limit(limit).
+		Scan(&visits).Error; err != nil {
 		return nil, err
 	}
 	return visits, nil

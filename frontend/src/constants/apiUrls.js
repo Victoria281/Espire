@@ -43,6 +43,9 @@ export const SEARCH_USER = (cid) => `/collections/${cid}/users/search`;
 export const GET_INVITED = (cid) => `/collections/${cid}/users`;
 export const INVITE = (cid) => `/collections/${cid}/users/invite`;
 export const GET_SHARED_COLLECTIONS = `/collections/shared`;
+export const UPDATE_PASSWORD = `/users/update`;
+export const DELETE_USER = `/users/delete`;
+
 
 export const GET_RECCS = `/users/get-reccomendations`;
 export const ADD_VISIT = `/users/add-visit`;

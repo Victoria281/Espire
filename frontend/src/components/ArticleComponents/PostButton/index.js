@@ -5,7 +5,7 @@ import Button from "../../common/Button";
 import ErrorMessage from "../../common/ErrorMessage";
 import { useLocation } from "react-router-dom";
 
-const PostButton = ({ msg, onClick }) => {
+const PostButton = ({ msg, onClick, checkInput }) => {
 
     const location = useLocation();
 
@@ -17,15 +17,20 @@ const PostButton = ({ msg, onClick }) => {
         <div className={styles.postButtonContainer}>
             <ErrorMessage msg={msg} />
 
-            {isEditing() ?
-                <Button type="main" onClick={() => onClick(false)}>
-                    Save
+            <div className={styles.btns}>
+                <Button type="main" onClick={() => checkInput()}>
+                    Check
                 </Button>
-                :
-                <Button type="main" onClick={() => onClick(true)}>
-                    Post
-                </Button>
-            }
+                {isEditing() ?
+                    <Button type="main" onClick={() => onClick(false)}>
+                        Save
+                    </Button>
+                    :
+                    <Button type="main" onClick={() => onClick(true)}>
+                        Post
+                    </Button>
+                }
+            </div>
         </div>
 
     );

@@ -17,12 +17,10 @@ export const handleLoginUser = (username, password) => async (dispatch) => {
   return { success: result.success }
 };
 
-export const handleRegisterUser = (username, email, password) => async (dispatch) => {
-  const result = await registerAPI(username, email, password);
+export const handleRegisterUser = (username, password) => async (dispatch) => {
+  const result = await registerAPI(username, password);
   if (!result.success) return { success: false, error: result.error };
   return dispatch(handleLoginUser(username, password));
-  //set onboarding to false
-  //update user token
 };
 
 export const clear_store = () => async (dispatch) => {

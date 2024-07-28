@@ -53,7 +53,7 @@ const App = () => {
         <Route path="/post/:url" element={<PrePostScreen />} />
         <Route path="/manpost" element={<PostScreen />} />
         <Route path="/manpost/:articleid" element={<PostScreen />} />
-        <Route path="/dashboard" element={<DashboardScreen />} />
+        <Route path="/profile" element={<DashboardScreen />} />
       </Routes>
     </Router>
   );

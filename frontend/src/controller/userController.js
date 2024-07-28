@@ -8,7 +8,9 @@ import {
     ADD_UTAGS,
     GET_UTAGS,
     REMOVE_UTAGS,
-    GET_SAVE
+    GET_SAVE,
+    UPDATE_PASSWORD,
+    DELETE_USER
 } from '../constants/apiUrls'
 
 export const getEspireAPI = async () => {
@@ -29,21 +31,23 @@ export const loginAPI = async (username, password) => {
         if (status == 200) return { data: data, success: true }
     } catch (e) {
         displayErrorHandler(e, LOGIN);
-        return { success: false, error: e.response.data }
+        console.log(e.response)
+        const errorMessage = e.response ? e.response.data.error : "refused";
+        return { success: false, error: errorMessage };
     }
 }
 
-export const registerAPI = async (username, email, password) => {
+export const registerAPI = async (username, password) => {
     try {
         const result = await axiosInstance.post(REGISTER, {
             username: username,
-            email: email,
             password: password
         });
         if (result.status == 200) return { data: result, success: true }
     } catch (e) {
         displayErrorHandler(e, REGISTER);
-        return { success: false }
+        const errorMessage = e.response ? e.response.data.error : "refused";
+        return { success: false, error: errorMessage };
     }
 }
 
@@ -113,3 +117,28 @@ export const getSavedArticlesAPI = async () => {
         return { success: false, error: e.response.data };
     }
 }
+
+export const updatePasswordAPI = async (oldPassword, newPassword) => {
+    try {
+        const { data, status } = await axiosInstance.put(UPDATE_PASSWORD, {
+            old_password: oldPassword,
+            new_password: newPassword,
+        });
+        if (status === 200) return { success: true };
+    } catch (e) {
+        displayErrorHandler(e, UPDATE_PASSWORD);
+        return { success: false, error: e.response.data };
+    }
+};
+
+export const deleteUserAPI = async () => {
+    try {
+        const { data, status } = await axiosInstance.delete(DELETE_USER);
+        if (status === 200) return { data: data, success: true };
+    } catch (e) {
+        displayErrorHandler(e, DELETE_USER);
+        console.log(e.response);
+        const errorMessage = e.response ? e.response.data.error : "refused";
+        return { success: false, error: errorMessage };
+    }
+};

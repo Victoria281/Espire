@@ -67,6 +67,9 @@
 .navbarContainer {
     background-color: rgb(255, 255, 255);
     width: 96vw;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    margin: 0;
     height: 8vh;
     position: -webkit-sticky;
     position: sticky;

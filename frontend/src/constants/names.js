@@ -196,8 +196,8 @@ export const NAVBAR_ITEMS = [
         link: '/databank',
     },
     {
-        name: 'Dashboard',
-        link: '/dashboard',
+        name: 'Profile',
+        link: '/profile',
     },
 ];
 
@@ -361,6 +361,7 @@ export const ARTICLE_BASE_TEMPLATE = {
     "name": "",
     "authors": "",
     "use": "",
+    "date": new Date(),
     "description": "",
     "Links": [
         {

@@ -11,6 +11,7 @@ import { SIGNIN, LOGIN, REGISTER_PATHNAME, LOGIN_SIDEBAR_TITLE, SIGNUP } from ".
 
 const LoginScreen = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errMsg, setErrMsg] = useState("");
@@ -20,11 +21,18 @@ const LoginScreen = () => {
     navigate(REGISTER_PATHNAME)
   }
   const handleLogin = () => {
+    setLoading(true)
     dispatch(handleLoginUser(username, password)).then(({ success, error }) => {
       if (success) {
-        navigate('/')
+        setLoading(false)
+        navigate('/library')
       } else {
-        setErrMsg(error);
+        setLoading(false)
+        if (error === "refused") {
+          setErrMsg("Due to the limitations of our current database, our backend is still inactive, please wait for 50 seconds before trying again! OR test the backend at this link https://espire-backend.onrender.com/espire");
+        } else {
+          setErrMsg(error);
+        }
       }
     })
   }
@@ -32,6 +40,7 @@ const LoginScreen = () => {
   return (
     <AuthBackground reverse={false}>
       <AuthMainBar
+        loading={loading}
         btn={SIGNIN} title={LOGIN} onClick={handleLogin}>
         <InputComponent
           title="Username"

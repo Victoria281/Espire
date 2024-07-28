@@ -7,6 +7,7 @@ import {
     // GET_ARTICLES_BY_USER,
     // GET_ARTICLES_BY_NAME,
     CREATE_NEW_ARTICLE,
+    DELETE_ARTICLE,
     CREATE_NEW_ARTICLE_LINK,
     CREATE_NEW_ARTICLE_QUOTE,
     // UPDATE_ARTICLE,
@@ -82,6 +83,16 @@ export const getArticlesByIdAPI = async (id) => {
         return { success: false }
     }
 }
+
+export const deleteArticlesByIdAPI = async (id) => {
+    try {
+        const { data, status } = await axiosInstance.delete(DELETE_ARTICLE(id));
+        if (status === 200) return { data: data, success: true };
+    } catch (e) {
+        displayErrorHandler(e, DELETE_ARTICLE(id));
+        return { success: false, error: e.response.data }
+    }
+};
 
 export const createNewArticleAPI = async (new_info) => {
     try {

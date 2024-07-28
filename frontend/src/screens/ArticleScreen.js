@@ -10,6 +10,7 @@ import BasicInformation from "../components/ArticleComponents/BasicInformation";
 import QuoteManagement from "../components/ArticleComponents/QuoteManagement";
 import TagManagement from "../components/ArticleComponents/TagManagement";
 import FlashcardManagement from "../components/ArticleComponents/FlashcardManagement";
+import ArticleManagement from "../components/ArticleComponents/ArticleManagement";
 
 const ArticleScreen = () => {
   const { articleid } = useParams();
@@ -57,6 +58,11 @@ const ArticleScreen = () => {
               <InformationHeading title={FLASHCARD_MANAGEMENT} />
               {flashcards != undefined && <FlashcardManagement id={articleid} flashcards={flashcards} setFlashcards={setFlashcards} />}
             </>
+          }
+          
+          {
+            workspace.article.owner &&
+              <ArticleManagement articleId={articleid} />
           }
         </>}
     </div>

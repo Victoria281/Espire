@@ -21,9 +21,9 @@ func (c *AuthController) Login(ctx *fiber.Ctx) error {
 	token, err := c.Service.Login(loginRequest.Username, loginRequest.Password)
 	if err != nil {
 		if err.Error() == "incorrect password" {
-			return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Unauthorized"})
+			return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Password is Wrong"})
 		}
-		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Internal server error"})
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "User Not Found"})
 	}
 
 	return ctx.JSON(fiber.Map{"token": token})
