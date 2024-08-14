@@ -1,0 +1,10 @@
+.informationHeadingTitle {
+    font-size: 110%;
+    color: #437FC7;
+    border-bottom: 2px solid #437FC7;
+    width: 90vw;
+    text-align: left;
+    margin: auto;
+    font-weight: 500;
+    margin-top: 5vh;
+}

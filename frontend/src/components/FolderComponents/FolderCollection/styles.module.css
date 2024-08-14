@@ -1,0 +1,307 @@
+.collectionMainContainer {
+    width: 96vw;
+    margin: 0 2vw;
+}
+
+.toggleButton {
+    margin-bottom: 16px;
+}
+
+.collectionHead {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.collectionAdmin{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.collectionAdmin div{
+    color: #437FC780; 
+    cursor: pointer;
+    font-size: 20px;
+    padding-top: 7px;
+    margin-left: 10px;
+}
+
+.collectionHead p {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.collectionContainer {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 16px;
+}
+
+.collectionContainer::-webkit-scrollbar {
+    height: 4px; 
+}
+
+.collectionContainer::-webkit-scrollbar-thumb {
+    background-color: #437FC780; 
+    border-radius: 4px; 
+}
+
+.collectionColumnContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.columnLayout {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.collectionItem {
+    width: 15vw;
+    background-color: #ffffff;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    flex: 0 0 auto; 
+}
+
+.collectionItem:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.collectionName {
+    font-weight: bolder;
+    color: #437FC7;
+    font-size: 18px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+.collectionDate,
+.articleCount {
+    color: #555555;
+    font-size: 12px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.fileIcon {
+    margin-bottom: 5px;
+    font-size: 40px;
+    color: #007bff;
+    transition: color 0.3s, transform 0.3s;
+}
+
+.fileIcon:hover {
+    color: #0056b3;
+    transform: scale(1.2);
+}
+
+.fileIconOpen {
+    color: #28a745;
+}
+
+.toggleButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+
+
+
+
+
+
+
+
+.adminmodal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.adminmodalContent {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+}
+
+.adminheader {
+    margin-bottom: 20px;
+}
+
+.admintextField {
+    margin-bottom: 16px;
+}
+
+.adminsubmitButton {
+    margin-right: 8px;
+}
+
+.admincancelButton {
+    margin-left: 8px;
+}
+
+
+
+
+.modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modalContent {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.header {
+    margin-bottom: 16px;
+}
+
+.select {
+    margin-bottom: 16px;
+}
+
+.listsContainer {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.listContainer {
+    flex: 1;
+}
+
+.listTitle {
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.listItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.addButton {
+    color: #28a745;
+}
+
+.removeButton {
+    color: #dc3545;
+}
+
+.closeButton {
+    display: block;
+    margin: 0 auto;
+}
+
+
+
+.deleteModalOverlay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.deleteModal {
+    background-color: #fff; 
+    border-radius: 10px; 
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    width: 400px; 
+    text-align: center; 
+}
+
+.deleteModalTitle {
+    font-size: 24px;
+    color: #437FC7;
+}
+
+.deleteModalText {
+    margin: 10px 0;
+    color: #555;
+}
+
+.deleteError {
+    color: red;
+}
+
+.deleteConfirmationInput {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 8px;
+    margin-top: 10px;
+    width: 90%;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.button {
+    padding: 10px 15px;
+    border-radius: 5px; 
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.deleteButton {
+    background-color: #ff4d4d;
+    color: white;
+}
+
+.deleteButton:hover {
+    background-color: #ff1a1a;
+}
+
+.button:not(.deleteButton) {
+    background-color: #437FC7;
+    color: white;
+}
+
+.button:hover:not(.deleteButton) {
+    background-color: #356ab2;
+}
+
+.collectionSelect {
+    border: 1px solid #ccc;
+    border-radius: 5px; 
+    padding: 8px; 
+    margin-top: 10px; 
+    width: 90%; 
+}

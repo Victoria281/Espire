@@ -1,0 +1,11 @@
+.postButtonContainer {
+    width: 50vw;
+    margin: auto;
+    margin-bottom: 10vh;
+}
+
+.btns {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}

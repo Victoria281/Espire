@@ -1,0 +1,29 @@
+.mainContainer {
+    padding-left: 10px;
+}
+
+.mainContainer p {
+    margin: 0;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.tagChip {
+    color: #437FC7!important;
+    background-color: #ffffff!important;
+    border: 2px solid #437FC7!important;
+    border-radius: 2px!important;
+    font-size: 13px!important;
+    font-weight: 700!important;
+}
+
+.tagsDisplayContainer {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+}
+
+.title {
+    font-weight: bold;
+}

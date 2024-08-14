@@ -1,0 +1,94 @@
+import {
+  SET_ARTICLES,
+  SET_ARTICLE_WORKSPACE,
+  SET_SEARCH_RESULTS,
+  SET_TAGS,
+  SET_COLLECTIONS,
+  SET_SHAREDCOLLECTIONS
+} from '../actions/articles';
+import {
+  CLEAR_STATE
+} from '../actions/user';
+
+const initialState = {
+  collections: [],
+  shared_collections: [],
+  tags: [],
+  articles: [],
+  workspace: {
+    article: {
+      "name": "",
+      "authors": "",
+      "date": new Date(),
+      "use": "",
+      "description": "",
+      "Links": [
+          {
+              "is_main": false,
+              "link": "",
+          },
+          {
+              "is_main": true,
+              "link": "",
+          }
+      ],
+      "Quotes": [
+          {
+              "grp_num": 1,
+              "priority": 1,
+              "fact": "",
+          }
+      ],
+      "Tags": [
+      ]
+  },
+    collectionId: null
+  },
+  search: {
+    database: [],
+    web: []
+  },
+  searchloader: ''
+};
+
+const reducer = (state = initialState, action) => {
+  switch (action.type) {
+    case SET_ARTICLES:
+      return {
+        ...state,
+        articles: action.articles
+      };
+    case SET_COLLECTIONS:
+      return {
+        ...state,
+        collections: action.collections
+      };
+    case SET_SHAREDCOLLECTIONS:
+      return {
+        ...state,
+        shared_collections: action.shared_collections
+      };
+    case SET_ARTICLE_WORKSPACE:
+      return {
+        ...state,
+        workspace: action.workspace
+      };
+    case SET_SEARCH_RESULTS:
+      return {
+        ...state,
+        search: action.search,
+        searchloader: action.searchloader,
+      };
+    case SET_TAGS:
+      return {
+        ...state,
+        tags: action.tags
+      };
+    case CLEAR_STATE:
+      return initialState;
+    default:
+      return state;
+  }
+};
+
+export default reducer;

@@ -1,0 +1,57 @@
+import axios from 'axios';
+import { useSelector } from "react-redux";
+
+import getConfiguration from './config';
+
+const axiosInstance = axios.create({
+    timeout: getConfiguration().timeout,
+    headers: {},
+    baseURL: getConfiguration().baseURL,
+});
+
+function redirectToLogin() {
+    window.localStorage.removeItem("state");
+    window.location.href="/login"
+}
+
+function redirectToLogout() {
+    window.localStorage.removeItem("state");
+    window.location.href="/"
+}
+
+axiosInstance.interceptors.request.use(
+    async config => {
+        const state = JSON.parse(localStorage.getItem("state"))
+        let token = "";
+        if (state != undefined) {
+            token = state.user.token;
+        }
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    err => {
+        return Promise.reject(err);
+    }
+);
+
+axiosInstance.interceptors.response.use(
+    response =>
+        Promise.resolve(response),
+    async err => {
+        // console.log(err)
+        const originalRequest = err.config;
+        // console.log('originalRequest', originalRequest)
+        if (err?.response.status === 403) {
+            redirectToLogout();
+        }
+        if (err?.response.status === 401 && originalRequest._retry) {
+            console.log("Token have expired!")
+            redirectToLogin();
+        }
+        return Promise.reject(err);
+    }
+);
+
+export default axiosInstance;

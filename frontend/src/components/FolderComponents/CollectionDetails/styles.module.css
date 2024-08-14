@@ -1,0 +1,324 @@
+.contentArea {
+    height: 100%;
+}
+
+.title {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin: 10px 10px;
+}
+
+.title p {
+    margin: 0;
+    color: #437FC7;
+    font-weight: bold;
+}
+
+.title svg {
+    color: #437FC7;
+}
+
+.tabContainer {
+    display: flex;
+    border-bottom: 2px solid #e0e0e0;
+    margin-bottom: 20px;
+}
+
+.tab {
+    padding: 5px 10px;
+    margin: 0 10px;
+    cursor: pointer;
+    border-radius: 4px 4px 0 0;
+    background-color: #ffffff;
+    color: #437fc7;
+    text-transform: none;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.tab:hover {
+    background-color: #437fc7;
+    color: #ffffff;
+}
+
+.tabActive {
+    background-color: #437fc7;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.rowLayout {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
+
+.diyColumn {
+    margin-top: 7px;
+    margin-left: 7px;
+    border: 2px dashed #ccc;
+    min-height: 20vh;
+    height: 30vh;
+    width: 20vw;
+    background-color: #fff;
+    padding: 8px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    overflow-y: scroll;
+}
+
+.diyColumn::-webkit-scrollbar {
+    width: 4px; 
+}
+
+.diyColumn::-webkit-scrollbar-thumb {
+    background-color: #8d8d8d80; 
+    border-radius: 4px; 
+}
+
+
+.diyColumn:hover {
+    background-color: #e0e0e0;
+}
+
+.synthesisColumn {
+    margin-top: 7px;
+    background-color: #fff;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    padding: 7px;
+    min-width: 20vw;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    height: 20vh;
+    justify-content: space-evenly;
+}
+
+.synthesisTextArea textarea {
+    flex: 1;
+    font-size: 13px;
+}
+
+.saveButton button{
+    align-self: flex-end;
+}
+
+/* Quotes */
+.quotesArea > p:first-of-type{
+    font-weight: bold;
+    margin: 15px 5px;
+}
+.quotesArea > p:first-of-type span{
+    font-weight: 300;
+    margin: 15px 5px;
+}
+
+/* Quotes List */
+.quotesList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    height: 48vh;
+    overflow-y: scroll;
+}
+
+.quotesList::-webkit-scrollbar {
+    width: 4px; 
+}
+
+.quotesList::-webkit-scrollbar-thumb {
+    background-color: #437FC780; 
+    border-radius: 4px; 
+}
+
+
+
+
+
+/* Quote Card */
+
+.tagContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+.quoteTag {
+    color: black;
+    padding: 3px;
+    font-size: 10px;
+    width: 20%;
+    margin-right: 10px;
+}
+.quoteGrpTag {
+    color: white;
+    padding: 3px;
+    font-size: 10px;
+    width: 20%;
+}
+
+.quoteCard {
+    margin-left:10px;
+    background-color: #fff;
+    border: 1px solid rgb(99, 99, 99);
+    border-radius: 5px;
+    padding: 4px 10px;
+    margin-bottom: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+    width: 100%;
+    height: 12vh;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.quoteInfo {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+    text-align: left;
+    height:65%;
+}
+
+.articleName {
+    position: absolute;
+    bottom: -5px;
+    right: 8px;
+    font-size: 0.75rem;
+    color: #555;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+
+.dragging {
+    opacity: 0.5;
+}
+
+.highlight {
+    background-color: #e0f7fa;
+}
+
+
+
+
+.synthesisSection {
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: 70vh;
+    overflow-y: scroll;
+}
+
+.groupSection {
+    margin: 0 20px;
+}
+
+
+.quotesList {
+    height: 70vh;
+    overflow-y: scroll;
+}
+
+.quotesList::-webkit-scrollbar, .synthesisSection::-webkit-scrollbar {
+    width: 4px; 
+}
+
+.quotesList::-webkit-scrollbar-thumb, .synthesisSection::-webkit-scrollbar-thumb {
+    background-color: #437FC780; 
+    border-radius: 4px; 
+}
+
+.synthesisHeader {
+    margin-bottom: 16px;
+    color: #333;
+}
+
+.synthesisContent {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    
+    background-color: #eeeeee;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    flex: 0 0 auto; 
+
+    margin: 20px 0;
+}
+
+.columnInfo {
+    display: flex;
+    gap: 16px;
+}
+
+.column {
+    flex: 1;
+}
+
+.columnTitle {
+    margin-bottom: 8px;
+    color: #555;
+}
+
+.columnList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.columnItem {
+    margin-bottom: 12px;
+}
+
+.quoteCard {
+    padding: 12px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.quoteArticle {
+    font-weight: bold;
+    color: #222;
+}
+
+.quoteText {
+    margin-top: 4px;
+    color: #444;
+}
+
+.synthesisDetails {
+    padding-top: 2px;
+    font-weight: bold;
+}
+
+.synthesisTitle {
+    margin-bottom: 12px;
+    color: #333;
+}
+
+.synthesisList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.synthesisItem {
+    margin-bottom: 8px;
+}
+
+.synthesisText {
+    color: #666;
+}

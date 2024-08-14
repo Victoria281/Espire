@@ -1,0 +1,24 @@
+/* Button */
+
+.buttonContainer, .buttonContainerPressable {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px 15px;
+}
+
+.buttonContainer > p, .buttonContainerPressable > p{
+    margin: auto;
+}
+
+.buttonContainerPressable:hover {
+    box-shadow: 3px 3px 2px rgb(0 0 0 / 0.2);
+}
+
+.buttonContainerPressable:active {
+    box-shadow: 0 0 0 rgb(0 0 0 / 0.2);
+    opacity: 70%;
+}

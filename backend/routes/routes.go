@@ -18,6 +18,13 @@ func SecureRoutes(router fiber.Router) {
 	router.Use(middleware.JWTMiddleware())
 }
 
+func TestRouter(router fiber.Router) {
+	router.Use(middleware.PrintingDebugInfo)
+	testController := &controller.TestController{}
+
+	router.Get("/", testController.HealthCheck)
+}
+
 func AuthRouter(router fiber.Router) {
 	router.Use(middleware.PrintingDebugInfo)
 	db := storage.GetDB()
@@ -36,43 +43,67 @@ func UserRouter(router fiber.Router) {
 	db := storage.GetDB()
 
 	userRepo := repo.NewUserRepository(db)
+	articleRepo := repo.NewArticleRepository(db)
 	userService := services.NewUserService(userRepo)
+	articleService := services.NewArticleService(articleRepo, userRepo)
+
 	userController := &controller.UserController{
-		Service: userService,
+		Service:        userService,
+		ArticleService: articleService,
 	}
 
 	router.Put("/update", userController.UpdatePassword)
-	router.Put("/delete", userController.Delete)
+	router.Delete("/delete", userController.Delete)
+
+	router.Post("/add-tag", userController.AddUserTag)
+	router.Delete("/remove-tag/:id", userController.RemoveUserTag)
+	router.Post("/add-visit", userController.AddUserArticleVisit)
+	router.Get("/get-visits", userController.GetUserArticleVisits)
+	router.Get("/get-tags", userController.GetUserTags)
+	router.Get("/get-reccomendations", userController.GetRecommendations)
+
+	router.Post("/save/:id", userController.ToggleSavedArticle)
+	router.Get("/save", userController.GetSavedArticles)
 }
 
 func ArticleRouter(router fiber.Router) {
 	db := storage.GetDB()
-
+	userRepo := repo.NewUserRepository(db)
 	articleRepo := repo.NewArticleRepository(db)
-	articleService := services.NewArticleService(articleRepo)
+	articleService := services.NewArticleService(articleRepo, userRepo)
 	articleController := &controller.ArticleController{
 		Service: articleService,
 	}
 
-	articleQuoteRepo := repo.NewArticleQuoteRepository(db) // Assuming you have this repository
+	articleLinkRepo := repo.NewArticleLinkRepository(db)
+	articleLinkService := services.NewArticleLinkService(articleLinkRepo)
+	articleLinkController := &controller.ArticleLinkController{
+		Service: articleLinkService,
+	}
+
+	articleQuoteRepo := repo.NewArticleQuoteRepository(db)
 	articleQuoteService := services.NewArticleQuoteService(articleQuoteRepo)
 	articleQuoteController := &controller.ArticleQuoteController{
 		Service: articleQuoteService,
 	}
 
-	articleFlashcardRepo := repo.NewArticleFlashcardRepository(db) // Assuming you have this repository
-	articleFlashcardService := services.NewArticleFlashcardService(articleFlashcardRepo)
+	articleFlashcardRepo := repo.NewArticleFlashcardRepository(db)
+	articleFlashcardService := services.NewArticleFlashcardService(articleFlashcardRepo, articleQuoteRepo)
 	articleFlashcardController := &controller.ArticleFlashcardController{
 		Service: articleFlashcardService,
 	}
 
-	router.Get("/:id", articleController.GetArticleByID)
+	router.Get("/id/:id", articleController.GetArticleByID)
 	router.Get("/", articleController.GetArticle)
 	router.Get("/username/:username", articleController.GetArticleByUsername)
 	router.Get("/name/:name", articleController.GetArticlesByName)
 	router.Post("/create", articleController.CreateNewArticle)
 	router.Put("/:id", articleController.UpdateArticle)
 	router.Delete("/:id", articleController.DeleteArticle)
+
+	router.Post("/links", articleLinkController.CreateLink)
+	router.Put("/links/:id", articleLinkController.UpdateLink)
+	router.Delete("/links/:id", articleLinkController.DeleteLink)
 
 	router.Post("/quotes", articleQuoteController.CreateQuote)
 	router.Put("/quotes/:id", articleQuoteController.UpdateQuote)
@@ -81,6 +112,63 @@ func ArticleRouter(router fiber.Router) {
 	router.Post("/flashcards", articleFlashcardController.CreateFlashcard)
 	router.Put("/flashcards/:id", articleFlashcardController.UpdateFlashcard)
 	router.Delete("/flashcards/:id", articleFlashcardController.DeleteFlashcard)
+	router.Post("/flashcards/generate/:article_id", articleFlashcardController.GenerateFlashcardsFromQuotes)
+
+	router.Get("/googlesearch", articleController.GetArticlesFromGoogle)
+	router.Get("/webscrap", articleController.GetArticleInfoAndSuggestTags)
+
+}
+
+func CollectionRouter(router fiber.Router) {
+	db := storage.GetDB()
+
+	collectionRepo := repo.NewCollectionRepository(db)
+	collectionService := services.NewCollectionService(collectionRepo)
+	collectionController := &controller.CollectionController{
+		Service: collectionService,
+	}
+	synthesisRepo := repo.NewSynthesisRepo(db)
+	synthesisService := services.NewSynthesisService(synthesisRepo)
+	synthesisController := &controller.SynthesisController{
+		Service: synthesisService,
+	}
+
+	collectionUserRepo := repo.NewCollectionUserRepository(db)
+	collectionUserService := services.NewCollectionUserService(collectionUserRepo)
+	collectionUserController := &controller.CollectionUserController{
+		Service: collectionUserService,
+	}
+
+	router.Get("/", collectionController.GetCollection)
+	router.Post("/", collectionController.CreateCollection)
+	router.Put("/:id", collectionController.UpdateCollection)
+	router.Post("/:id/articles/:article_id", collectionController.AddArticleToCollection)
+	router.Delete("/:id/articles/:article_id", collectionController.RemoveArticleFromCollection)
+	router.Delete("/:id", collectionController.DeleteCollection)
+
+	router.Post("/synthesis", synthesisController.CreateSynthesis)
+	router.Delete("/synthesis/:id", synthesisController.DeleteSynthesis)
+
+	router.Get("/:id/users", collectionUserController.GetInvitedUsers)
+	router.Post("/:id/users/invite", collectionUserController.InviteUser)
+	router.Delete("/:id/users/invite", collectionUserController.RemoveUser)
+	router.Get("/:id/users/search", collectionUserController.SearchUser)
+	router.Get("/shared", collectionUserController.GetSharedCollections)
+}
+
+func TagRouter(router fiber.Router) {
+	db := storage.GetDB()
+
+	tagRepo := repo.NewTagRepository(db)
+	tagService := services.NewTagService(tagRepo)
+	tagController := &controller.TagController{
+		Service: tagService,
+	}
+
+	router.Get("/", tagController.GetAllTags)
+	router.Post("/", tagController.CreateTag)
+	router.Put("/articles/:article_id", tagController.UpdateArticleTags)
+	router.Delete("/:id", tagController.DeleteTag)
 }
 
 func BookRouter(router fiber.Router) {

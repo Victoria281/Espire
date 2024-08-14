@@ -1,0 +1,114 @@
+.flashcardManagementContainer {
+    width: 88%;
+    margin: auto;
+    margin-bottom: 10vh;
+    margin-top: 2vh;
+}
+
+.editModeContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.flashcardEditContainer {
+    display: flex;
+    align-items: center;
+}
+
+.flashcardCard {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    width: 100%;
+    padding-left: 50px;
+}
+
+.editOptions {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.editOptions button {
+    width: 25%;
+}
+
+.flashcardInput {
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    padding: 8px;
+}
+
+.deleteButton {
+    position: absolute !important;
+    top: 10px !important;
+    left: 0 !important;
+    background-color: #ef5350 !important;
+    color: #fff !important;
+    border-radius: 4px !important;
+}
+
+.viewModeContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.viewModeChip {
+    background-color: #ebebeb !important;
+    border: 1px solid #ddd !important;
+    color: #437FC7 !important;
+    font-weight: 700;
+    border-radius: 4px;
+    width: 100%;
+    justify-content: flex-start !important;
+    height: 7vh;
+}
+
+.flashcardDialogContent {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.flashcardItemCorrect, .flashcardItemWrong, .flashcardItem {
+    width: 80%;
+    margin-bottom: 2vh;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+
+}
+
+.flashcardItem {
+    border: 2px solid #437FC7;
+}
+
+.flashcardItemWrong {
+    border: 2px solid #c74343;
+}
+
+.flashcardItemCorrect {
+    border: 2px solid #4ec743;
+}
+
+.submitBtn {
+    width: 20%;
+}
+
+.submitArea {
+    background-color: #DBEDFF;
+    text-align: left;
+    margin: 0 4vw 1vh 4vw;
+    box-shadow: inset 10px 10px 10px -10px rgba(0, 0, 0, 0.3);
+    padding: 3vh 2vw;
+    border-radius: 5px;
+}

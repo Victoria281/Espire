@@ -1,0 +1,22 @@
+.inputComponentsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2vh 0;
+}
+
+.roundedInput {
+    width: 100%;
+    padding: 2vh 1vw;
+    border: 1px solid white;
+    border-radius: 5px;
+    background-color: #EDF6FF;
+    font-size: 120%;
+    margin: 0;
+    outline: none;
+    color: #437FC7;
+}
+
+.roundedInput::placeholder {
+    color: #D3D3D3;
+}

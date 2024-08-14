@@ -1,0 +1,52 @@
+.mainContainer {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+.leftContainer {
+    width: 30vw;
+    border-right: 1px solid #437FC7;
+}
+
+.rightContainer {
+    width: 70vw;    
+}
+
+.returnContainer {
+    height: 10vh;
+    border-bottom: 1px solid #437FC7;
+}
+
+.articlesContainer {
+    height: 55vh;
+    border-bottom: 1px solid #437FC7;
+}
+
+.overviewContainer {
+    height: 35vh;
+}
+
+.synthesisContainer {
+    height: 100vh;
+    border-bottom: 1px solid #437FC7;
+}
+
+.flashcardsContainer {
+    height: 40vh;
+}
+
+.noArticlesContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+}
+
+.addArticleButton {
+    margin-top: 16px;
+}
